@@ -18,11 +18,14 @@ public class Film {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "stars")
+    private Integer stars;
+
     @Column(name = "description")
     private String description;
 
     @Column(name = "image")
-    private byte[] image;
+    private String image;
 
     public Long getId() {
         return id;
@@ -40,6 +43,14 @@ public class Film {
         this.title = title;
     }
 
+    public Integer getStars() {
+        return stars;
+    }
+
+    public void setStars(Integer stars) {
+        this.stars = stars;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -48,11 +59,11 @@ public class Film {
         this.description = description;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }
