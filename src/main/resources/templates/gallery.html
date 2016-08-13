@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
+        th:href="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js}"/>
+
+    <script src="../static/js/caption-slide-down.js" th:src="@{js/caption-slide-down.js}"/>
+
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        function showMe (object) {
+            var id = $(object).closest("div").find('.caption').attr('id');
+            var show = document.getElementById(id);
+            $(show).fadeIn(300);
+            $(show).css('background-color', "white");
+        }
+        function hideMe(id) {
+            var caption = document.getElementById(id);
+            $(caption).hide();
+        }
+        /*]]>*/
+    </script>
+
+    <!--include github icons (octicons)-->
+    <link href="../static/build/font/octicons.css" type="text/css" th:href="@{/build/font/octicons.css}" rel="stylesheet"/>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/dist/css/bootstrap.min.css" th:href="@{/dist/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/dist/css/bootstrap.css" th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
+
+
+<!-- Custom styles for this template -->
+    <link href="../static/css/gallery.css" th:href="@{/css/gallery.css}" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div class="navbar-collapse collapse inverse" id="navbar-header">
+    <div class="container-fluid">
+        <div class="about">
+            <h4>About</h4>
+            <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+        </div>
+        <div class="social">
+            <h4>Contact</h4>
+            <ul class="list-unstyled">
+                <li><a href="#">Follow on Twitter</a></li>
+                <li><a href="#">Like on Facebook</a></li>
+                <li><a href="#">Email me</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="navbar navbar-static-top navbar-dark bg-inverse">
+
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-header">
+            &#9776;
+        </button>
+        <a href="#" class="navbar-brand">Album</a>
+        <a href="registration.html" class="navbar text-muted pull-md-right">Register</a>
+
+    </div>
+
+</div>
+
+
+<div class="album text-muted">
+    <div class="container">
+
+
+        <!--<p class="caption">sdlfskfp;kfgkdsf;gk;sdfkgsdk;pgs;g</p>-->
+
+        <!--<button class="btn btn-danger slide">Hide caption!</button>-->
+
+        <div class="container centered">
+            <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+
+                <!-- Links -->
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" style="padding-top: 5px">
+                        <span class="octicon octicon-search"></span>
+                    </li>
+                    <li class="nav-item">
+                        <input type="text" class="form-control"/>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 1</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            Oder By
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="Preview">
+                            <a class="dropdown-item" href="#">Difficulty</a>
+                            <a class="dropdown-item" href="#">Rating</a>
+                            <a class="dropdown-item" href="#">Dropdown Link 3</a>
+                        </div>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+        <div class="card aligned text-md-center">
+            <div class="card-block">
+                <img onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/corey.jpg" alt="Sample Image"/>
+                <div id="1" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
+                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
+                    <br/>
+                    <h4 style="padding-top: 10px">Slipknot</h4>
+                    <p style="padding-top: 5px; font-size: 0.9em">Slipknot is an American heavy metal band from Des Moines, Iowa. The band was founded in September
+                        1995 by percussionist Shawn Crahan and bassist Paul Gray. After several lineup changes in its
+                        early years, the band settled on nine members for more than a decade: Corey Taylor, Mick Thomson,
+                        Jim Root, Paul Gray, Craig Jones, Sid Wilson, Shawn Crahan, Chris Fehn and Joey Jordison.</p>
+                </div>
+            </div>
+            <p>Slipknot</p>
+        </div>
+        <div class="card aligned text-md-center">
+            <div class="card-block">
+                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/chester.jpg" alt="Sample Image"/>
+                <div id="2" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
+                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
+                    <br/>
+                    <h4 style="padding-top: 10px">Linkin park</h4>
+                    <p style="padding-top: 5px; font-size: 0.9em">Linkin Park is an American rock band from
+                        Agoura Hills, California. Formed in 1996, the band rose to international fame with
+                        their debut album Hybrid Theory (2000), which was certified diamond by the RIAA in
+                        2005 and multi-platinum in several other countries.</p>
+                </div>
+            </div>
+            <p>Slipknot</p>
+        </div>
+        <div class="card aligned text-md-center">
+            <div class="card-block">
+                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/matt.jpg" alt="Sample Image"/>
+                <div id="3" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
+                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
+                    <br/>
+                    <h4 style="padding-top: 10px">Avenged Sevenfold</h4>
+                    <p style="padding-top: 5px; font-size: 0.9em">Avenged Sevenfold (sometimes abbreviated as A7X) is
+                        an American heavy metal band from Huntington Beach, California, formed in 1999. The band's
+                        current lineup consists of lead vocalist M. Shadows, rhythm guitarist and backing vocalist
+                        Zacky Vengeance, lead guitarist and backing vocalist Synyster Gates, bassist and backing
+                        vocalist Johnny Christ, and drummer Brooks Wackerman.</p>
+                </div>
+            </div>
+            <p>Slipknot</p>
+        </div>
+        <div class="card aligned text-md-center">
+            <div class="card-block">
+                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/till.jpg" alt="Sample Image"/>
+                <div id="4" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
+                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
+                    <br/>
+                    <h4 style="padding-top: 10px">Avenged Sevenfold</h4>
+                    <p style="padding-top: 5px; font-size: 0.9em">Avenged Sevenfold (sometimes abbreviated as A7X) is
+                        an American heavy metal band from Huntington Beach, California, formed in 1999. The band's
+                        current lineup consists of lead vocalist M. Shadows, rhythm guitarist and backing vocalist
+                        Zacky Vengeance, lead guitarist and backing vocalist Synyster Gates, bassist and backing
+                        vocalist Johnny Christ, and drummer Brooks Wackerman.</p>
+                </div>
+            </div>
+            <p>Slipknot</p>
+        </div>
+        <div class="card aligned text-md-center">
+            <div class="card-block">
+                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/corey.jpg" alt="Sample Image"/>
+                <div id="5" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
+                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
+                    <br/>
+                    <h4 style="padding-top: 10px">Avenged Sevenfold</h4>
+                    <p style="padding-top: 5px; font-size: 0.9em">Avenged Sevenfold (sometimes abbreviated as A7X) is
+                        an American heavy metal band from Huntington Beach, California, formed in 1999. The band's
+                        current lineup consists of lead vocalist M. Shadows, rhythm guitarist and backing vocalist
+                        Zacky Vengeance, lead guitarist and backing vocalist Synyster Gates, bassist and backing
+                        vocalist Johnny Christ, and drummer Brooks Wackerman.</p>
+                </div>
+            </div>
+            <p>Slipknot</p>
+        </div>
+    </div>
+</div>
+
+<footer class="text-muted">
+    <div class="container">
+        <p class="pull-xs-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+        <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
+        th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js}" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"
+        th:src="@{https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js}" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"/>
+<script src="assets/js/vendor/holder.min.js"
+        th:src="@{/js/vendor/holder.min.js}"/>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    $(function () {
+        Holder.addTheme("thumb", { background: "#55595c", foreground: "#eceeef", text: "Thumbnail" });
+    });
+    /*]]>*/
+</script>
+<script src="../static/dist/js/bootstrap.min.js"
+        th:src="@{/dist/js/bootstrap.min.js}"/>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../static/assets/js/ie10-viewport-bug-workaround.js"
+        th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"/>
+</body>
+</html>
