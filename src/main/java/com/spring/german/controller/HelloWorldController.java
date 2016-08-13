@@ -15,6 +15,11 @@ public class HelloWorldController {
         return "gallery";
     }
 
+    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    public String registration(Model model) {
+        return "registration";
+    }
+
         @RequestMapping(value = "/showForm", method = RequestMethod.GET)
     public String showForm(Model model) {
         Student student = new Student();
