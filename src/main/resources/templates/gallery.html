@@ -75,7 +75,7 @@
             <div class="card-block">
                 <img class="hideMe" style="width: 336px; height: 280px" th:src="@{/} + ${film.image}" alt="Sample Image"/>
                 <div th:id="${film.id}" class="card-img-overlay caption showMe">
-                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark" th:text="${film.stars}">9.0</div>
+                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark" th:text="${#numbers.formatDecimal(film.stars, 0, 1)}">9.0</div>
                     <br/>
                     <h4 style="padding-top: 10px" th:text="${film.title}">Slipknot</h4>
                     <p style="padding-top: 5px; font-size: 0.9em" th:text="${film.description}">Slipknot is an American heavy metal band from Des Moines, Iowa. The band was founded in September

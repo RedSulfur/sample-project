@@ -19,7 +19,7 @@ public class Film {
     private String title;
 
     @Column(name = "stars")
-    private Integer stars;
+    private Double stars;
 
     @Column(name = "description")
     private String description;
@@ -43,11 +43,11 @@ public class Film {
         this.title = title;
     }
 
-    public Integer getStars() {
+    public Double getStars() {
         return stars;
     }
 
-    public void setStars(Integer stars) {
+    public void setStars(Double stars) {
         this.stars = stars;
     }
 

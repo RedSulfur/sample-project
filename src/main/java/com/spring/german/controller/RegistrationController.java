@@ -17,12 +17,9 @@ public class RegistrationController {
     @Autowired
     FilmRepository filmRepository;
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String showGallery(Model model) {
-        model.addAttribute("", "");
-        return "";
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String loginPage() {
+        return "login";
     }
-
-
 
 }

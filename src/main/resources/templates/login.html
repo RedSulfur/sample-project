@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <title>HelloWorld Login page</title>
+    <link href="../static/dist/css/bootstrap.min.css" th:href="@{/dist/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/dist/css/bootstrap.css" th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css"
+    th:href="@{//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css}"/>
+    <link href="../static/css/login.css" type="text/css" th:href="@{/css/login.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div id="mainWrapper">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-form">
+                <form th:action="@{/login}" method="post" class="form-horizontal">
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            <p>Invalid username and password.</p>
+                        </div>
+                        <div th:if="${param.logout}" class="alert alert-success">
+                            <p>You have been logged out successfully.</p>
+                        </div>
+                    <div class="input-group input-sm">
+                        <label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
+                        <input type="text" class="form-control" id="username" name="ssoId" placeholder="Enter Username" />
+                    </div>
+                    <div class="input-group input-sm">
+                        <label class="input-group-addon" for="password"><i class="fa fa-lock"></i></label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password"/>
+                    </div>
+                    <!--This solution is to ensure that each request requires,
+                     in addition to our session cookie, a randomly generated token as an HTTP parameter.
+                     When a request is submitted, the server must look up the expected value
+                     for the parameter and compare it against the actual value in the request.
+                     If the values do not match, the request should fail.-->
+                    <input type="hidden" th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+
+                    <div class="form-actions">
+                        <input type="submit"
+                               class="btn btn-block btn-primary btn-default" value="Log in"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
