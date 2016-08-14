@@ -11,21 +11,21 @@ CREATE TABLE germantv.film (
 
 INSERT INTO germantv.film (title, stars, description, image)
 VALUES ('Slipknot', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        '/home/sulfur/corey.jpg');
+        'img/corey.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
 VALUES ('Linkin Park', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        '/home/sulfur/chester.jpg');
+        'img/chester.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
 VALUES ('Avenged Sevenfold', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        '/home/sulfur/matt.jpg');
+        'img/matt.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
 VALUES ('Rammstein', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        '/home/sulfur/till.jpg');
+        'img/till.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
 VALUES ('Slipknot', 9.6, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        '/home/sulfur/corey.jpg');
+        'img/corey.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
 VALUES ('Slipknot', 9.7, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        '/home/sulfur/corey.jpg');
+        'img/corey.jpg');
 
 

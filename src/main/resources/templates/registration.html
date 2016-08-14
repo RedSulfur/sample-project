@@ -7,21 +7,6 @@
 
     <script src="../static/js/caption-slide-down.js" th:src="@{js/caption-slide-down.js}"/>
 
-    <script type="text/javascript">
-        /*<![CDATA[*/
-        function showMe (object) {
-            var id = $(object).closest("div").find('.caption').attr('id');
-            var show = document.getElementById(id);
-            $(show).fadeIn(300);
-            $(show).css('background-color', "white");
-        }
-        function hideMe(id) {
-            var caption = document.getElementById(id);
-            $(caption).hide();
-        }
-        /*]]>*/
-    </script>
-
     <!--include github icons (octicons)-->
     <link href="../static/build/font/octicons.css" type="text/css" th:href="@{/build/font/octicons.css}" rel="stylesheet"/>
 

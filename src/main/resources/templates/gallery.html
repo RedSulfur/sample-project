@@ -9,16 +9,17 @@
 
     <script type="text/javascript">
         /*<![CDATA[*/
-        function showMe (object) {
-            var id = $(object).closest("div").find('.caption').attr('id');
+        $(document).on('mouseenter', '.hideMe', function () {
+            var id = $(this).closest("div").find('.caption').attr('id');
             var show = document.getElementById(id);
             $(show).fadeIn(300);
             $(show).css('background-color', "white");
-        }
-        function hideMe(id) {
+        });
+        $(document).on('mouseleave', '.showMe', function () {
+            var id = $(this).attr('id');
             var caption = document.getElementById(id);
             $(caption).hide();
-        }
+        });
         /*]]>*/
     </script>
 
@@ -69,83 +70,21 @@
 
             </nav>
         </div>
-        <div class="card aligned text-md-center">
+        <!--onmouseover="showMe(this);"-->
+        <div class="card aligned text-md-center" th:each="film : ${films}">
             <div class="card-block">
-                <img onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/corey.jpg" alt="Sample Image"/>
-                <div id="1" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
-                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
+                <img class="hideMe" style="width: 336px; height: 280px" th:src="@{/} + ${film.image}" alt="Sample Image"/>
+                <div th:id="${film.id}" class="card-img-overlay caption showMe">
+                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark" th:text="${film.stars}">9.0</div>
                     <br/>
-                    <h4 style="padding-top: 10px">Slipknot</h4>
-                    <p style="padding-top: 5px; font-size: 0.9em">Slipknot is an American heavy metal band from Des Moines, Iowa. The band was founded in September
+                    <h4 style="padding-top: 10px" th:text="${film.title}">Slipknot</h4>
+                    <p style="padding-top: 5px; font-size: 0.9em" th:text="${film.description}">Slipknot is an American heavy metal band from Des Moines, Iowa. The band was founded in September
                         1995 by percussionist Shawn Crahan and bassist Paul Gray. After several lineup changes in its
                         early years, the band settled on nine members for more than a decade: Corey Taylor, Mick Thomson,
                         Jim Root, Paul Gray, Craig Jones, Sid Wilson, Shawn Crahan, Chris Fehn and Joey Jordison.</p>
                 </div>
             </div>
-            <p>Slipknot</p>
-        </div>
-        <div class="card aligned text-md-center">
-            <div class="card-block">
-                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/chester.jpg" alt="Sample Image"/>
-                <div id="2" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
-                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
-                    <br/>
-                    <h4 style="padding-top: 10px">Linkin park</h4>
-                    <p style="padding-top: 5px; font-size: 0.9em">Linkin Park is an American rock band from
-                        Agoura Hills, California. Formed in 1996, the band rose to international fame with
-                        their debut album Hybrid Theory (2000), which was certified diamond by the RIAA in
-                        2005 and multi-platinum in several other countries.</p>
-                </div>
-            </div>
-            <p>Slipknot</p>
-        </div>
-        <div class="card aligned text-md-center">
-            <div class="card-block">
-                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/matt.jpg" alt="Sample Image"/>
-                <div id="3" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
-                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
-                    <br/>
-                    <h4 style="padding-top: 10px">Avenged Sevenfold</h4>
-                    <p style="padding-top: 5px; font-size: 0.9em">Avenged Sevenfold (sometimes abbreviated as A7X) is
-                        an American heavy metal band from Huntington Beach, California, formed in 1999. The band's
-                        current lineup consists of lead vocalist M. Shadows, rhythm guitarist and backing vocalist
-                        Zacky Vengeance, lead guitarist and backing vocalist Synyster Gates, bassist and backing
-                        vocalist Johnny Christ, and drummer Brooks Wackerman.</p>
-                </div>
-            </div>
-            <p>Slipknot</p>
-        </div>
-        <div class="card aligned text-md-center">
-            <div class="card-block">
-                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/till.jpg" alt="Sample Image"/>
-                <div id="4" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
-                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
-                    <br/>
-                    <h4 style="padding-top: 10px">Avenged Sevenfold</h4>
-                    <p style="padding-top: 5px; font-size: 0.9em">Avenged Sevenfold (sometimes abbreviated as A7X) is
-                        an American heavy metal band from Huntington Beach, California, formed in 1999. The band's
-                        current lineup consists of lead vocalist M. Shadows, rhythm guitarist and backing vocalist
-                        Zacky Vengeance, lead guitarist and backing vocalist Synyster Gates, bassist and backing
-                        vocalist Johnny Christ, and drummer Brooks Wackerman.</p>
-                </div>
-            </div>
-            <p>Slipknot</p>
-        </div>
-        <div class="card aligned text-md-center">
-            <div class="card-block">
-                <img class="test" onmouseover="showMe(this);" style="width: 336px; height: 280px" src="img/corey.jpg" alt="Sample Image"/>
-                <div id="5" onmouseleave="hideMe(this.id);" class="card-img-overlay caption">
-                    <div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark">9.0</div>
-                    <br/>
-                    <h4 style="padding-top: 10px">Avenged Sevenfold</h4>
-                    <p style="padding-top: 5px; font-size: 0.9em">Avenged Sevenfold (sometimes abbreviated as A7X) is
-                        an American heavy metal band from Huntington Beach, California, formed in 1999. The band's
-                        current lineup consists of lead vocalist M. Shadows, rhythm guitarist and backing vocalist
-                        Zacky Vengeance, lead guitarist and backing vocalist Synyster Gates, bassist and backing
-                        vocalist Johnny Christ, and drummer Brooks Wackerman.</p>
-                </div>
-            </div>
-            <p>Slipknot</p>
+            <p th:text="${film.title}">Slipknot</p>
         </div>
     </div>
 </div>
