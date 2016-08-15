@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
@@ -37,12 +38,7 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String registration(Model model) {
-        return "registration";
-    }
-
-        @RequestMapping(value = "/showForm", method = RequestMethod.GET)
+    @RequestMapping(value = "/showForm", method = RequestMethod.GET)
     public String showForm(Model model) {
         Student student = new Student();
         model.addAttribute("student", student);
@@ -50,7 +46,7 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/processForm", method = RequestMethod.POST)
-    public String processForm(@ModelAttribute(value = "student") Student student, Model model) {
+    public String processForm(@ModelAttribute(value = "student")Student student, Model model) {
         String obtainedName = student.getName();
         int age = 15;
         String newName = obtainedName + " evolved";
