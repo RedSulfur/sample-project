@@ -1,3 +1,4 @@
+/*
 package com.spring.german.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,3 +11,4 @@ public class QuickPasswordEncodingGenerator {
         System.out.println(" |||   " + passwordEncoder.encode(password) + "   |||");
     }
 }
+*/

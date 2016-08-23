@@ -38,6 +38,4 @@ public class RegistrationController {
 
         return "registration";
     }
-
-
 }
