@@ -1,6 +1,7 @@
 package com.spring.german.service;
 
 import com.spring.german.entity.User;
+import com.spring.german.entity.VerificationToken;
 
 public interface UserService {
 
@@ -8,4 +9,7 @@ public interface UserService {
     User findById(long id);
     User findBySso(String sso);
 
+    User getUser(String verificationToken);
+    void createVerificationToken(User user, String token);
+    VerificationToken getVerificationToken(String VerificationToken);
 }

@@ -43,6 +43,9 @@ dependencies {
     compile     "org.springframework.boot:spring-boot-starter-security:1.4.0.RELEASE"
     compile     "org.springframework.boot:spring-boot-starter-actuator:1.4.0.RELEASE"
     compile     "org.springframework.boot:spring-boot-starter-thymeleaf:1.4.0.RELEASE"
+    compile     "org.springframework:spring-context-support:4.3.2.RELEASE"
+    compile     "javax.mail:mail:1.4.7"
+
 }
 
 task wrapper(type: Wrapper) {
