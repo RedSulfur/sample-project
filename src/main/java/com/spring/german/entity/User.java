@@ -51,7 +51,7 @@ public class User {
 
     @NotEmpty
     @Column(name = "state")
-    private String state = State.ACTIVE.getState();
+    private String state = State.INACTIVE.getState();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "app_user_user_profile",

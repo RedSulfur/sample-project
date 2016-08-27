@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -22,6 +24,17 @@ public class AppConfig {
 
     @Autowired
     private Environment env;
+
+
+     @Bean
+     public MessageSource messageSource() {
+         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+         messageSource.setBasename("classpath:messages");
+         messageSource.setUseCodeAsDefaultMessage(true);
+         messageSource.setDefaultEncoding("UTF-8");
+         messageSource.setCacheSeconds(0);
+         return messageSource;
+     }
 
     @Bean
     public JavaMailSenderImpl javaMailSenderImpl() {

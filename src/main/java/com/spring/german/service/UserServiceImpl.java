@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    VerificationTokenRepository tokenRepository;
+    private VerificationTokenRepository tokenRepository;
 
     @Override
     public User save(User u) {
@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(u);
 
         return savedUser;
+    }
+
+    @Override
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 
     @Override
