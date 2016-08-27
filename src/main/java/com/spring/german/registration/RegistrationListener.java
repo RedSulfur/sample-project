@@ -1,6 +1,5 @@
 package com.spring.german.registration;
 
-import org.apache.commons.io.IOUtils;
 import com.spring.german.entity.User;
 import com.spring.german.service.UserService;
 import org.slf4j.Logger;
@@ -9,22 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.inject.Inject;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -36,8 +29,16 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
-    private static final String LOGO = "/home/sufur/IdeaProjects/german/src/main/resources/static/img/germany-logo.jpg";
+    private static final String LOGO_NAME = "germany-logo.jpg";
 
+    /**
+     * The instance of the TemplateEngine class is provided by Spring Boot
+     * Thymeleaf auto configuration. All we need to do is to call the process()
+     * method which expects the name of the template that we want to use and
+     * the context object that acts as a container for our model.
+     */
+    @Autowired
+    private TemplateEngine templateEngine;
     @Autowired
     private UserService service;
     @Autowired
@@ -92,24 +93,24 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         log.info("Based on user's locale, the following message, was fetched " +
                 "from the properties file: {{}, locale: {}}", message, event.getLocale());
 
-        /*InputStreamSource imageSource = new ByteArrayResource(IOUtils.toByteArray(getClass().getResourceAsStream(LOGO)));
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        // Prepare the evaluation context
+        final Context ctx = new Context(event.getLocale());
+        ctx.setVariable("name", user.getFirstName());
+        ctx.setVariable("body", message + " \n" + "http://localhost:8080" + confirmationUrl);
+        ctx.setVariable("imageResourceName", LOGO_NAME); // so that we can reference it from HTML
 
-        InternetAddress address = new InternetAddress(recipientAddress);
-        mimeMessage.setRecipient(Message.RecipientType.TO , address);
-        mimeMessage.setSubject(subject);
-        mimeMessage.setText(message + " \n" + "http://localhost:8080" + confirmationUrl);
-        */
+
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED);
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        final String htmlContent = this.templateEngine.process("email-inlineimage", ctx);
+        mimeMessageHelper.setText(htmlContent, true); // true = isHtml
         mimeMessageHelper.setTo(recipientAddress);
-
-        mimeMessageHelper.setText(message + " \n" + "http://localhost:8080" + confirmationUrl);
-
-        mimeMessageHelper.addInline("logo", new ClassPathResource("static/img/germany-logo.jpg"));
-
         mimeMessageHelper.setSubject(subject);
+
+//        mimeMessageHelper.setText(message + " \n" + "http://localhost:8080" + confirmationUrl);
+
+        mimeMessageHelper.addInline(LOGO_NAME, new ClassPathResource("static/img/germany-logo.jpg"));
 
         log.info("JavaMailSender performs an email dispatch");
         mailSender.send(mimeMessage);
