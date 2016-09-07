@@ -59,6 +59,24 @@ public class User {
             inverseJoinColumns = { @JoinColumn(name = "user_profile_id") })
     private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
+    public User() {
+    }
+
+    public User(String ssoId, String password,
+                String firstName,
+                String lastName,
+                String email,
+                String state,
+                Set<UserProfile> userProfiles) {
+        this.ssoId = ssoId;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.state = state;
+        this.userProfiles = userProfiles;
+    }
+
     public long getId() {
         return id;
     }
@@ -122,7 +140,6 @@ public class User {
     public void setUserProfiles(Set<UserProfile> userProfiles) {
         this.userProfiles = userProfiles;
     }
-
 
     /**
      * TODO: Is this code sample relevant?

@@ -17,9 +17,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class HelloWorldController {
+public class GalleryController {
 
-    Logger log = LoggerFactory.getLogger(HelloWorldController.class);
+    Logger log = LoggerFactory.getLogger(GalleryController.class);
 
     @Autowired
     FilmRepository filmRepository;
