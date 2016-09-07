@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 
 @RunWith(SpringRunner.class)
@@ -58,7 +59,7 @@ public class RegistrationControllerTest {
                         "inactive",
                         new HashSet<UserProfile>()));
 
-        this.mvc.perform(post("/registration"))
+        this.mvc.perform(post("/registration").with(csrf()))
                 .andExpect(redirectedUrl("/registration"));
     }
 
