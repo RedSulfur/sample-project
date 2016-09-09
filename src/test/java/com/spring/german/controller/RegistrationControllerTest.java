@@ -1,37 +1,26 @@
 package com.spring.german.controller;
 
-import com.spring.german.entity.User;
-import com.spring.german.entity.UserProfile;
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
 import com.spring.german.service.UserServiceImpl;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashSet;
-
-import static org.mockito.Matchers.anyObject;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RegistrationController.class)
@@ -46,31 +35,58 @@ public class RegistrationControllerTest {
     //@Autowired
     //private Filter springSecurityFilterChain;
 
-    @MockBean private PasswordEncoder               passwordEncoder;
-    @MockBean private UserRepository                userRepository;
-    @MockBean private VerificationTokenRepository   tokenRepository;
-    @MockBean private UserServiceImpl               userService;
-    @MockBean private ApplicationEventPublisher     eventPublisher;
-    @MockBean private RegistrationController        controller;
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+    @MockBean
+    private UserRepository userRepository;
+    @MockBean
+    private VerificationTokenRepository tokenRepository;
+    @MockBean
+    private UserServiceImpl userService;
+    @MockBean
+    private ApplicationEventPublisher eventPublisher;
+    @MockBean
+    private RegistrationController controller;
 
     @Before
     public void setUp() throws Exception {
     }
 
     @Test
-    public void shouldPopulateModelOnGetRequestToRegistration()
+    public void shouldNotRedirectOnGetRequestToRegistrationPage()
             throws Exception {
 
         this.mvc.perform(get("/registration")
                 .with(user("admin")
-                .password("pass")
-                .roles("ADMIN", "USER")))
-                .andExpect(status().isOk());
+                        .password("pass")
+                        .roles("ADMIN", "USER")))
+                .andExpect(status().isOk())
+                .andExpect(redirectedUrl(null));
+    }
 
-//        this.mvc.perform(get("/registration")
-//                .with(user("admin")
-//                .password("pass")
-//                .roles("USER","ADMIN")));
-//                .andExpect(model().attribute("user", Matchers.instanceOf(User.class)));
+    @Test
+    public void shouldPopulateModelOnPostMethodToRegistrationPage()
+            throws Exception {
+
+        this.mvc.perform(post("/registration")
+                .with(user("admin")
+                .password("pass")
+                .roles("ADMIN", "USER"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("ssoId", "nickname")
+                .param("password", "pass")
+                .param("firstName", "John")
+                .param("lastName", "Doe")
+                .param("email", "john@doe.com"))
+
+                .andExpect(status().isOk())
+                .andExpect(view().name("registration"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("user", hasProperty("ssoId", is("nickname"))))
+                .andExpect(model().attribute("user", hasProperty("password", is("pass"))))
+                .andExpect(model().attribute("user", hasProperty("firstName", is("John"))))
+                .andExpect(model().attribute("user", hasProperty("lastName", is("Doe"))))
+                .andExpect(model().attribute("user", hasProperty("email", is("john@doe.com"))))
+                .andExpect(forwardedUrl(null));
     }
 }

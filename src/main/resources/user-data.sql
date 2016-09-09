@@ -33,7 +33,8 @@ CREATE TABLE germantv.app_user_user_profile
   ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-/* Populate USER_PROFILE Table */
+--  Populate USER_PROFILE Table
+
 INSERT INTO germantv.user_profile(type)
 VALUES ('USER');
 
@@ -44,12 +45,14 @@ INSERT INTO germantv.user_profile(type)
 VALUES ('DBA');
 
 
-/* Populate one Admin User which will further create other users for the application using GUI */
+--  Populate one Admin User which will further create other users for the application using GUI
+
 INSERT INTO germantv.app_user(sso_id, password, first_name, last_name, email, state)
 VALUES ('sulfur','$2a$10$rNSLPUnJZZZfu6otudhFB.Uz8IahfsGqRaiQalCwsNghF10N7Dy9q', 'Raymond','Sulfur','sulfur@gmail.com', 'Active');
 
 
-/* Populate JOIN Table */
+--  Populate JOIN Table
+
 INSERT INTO germantv.app_user_user_profile (user_id, user_profile_id)
   SELECT app_user.id, profile.id FROM security.app_user app_user, security.user_profile profile
 where app_user.sso_id='sulfur' and profile.type='ADMIN';

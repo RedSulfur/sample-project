@@ -10,22 +10,22 @@ CREATE TABLE germantv.film (
 );
 
 INSERT INTO germantv.film (title, stars, description, image)
-VALUES ('Slipknot', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/corey.jpg');
+VALUES ('Dr. House', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
+        'img/house.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
-VALUES ('Linkin Park', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/chester.jpg');
+VALUES ('Fringe', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
+        'img/fringe.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
-VALUES ('Avenged Sevenfold', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/matt.jpg');
+VALUES ('Breaking Bad', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
+        'img/breakingbad.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
-VALUES ('Rammstein', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/till.jpg');
+VALUES ('Sherlock', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
+        'img/sher.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
-VALUES ('Slipknot', 9.6, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/corey.jpg');
+VALUES ('Game of Thrones', 9.6, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
+        'img/thrones.jpg');
 INSERT INTO germantv.film (title, stars, description, image)
-VALUES ('Slipknot', 9.7, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/corey.jpg');
+VALUES ('Dexter', 9.7, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
+        'img/dexter.jpg');
 
 
