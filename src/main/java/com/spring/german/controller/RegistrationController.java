@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +29,21 @@ public class RegistrationController {
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
+  /*  @ModelAttribute("user")
+    public User getUser() {
+        return new User();
+    }*/
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
         return "login";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String showRegistrationPage(Model model) {
-        model.addAttribute("user", new User());
-        return "registration";
+    public ModelAndView showRegistrationPage(ModelAndView model) {
+        model.setViewName("/registration");
+        model.addObject(new User());
+        return model;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)

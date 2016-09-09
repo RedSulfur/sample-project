@@ -5,6 +5,9 @@ import com.spring.german.entity.UserProfile;
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
 import com.spring.german.service.UserServiceImpl;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -16,16 +19,19 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashSet;
 
 import static org.mockito.Matchers.anyObject;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RegistrationController.class)
@@ -34,8 +40,8 @@ public class RegistrationControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Autowired
-    private ApplicationContext applicationContext;
+//    @Autowired
+//    private WebApplicationContext context;
 
     //@Autowired
     //private Filter springSecurityFilterChain;
@@ -47,20 +53,24 @@ public class RegistrationControllerTest {
     @MockBean private ApplicationEventPublisher     eventPublisher;
     @MockBean private RegistrationController        controller;
 
-    @Test
-    public void registerUser() throws Exception {
-
-        BDDMockito.given(this.userService.save(anyObject()))
-                .willReturn(new User("valid_user",
-                        "valid_password",
-                        "valid_name",
-                        "valid_last_name",
-                        "valid_email",
-                        "inactive",
-                        new HashSet<UserProfile>()));
-
-        this.mvc.perform(post("/registration").with(csrf()))
-                .andExpect(redirectedUrl("/registration"));
+    @Before
+    public void setUp() throws Exception {
     }
 
+    @Test
+    public void shouldPopulateModelOnGetRequestToRegistration()
+            throws Exception {
+
+        this.mvc.perform(get("/registration")
+                .with(user("admin")
+                .password("pass")
+                .roles("ADMIN", "USER")))
+                .andExpect(status().isOk());
+
+//        this.mvc.perform(get("/registration")
+//                .with(user("admin")
+//                .password("pass")
+//                .roles("USER","ADMIN")));
+//                .andExpect(model().attribute("user", Matchers.instanceOf(User.class)));
+    }
 }
