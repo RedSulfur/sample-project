@@ -4,7 +4,9 @@ import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
 import com.spring.german.service.UserServiceImpl;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,12 +31,6 @@ public class RegistrationControllerTest {
     @Autowired
     private MockMvc mvc;
 
-//    @Autowired
-//    private WebApplicationContext context;
-
-    //@Autowired
-    //private Filter springSecurityFilterChain;
-
     @MockBean
     private PasswordEncoder passwordEncoder;
     @MockBean
@@ -47,6 +43,9 @@ public class RegistrationControllerTest {
     private ApplicationEventPublisher eventPublisher;
     @MockBean
     private RegistrationController controller;
+
+    @Rule
+    public ExpectedException thrown= ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
@@ -88,5 +87,12 @@ public class RegistrationControllerTest {
                 .andExpect(model().attribute("user", hasProperty("lastName", is("Doe"))))
                 .andExpect(model().attribute("user", hasProperty("email", is("john@doe.com"))))
                 .andExpect(forwardedUrl(null));
+    }
+
+    @Test
+    public void sf()
+            throws Exception {
+        //mvc.perform();
+
     }
 }

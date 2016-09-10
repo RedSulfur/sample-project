@@ -3,28 +3,37 @@ package com.spring.german.controller;
 import com.spring.german.entity.User;
 import com.spring.german.registration.OnRegistrationCompleteEvent;
 import com.spring.german.service.UserService;
+import com.spring.german.validation.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class RegistrationController {
 
+    public static final String REGISTRATION_PAGE = "/registration";
+
     Logger log = LoggerFactory.getLogger(GalleryController.class);
 
     @Autowired
-    UserService userService;
+    private UserService userService;
+
+    @Autowired
+    private UserValidator validator;
 
     @Autowired
     ApplicationEventPublisher eventPublisher;
@@ -42,8 +51,16 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registerUser(@ModelAttribute(value = "user") User user,
+    public String registerUser(@ModelAttribute(value = "user")
+                                   @Validated @Valid User user,
+                               BindingResult result,
                                Model model, WebRequest request) {
+
+        validator.validate(user, result);
+        if(result.hasErrors()) {
+            return REGISTRATION_PAGE;
+        }
+
         User savedUser = userService.save(user);
         log.info("User was retrieved from the post method body and stored in the database: {}", savedUser);
 
@@ -61,6 +78,9 @@ public class RegistrationController {
             return "access-denied";
         }
 
-        return "registration";
+        /**
+         * TODO: Change this page to the display result page when it is ready
+         */
+        return REGISTRATION_PAGE;
     }
 }
