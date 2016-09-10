@@ -29,11 +29,6 @@ public class RegistrationController {
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
-  /*  @ModelAttribute("user")
-    public User getUser() {
-        return new User();
-    }*/
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
         return "login";

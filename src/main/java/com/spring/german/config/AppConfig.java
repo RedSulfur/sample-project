@@ -1,9 +1,10 @@
 package com.spring.german.config;
 
+import org.h2.server.web.WebServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,12 +13,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.web.servlet.ViewResolver;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
 
 import java.util.Properties;
 
@@ -30,6 +25,19 @@ public class AppConfig {
 
     @Autowired
     private Environment env;
+
+    /**
+     * The following Spring Configuration declares the servlet wrapper for the H2
+     * database console and maps it to the path of /h2
+     *
+     * @return The wrapper servlet of the database
+     */
+    @Bean
+    public ServletRegistrationBean h2servletRegistration() {
+        ServletRegistrationBean registration = new ServletRegistrationBean(new WebServlet());
+        registration.addUrlMappings("/h2/*");
+        return registration;
+    }
 
      @Bean
      public MessageSource messageSource() {
@@ -48,7 +56,6 @@ public class AppConfig {
         try {
             mailSenderImpl.setHost(env.getRequiredProperty("smtp.host"));
             mailSenderImpl.setPort(env.getRequiredProperty("smtp.port", Integer.class));
-            //mailSenderImpl.setProtocol(env.getRequiredProperty("smtp.protocol"));
             mailSenderImpl.setUsername(env.getRequiredProperty("smtp.username"));
             mailSenderImpl.setPassword(env.getRequiredProperty("smtp.password"));
         } catch (IllegalStateException e) {

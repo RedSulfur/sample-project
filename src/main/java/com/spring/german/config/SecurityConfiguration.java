@@ -1,5 +1,6 @@
 package com.spring.german.config;
 
+import com.spring.german.util.UrlFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,15 +25,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     @Qualifier("customUserDetailsService")
     private UserDetailsService userDetailsService;
-
-    /*
-    @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("bill").password("abc123").roles("USER");
-        auth.inMemoryAuthentication().withUser("admin").password("root123").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("dba").password("root123").roles("ADMIN","DBA");
-    }
-    */
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
@@ -59,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 
-                .antMatchers("/", "/home").permitAll()
+                .antMatchers("/", "/home", "/h2/**").permitAll()
                 /**
                  * Any URL that starts with "/gallery" will be restricted to users who have the role
                  * "ROLE_ADMIN". You will notice that since we are invoking the hasRole method we
@@ -72,13 +63,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                  */
                 .and().formLogin().loginPage("/login")
                 .usernameParameter("ssoId").passwordParameter("password")
-                .and().csrf()
+                .and().csrf().requireCsrfProtectionMatcher(new UrlFilter("/h2"))
                 /**
                  * will catch all 403 [http access denied] exceptions and display our user
                  * defined page instead of showing default HTTP 403 page [ which is not so helpful anyway].
                  */
                 .and().exceptionHandling().accessDeniedPage("/Access_Denied");
 
+        http.headers().frameOptions().disable();
     }
-
 }
