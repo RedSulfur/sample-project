@@ -8,6 +8,7 @@ public interface UserService {
     User save(User u);
     User findById(long id);
     User findBySso(String sso);
+    User findByEmail(String email);
     void updateUser(User user);
 
     User getUser(String verificationToken);

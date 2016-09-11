@@ -42,44 +42,58 @@
                     </div>
                 </div>
             </div>
-
             <div class="control-group">
                 <!-- Password-->
                 <label class="control-label" for="password">Password</label>
                 <div class="controls">
-                    <input th:field="*{password}" type="password" id="password" name="password" placeholder="" class="input-xlarge"/>
-                    <p class="help-block">Password should be at least 4 characters</p>
+                    <input th:field="*{password}" th:class="${#fields.hasErrors('password')}
+                    ? 'error input-xlarge' : 'input-xlarge'" type="password" id="password"
+                           name="password" placeholder=""/>
+                    <div style="width: 500px">
+                        <p th:if="${#fields.hasErrors('password')}" class="alert alert-danger" style="padding: 4px"
+                           th:errors="*{password}"></p>
+                    </div>
                 </div>
             </div>
-
             <div class="control-group">
                 <!-- Username -->
-                <label class="control-label"  for="firstName">Username</label>
+                <label class="control-label"  for="firstName">First name</label>
                 <div class="controls">
-                    <input th:field="*{firstName}" type="text" id="firstName" name="firstName" placeholder="" class="input-xlarge"/>
-                    <p class="help-block">Username can contain any letters or numbers, without spaces</p>
-                    <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</p>
+                    <input th:field="*{firstName}" th:class="${#fields.hasErrors('firstName')}
+                    ? 'error input-xlarge' : 'input-xlarge'" type="text" id="firstName"
+                           name="firstName" placeholder=""/>
+                    <div style="width: 500px">
+                        <p th:if="${#fields.hasErrors('firstName')}" class="alert alert-danger" style="padding: 4px"
+                           th:errors="*{firstName}"></p>
+                    </div>
                 </div>
             </div>
-
             <div class="control-group">
                 <!-- Username -->
-                <label class="control-label"  for="lastName">Username</label>
+                <label class="control-label"  for="lastName">Last name</label>
                 <div class="controls">
-                    <input th:field="*{lastName}" type="text" id="lastName" name="lastName" placeholder="" class="input-xlarge"/>
-                    <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+                    <input th:field="*{lastName}" th:class="${#fields.hasErrors('lastName')}
+                    ? 'error input-xlarge' : 'input-xlarge'" type="text" id="lastName"
+                           name="lastName" placeholder=""/>
+                    <div style="width: 500px">
+                        <p th:if="${#fields.hasErrors('lastName')}" class="alert alert-danger" style="padding: 4px"
+                           th:errors="*{lastName}"></p>
+                    </div>
                 </div>
             </div>
-
             <div class="control-group">
                 <!-- E-mail -->
                 <label class="control-label" for="email">E-mail</label>
                 <div class="controls">
-                    <input th:field="*{email}" type="text" id="email" name="email" placeholder="" class="input-xlarge"/>
-                    <p class="help-block">Please provide your E-mail</p>
+                    <input th:field="*{email}" th:class="${#fields.hasErrors('email')}
+                    ? 'error input-xlarge' : 'input-xlarge'" type="text" id="email"
+                           name="email" placeholder=""/>
+                    <div style="width: 500px">
+                        <p th:if="${#fields.hasErrors('email')}" class="alert alert-danger" style="padding: 4px"
+                           th:errors="*{email}"></p>
+                    </div>
                 </div>
             </div>
-
             <div class="control-group">
                 <!-- Button -->
                 <div class="controls">

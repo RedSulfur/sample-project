@@ -6,7 +6,8 @@ spring:
     password: postgres
     platform: postgres
     driver-class-name: org.postgresql.Driver
-  jpa:
+    schema: germantv
+    jpa:
     show-sql: true
     packages-to-scan: com.spring.german
     hibernate:

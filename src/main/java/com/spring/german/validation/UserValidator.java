@@ -13,8 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.util.Locale;
-
-import static com.spring.german.util.ErrorMessages.DUPLICATE_USERNAME;
+import java.util.Optional;
 
 @Component
 @EnableConfigurationProperties
@@ -36,10 +35,17 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
 
-        log.info("Error message fetched: {}", DUPLICATE_USERNAME);
         User user = (User) target;
-        User currentUser = service.findBySso(user.getSsoId());
-        if (currentUser.getSsoId().equals(user.getSsoId())) {
+        log.info("UserValidator is processes the following user: " + user.toString());
+
+        Optional optionalBySsoId = Optional.ofNullable(service.findBySso(user.getSsoId()));
+        Optional optionalByEmail = Optional.ofNullable(service.findByEmail(user.getEmail()));
+
+        if (optionalByEmail.isPresent()) {
+            errors.rejectValue("email", "Registered Email",
+                    messages.getMessage("email.taken", null, new Locale("en_US")));
+        }
+        if (optionalBySsoId.isPresent()) {
             errors.rejectValue("ssoId", "Duplicate Username",
                     messages.getMessage("username.duplicate", null, new Locale("en_US")));
         }

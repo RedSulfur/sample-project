@@ -2,6 +2,7 @@ package com.spring.german.entity;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
+@EnableConfigurationProperties
 public class User {
 
     @Id
@@ -26,8 +28,7 @@ public class User {
     @Column(name = "id")
     private long id;
 
-
-    @NotEmpty(message = "Username can contain any letters or numbers, without spaces")
+    @NotEmpty
     @Column(name = "sso_id")
     private String ssoId;
 
