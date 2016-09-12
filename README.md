@@ -2,6 +2,8 @@
 Sample project that provides users with an easy and pleasant way to learn german.<br />
 _Still in development_
 
+[![Code Coverage](https://img.shields.io/codecov/c/github/pvorb/property-providers/develop.svg)](https://codecov.io/github/RedSulfur/sample-project?branch=master)
+
 **Technoligies involved:**<br />
 ⋅ [Spring Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html)<br />
 ⋅ [Spring MVC](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html)<br />
