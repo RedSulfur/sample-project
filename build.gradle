@@ -15,7 +15,6 @@ buildscript {
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
-        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
 
@@ -24,6 +23,10 @@ apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'jacoco'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 mainClassName = "com.spring.german.Application"
 
@@ -34,8 +37,9 @@ jacocoTestReport {
     }
 }
 
-check.dependsOn jacocoTestReport
+println System.getProperty("java.home")
 
+check.dependsOn jacocoTestReport
 
 jar {
     baseName = 'bookmarks-rest'
@@ -47,8 +51,7 @@ repositories {
 }
 
 group = 'german'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
 
 dependencies {
     compile     "org.springframework.boot:spring-boot-starter-web:1.4.0.RELEASE"
