@@ -2,7 +2,7 @@
 Sample project that provides users with an easy and pleasant way to learn german.<br />
 _Still in development_
 
-[![Code Coverage](https://img.shields.io/codecov/c/github/pvorb/property-providers/develop.svg)](https://travis-ci.org/RedSulfur/sample-project.svg?branch=master)
+[![Travis Build](https://api.travis-ci.org/RedSulfur/sample-project.svg?branch=master)](https://travis-ci.org/RedSulfur/sample-project)
 
 **Technoligies involved:**<br />
 ⋅ [Spring Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html)<br />
