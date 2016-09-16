@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
+            th:href="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js}"/>
+
+    <script src="../static/js/caption-slide-down.js" th:src="@{js/caption-slide-down.js}"/>
+
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        $(document).on('mouseenter', '.hideMe', function () {
+            var id = $(this).closest("div").find('.caption').attr('id');
+            var show = document.getElementById(id);
+            $(show).fadeIn(300);
+            $(show).css('background-color', "white");
+        });
+        $(document).on('mouseleave', '.showMe', function () {
+            var id = $(this).attr('id');
+            var caption = document.getElementById(id);
+            $(caption).hide();
+        });
+        /*]]>*/
+    </script>
+
+    <!--include github icons (octicons)-->
+    <link href="../static/build/font/octicons.css" type="text/css" th:href="@{/build/font/octicons.css}" rel="stylesheet"/>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/dist/css/bootstrap.min.css" th:href="@{/dist/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/dist/css/bootstrap.css" th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
+
+
+    <!-- Custom styles for this template -->
+    <link href="../static/css/gallery.css" th:href="@{/css/gallery.css}" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div th:include="fragments/header :: header"></div>
+
+
+<div class="container" style="width: 700px; margin-top:60px">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab">Offer a project</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#buzz" role="tab" data-toggle="tab">Become collaborator</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#references" role="tab" data-toggle="tab">references</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="profile">
+            <h1 style="font-family: 'Oswald', serif; font-size: 18px; padding-top: 15px; padding-bottom:15px">
+                You can offer a project for collaboration by browsing one from your
+                file system or by specifying a name of your github repository</h1>
+
+            <div class="input-group" style="width:400px">
+                <form th:action="@{/collaborate}" method="POST">
+                    <div class="input-group">
+                        <input th:value="${repoName}" th:name="repoName" type="text" class="form-control" placeholder="Repository name..."></input>
+                        <span class="input-group-btn">
+                            <input type="submit" class="btn btn-secondary"></input>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <label class="custom-file">
+                <input type="file" id="file" class="custom-file-input"></input>
+                <span class="custom-file-control"></span>
+            </label>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="buzz">bbb</div>
+        <div role="tabpanel" class="tab-pane fade" id="references">ccc</div>
+    </div>
+</div>
+
+
+
+<div th:include="fragments/footer :: footer"></div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
+        th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js}" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"
+        th:src="@{https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js}" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"/>
+<script src="assets/js/vendor/holder.min.js"
+        th:src="@{/js/vendor/holder.min.js}"/>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    $(function () {
+        Holder.addTheme("thumb", { background: "#55595c", foreground: "#eceeef", text: "Thumbnail" });
+    });
+    /*]]>*/
+</script>
+<script src="../static/dist/js/bootstrap.min.js"
+        th:src="@{/dist/js/bootstrap.min.js}"/>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../static/assets/js/ie10-viewport-bug-workaround.js"
+        th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"/>
+</body>
+</html>

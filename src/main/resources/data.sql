@@ -2,8 +2,7 @@ DROP TABLE app_user_user_profile;
 DROP TABLE app_user;
 DROP TABLE user_profile;
 
-CREATE TABLE app_user
-(
+CREATE TABLE app_user (
   id bigserial NOT NULL,
   sso_id character varying(30),
   password character varying(100),
@@ -14,15 +13,13 @@ CREATE TABLE app_user
   CONSTRAINT app_user_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE user_profile
-(
+CREATE TABLE user_profile (
   id bigserial NOT NULL,
   type character varying(30),
   CONSTRAINT user_profile_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE app_user_user_profile
-(
+CREATE TABLE app_user_user_profile (
   user_id bigint,
   user_profile_id bigint,
   CONSTRAINT app_user_fk FOREIGN KEY (user_id)

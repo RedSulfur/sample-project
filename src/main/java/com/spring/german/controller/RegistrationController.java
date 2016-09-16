@@ -63,6 +63,8 @@ public class RegistrationController {
 
         User savedUser = userService.save(user);
         log.info("User was retrieved from the post method body and stored in the database: {}", savedUser);
+        log.info("Locale: {}", request.getLocale());
+        log.info("AppUrl: {}", request.getContextPath());
 
         try {
             String appUrl = request.getContextPath();
