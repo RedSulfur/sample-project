@@ -74,6 +74,15 @@
                 <input type="file" id="file" class="custom-file-input"></input>
                 <span class="custom-file-control"></span>
             </label>
+            <div th:if="${not #lists.isEmpty(technologies)}" class="list-group">
+                <h2 style="font-family: 'Oswald', serif">After submission users will be able to find your project
+                by the following technologies:</h2>
+                <a th:each="tech : ${technologies}" th:text="${tech}" href="#"
+                   class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+                <a href="#" class="btn btn-success" role="button">Offer project</a>
+            </div>
+
+
         </div>
         <div role="tabpanel" class="tab-pane fade" id="buzz">bbb</div>
         <div role="tabpanel" class="tab-pane fade" id="references">ccc</div>

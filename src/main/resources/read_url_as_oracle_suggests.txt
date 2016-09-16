@@ -1,0 +1,11 @@
+URL oracle = new URL("https://raw.githubusercontent.com/RedSulfur/" + repoName + "/master/README.md");
+
+        StringBuilder sb = new StringBuilder();
+        try(BufferedReader in = new BufferedReader(
+                new InputStreamReader(oracle.openStream()))) {
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                sb.append(inputLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }

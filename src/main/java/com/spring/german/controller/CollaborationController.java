@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.net.*;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 public class CollaborationController {
 
     Logger log = LoggerFactory.getLogger(GalleryController.class);
+    private static final String REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)";
 
     @RequestMapping(value = "/collaborate", method = RequestMethod.GET)
     public ModelAndView getRepoName(ModelAndView mav) {
@@ -32,25 +32,33 @@ public class CollaborationController {
     }
 
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
-    public String processRepoReadme(@ModelAttribute(value = "repoName") String repoName,
-                                    ModelAndView mav) throws IOException, URISyntaxException {
+    public ModelAndView getRepoData(@ModelAttribute(value = "repoName") String repoName,
+                              ModelAndView mav, Principal principal) throws IOException {
         Assert.notNull(repoName);
         log.info("Repository name fetched: {}", repoName);
+        log.info("Current logged in user: {}", principal.getName());
 
         URL url = new URL("https://raw.githubusercontent.com/RedSulfur/" + repoName + "/master/README.md");
         URLConnection con = url.openConnection();
         InputStream in = con.getInputStream();
-        String encoding = con.getContentEncoding();  // ** WRONG: should use "con.getContentType()" instead but it returns something like "text/html; charset=UTF-8" so this value must be parsed to extract the actual encoding
+        String encoding = con.getContentEncoding();
         encoding = encoding == null ? "UTF-8" : encoding;
         String body = IOUtils.toString(in, encoding);
-        log.info("****************************************");
-        log.info(body);
 
-        return "";
-    }
+        List<String> technologies = new ArrayList<>();
+        Matcher m = Pattern.compile(REGEX).matcher(body);
+        while (m.find()) {
+            technologies.add(m.group(1));
+        }
 
-    public Stream<String> getLineReader(String repoName)
-            throws IOException, URISyntaxException {
-         return Files.lines(Paths.get(new URI("https://raw.githubusercontent.com/RedSulfur/", repoName ,"/master/README.md")));
+        log.info("*********************************8");
+        for (String data : technologies) {
+            log.info(data);
+        }
+
+        mav.setViewName("collaboration");
+        mav.addObject("technologies", technologies);
+
+        return mav;
     }
 }
