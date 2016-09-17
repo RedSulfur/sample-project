@@ -20,6 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CollaborationController.class)
 public class CollaborationControllerTest {
 
+    public static final String VALID_STRING_REPRESENTATION = "[Travis Build, Spring Thymeleaf, Spring MVC, Spring validation, Gradle, Spring Security, Bootstrap]";
+
     @Autowired
     private MockMvc mvc;
 
@@ -35,7 +37,7 @@ public class CollaborationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("repoName", "sample-project"))
                 .andExpect(view().name("collaboration"))
-                .andExpect(model().attribute("technologies", hasToString(equalTo("[Travis Build, Spring Thymeleaf, Spring MVC, Spring validation, Gradle, Spring Security, Bootstrap]"))))
+                .andExpect(model().attribute("technologies", hasToString(equalTo(VALID_STRING_REPRESENTATION))))
                 .andExpect(model().hasNoErrors())
                 .andExpect(status().isOk());
     }

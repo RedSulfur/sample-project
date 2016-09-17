@@ -21,7 +21,6 @@ public class GalleryController {
     @Autowired
     FilmRepository filmRepository;
 
-    //@ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(value = "/gallery", method = RequestMethod.GET)
     public ModelAndView showGallery() {
         List<Film> films = filmRepository.findAll();

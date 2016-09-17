@@ -22,15 +22,41 @@ import java.util.regex.Pattern;
 @RestController
 public class CollaborationController {
 
-    Logger log = LoggerFactory.getLogger(GalleryController.class);
+    private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
+
     private static final String REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)";
 
+    /**
+     * When issued by a respective get method performs a redirection
+     * to the template called collaboration.html
+     *
+     * @param mav {@link ModelAndView} object that specifies subsequent
+     *            view
+     * @return    {@link ModelAndView} object
+     */
     @RequestMapping(value = "/collaborate", method = RequestMethod.GET)
     public ModelAndView getRepoName(ModelAndView mav) {
         mav.setViewName("collaboration");
         return mav;
     }
 
+    /**
+     * Searches for the readme file at user's GitHub repository
+     * and establishes a url connection to it. After connection
+     * to file was acquired controller performs its processing
+     * in order to obtain the name of every technology that was
+     * used to create the given repository.
+     *
+     * @param repoName  name of the repository to be processed
+     * @param mav       {@link ModelAndView} object contains all
+     *                  the information for the further workflow
+     * @param principal {@link Principal} object is needed to determine
+     *                  a username of the current user
+     *
+     * @return  {@link ModelAndView} object that contains a view
+     *          name and a list of technologies
+     * @throws IOException
+     */
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
     public ModelAndView getRepoData(@ModelAttribute(value = "repoName") String repoName,
                               ModelAndView mav, Principal principal) throws IOException {
@@ -51,7 +77,6 @@ public class CollaborationController {
             technologies.add(m.group(1));
         }
 
-        log.info("*********************************8");
         for (String data : technologies) {
             log.info(data);
         }
