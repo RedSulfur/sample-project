@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(CollaborationController.class)
-public class CollaborationControllerTest {
+public class CollaborationServiceTest {
 
     public static final String VALID_STRING_REPRESENTATION = "[Travis Build, Spring Thymeleaf, Spring MVC, Spring validation, Gradle, Spring Security, Bootstrap]";
 

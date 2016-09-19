@@ -4,23 +4,14 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
-@EnableConfigurationProperties
 public class User {
 
     @Id
@@ -61,6 +52,9 @@ public class User {
             inverseJoinColumns = { @JoinColumn(name = "user_profile_id") })
 
     private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Project> projects;
 
     public User() {
     }

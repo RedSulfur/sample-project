@@ -2,8 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
-            th:href="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js}"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js}"/>
 
     <script src="../static/js/caption-slide-down.js" th:src="@{js/caption-slide-down.js}"/>
 
@@ -53,6 +52,8 @@
         </li>
     </ul>
 
+
+
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="profile">
@@ -74,15 +75,12 @@
                 <input type="file" id="file" class="custom-file-input"></input>
                 <span class="custom-file-control"></span>
             </label>
+
             <div th:if="${not #lists.isEmpty(technologies)}" class="list-group">
                 <h2 style="font-family: 'Oswald', serif">After submission users will be able to find your project
-                by the following technologies:</h2>
-                <a th:each="tech : ${technologies}" th:text="${tech}" href="#"
-                   class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-                <a href="#" class="btn btn-success" role="button">Offer project</a>
+                    by the following technologies:</h2>
+                <button style="margin: 2px" th:each="tech : ${technologies}" th:text="${tech}" type="button" class="btn btn-primary">Primary <span class="badge">7</span></button>
             </div>
-
-
         </div>
         <div role="tabpanel" class="tab-pane fade" id="buzz">bbb</div>
         <div role="tabpanel" class="tab-pane fade" id="references">ccc</div>
@@ -96,13 +94,10 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
-        th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js}" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"/>
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js}" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"/>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"
-        th:src="@{https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js}" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"/>
-<script src="assets/js/vendor/holder.min.js"
-        th:src="@{/js/vendor/holder.min.js}"/>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js}" integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB" crossorigin="anonymous"/>
+<script th:src="@{/js/vendor/holder.min.js}"/>
 <script type="text/javascript">
     /*<![CDATA[*/
     $(function () {
@@ -110,10 +105,6 @@
     });
     /*]]>*/
 </script>
-<script src="../static/dist/js/bootstrap.min.js"
-        th:src="@{/dist/js/bootstrap.min.js}"/>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../static/assets/js/ie10-viewport-bug-workaround.js"
-        th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"/>
+<script th:src="@{/dist/js/bootstrap.min.js}"/>
 </body>
 </html>
