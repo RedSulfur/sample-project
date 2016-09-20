@@ -1,17 +1,17 @@
 package com.spring.german.controller;
 
-import com.spring.german.entity.Film;
-import com.spring.german.repository.FilmRepository;
+import com.spring.german.entity.Project;
+import com.spring.german.repository.ProjectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class GalleryController {
@@ -19,18 +19,21 @@ public class GalleryController {
     Logger log = LoggerFactory.getLogger(GalleryController.class);
 
     @Autowired
-    FilmRepository filmRepository;
+    private ProjectRepository projectRepository;
 
     @RequestMapping(value = "/gallery", method = RequestMethod.GET)
-    public ModelAndView showGallery() {
-        List<Film> films = filmRepository.findAll();
-        log.info("*****************************************");
-        log.info("FILMS FETCHED: {}", Arrays.toString(films.toArray()));
+    public String getProjects(Model model) {
 
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("gallery");
-        mav.addObject("films", films);
+        /*projectRepository.findByTechnologiesContaining("Maven")
+                .stream().map(Project::getTechnologies)
+                .collect(Collectors.toList()).forEach(p -> list.add(p.split(",")));*/
 
-        return mav;
+        List<Project> projects = projectRepository.findByTechnologiesContaining("Maven");
+
+        projects.forEach(project -> log.info("Technology: {}", project.getTechnologies()));
+
+        model.addAttribute("projects", projects);
+
+        return "gallery";
     }
 }
