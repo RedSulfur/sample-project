@@ -86,6 +86,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
         String recipientAddress = user.getEmail();
         log.info("Destination email: {}", user.getEmail());
+        log.info("You will prepend the following url to your link: {}", event.getAppUrl());
         String subject = "Registration Confirmation";
         String confirmationUrl
                 = event.getAppUrl() + "/registrationConfirm?token=" + token;

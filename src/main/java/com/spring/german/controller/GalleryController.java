@@ -28,7 +28,7 @@ public class GalleryController {
                 .stream().map(Project::getTechnologies)
                 .collect(Collectors.toList()).forEach(p -> list.add(p.split(",")));*/
 
-        List<Project> projects = projectRepository.findByTechnologiesContaining("Maven");
+        List<Project> projects = projectRepository.getProjectsWithSpecificTechnologies();
 
         projects.forEach(project -> log.info("Technology: {}", project.getTechnologies()));
 

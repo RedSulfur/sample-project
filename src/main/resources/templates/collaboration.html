@@ -76,10 +76,15 @@
                 <span class="custom-file-control"></span>
             </label>
 
-            <div th:if="${not #lists.isEmpty(technologies)}" class="list-group">
+            <div th:if="${not #lists.isEmpty(#httpSession.getAttribute('technologies'))}" class="list-group">
                 <h2 style="font-family: 'Oswald', serif">After submission users will be able to find your project
                     by the following technologies:</h2>
-                <button style="margin: 2px" th:each="tech : ${technologies}" th:text="${tech}" type="button" class="btn btn-primary">Primary <span class="badge">7</span></button>
+                <a th:each="tech : ${#httpSession.getAttribute('technologies')}" th:text="${tech}" href="#"
+                   class="list-group-item list-group-item-action"></a>
+
+                <a type="submit" th:href="@{/publish}"
+                   class="btn btn-success" role="button">Offer project</a>
+                <!--th:value="${technologies}" th:name="technologies"-->
             </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="buzz">bbb</div>

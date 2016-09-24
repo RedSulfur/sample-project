@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,9 @@ public class RegistrationController {
 
     @Autowired
     private UserValidator validator;
+
+    @Autowired
+    private ServletContext servletContext;
 
     @Autowired
     ApplicationEventPublisher eventPublisher;
@@ -54,7 +59,7 @@ public class RegistrationController {
     public String registerUser(@ModelAttribute(value = "user")
                                    @Validated @Valid User user,
                                BindingResult result,
-                               Model model, WebRequest request) {
+                               Model model, HttpServletRequest request) {
 
         validator.validate(user, result);
         if(result.hasErrors()) {
@@ -64,10 +69,10 @@ public class RegistrationController {
         User savedUser = userService.save(user);
         log.info("User was retrieved from the post method body and stored in the database: {}", savedUser);
         log.info("Locale: {}", request.getLocale());
-        log.info("AppUrl: {}", request.getContextPath());
+        log.info("AppUrl: {}", request.getRequestURL());
 
         try {
-            String appUrl = request.getContextPath();
+            String appUrl = request.getRequestURL().toString();
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent
                     (savedUser, request.getLocale(), appUrl));
         } catch (Exception e) {

@@ -23,11 +23,11 @@ public class CollaborationService {
 
     private static final Logger log = LoggerFactory.getLogger(CollaborationService.class);
 
-    public List<String> getTechnologies(String repoName) {
+    public List<String> getTechnologies(String username, String repoName) {
 
         String body;
         try {
-            URL url = new URL("https://raw.githubusercontent.com/RedSulfur/" + repoName + "/master/README.md");
+            URL url = new URL("https://raw.githubusercontent.com/" + username + "/" + repoName + "/master/README.md");
             URLConnection con = url.openConnection();
             InputStream in = con.getInputStream();
             String encoding = con.getContentEncoding();

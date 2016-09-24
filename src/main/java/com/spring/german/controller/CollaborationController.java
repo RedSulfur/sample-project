@@ -9,8 +9,9 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+    import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.security.Principal;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @Controller
 public class CollaborationController {
 
-    private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
+    private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
 
     private CollaborationService collaborationService;
 
@@ -55,17 +56,28 @@ public class CollaborationController {
      */
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
     public ModelAndView getRepoData(@ModelAttribute(value = "repoName") String repoName,
-                                    Principal principal) {
+                                    HttpServletRequest request, Principal principal) {
         Assert.notNull(repoName);
         log.info("Repository name fetched: {}", repoName);
         log.info("Current logged in user: {}", principal.getName());
+        String username = principal.getName();
 
-        List<String> technologies = collaborationService.getTechnologies(repoName);
+        List<String> technologies = collaborationService.getTechnologies(username, repoName);
+        request.getSession().setAttribute("technologies", technologies);
 
         ModelAndView mav = this.getDefaultView();
-        mav.addObject("technologies", technologies);
 
         return mav;
+    }
+
+    @RequestMapping(value = "/publish", method = RequestMethod.GET)
+    public ModelAndView publishProject(@ModelAttribute(value = "techs") String technologies,
+                                       HttpServletRequest request) {
+
+        log.info("Parameter is not an array: {}", request.getSession().getAttribute("technologies"));
+        request.getSession().removeAttribute("technologies");
+
+        return this.getDefaultView();
     }
 
     private ModelAndView getDefaultView() {
