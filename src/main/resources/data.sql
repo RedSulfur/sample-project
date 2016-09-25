@@ -44,40 +44,10 @@ VALUES ('DBA');
 --  Populate one Admin User which will further create other users for the application using GUI
 
 INSERT INTO app_user(sso_id, password, first_name, last_name, email, state)
-VALUES ('sulfur','$2a$10$rNSLPUnJZZZfu6otudhFB.Uz8IahfsGqRaiQalCwsNghF10N7Dy9q', 'Raymond','Sulfur','sulfur@gmail.com', 'Active');
+VALUES ('RedSulfur','$2a$10$Fb7/daJELSrdgJ4gkNL9Gu1KPS.2aYrqLXN38tNXzFV8mfHeA80mi', 'John','Doe','sulfur@gmail.com', 'Active');
 
 --  Populate JOIN Table
 
 INSERT INTO app_user_user_profile (user_id, user_profile_id)
 SELECT app_user.id, profile.id FROM app_user app_user, user_profile profile
-where app_user.sso_id='sulfur' and profile.type='ADMIN';
-
-DROP TABLE film;
-
-CREATE TABLE film (
-  id          BIGSERIAL NOT NULL,
-  title       VARCHAR(30),
-  stars       DOUBLE PRECISION,
-  description VARCHAR(255),
-  image       CHARACTER VARYING(255),
-  CONSTRAINT film_id_pk PRIMARY KEY (id)
-);
-
-INSERT INTO film (title, stars, description, image)
-VALUES ('Dr. House', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/house.jpg');
-INSERT INTO film (title, stars, description, image)
-VALUES ('Fringe', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/fringe.jpg');
-INSERT INTO film (title, stars, description, image)
-VALUES ('Breaking Bad', 9, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/breakingbad.jpg');
-INSERT INTO film (title, stars, description, image)
-VALUES ('Sherlock', 8.5, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/sher.jpg');
-INSERT INTO film (title, stars, description, image)
-VALUES ('Game of Thrones', 9.6, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/thrones.jpg');
-INSERT INTO film (title, stars, description, image)
-VALUES ('Dexter', 9.7, 'SOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERESOME INFO HERE',
-        'img/dexter.jpg');
+where app_user.sso_id='RedSulfur' and profile.type='ADMIN';

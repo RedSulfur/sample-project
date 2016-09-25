@@ -58,7 +58,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            Oder By
+                            Order By
                         </a>
                         <div class="dropdown-menu" aria-labelledby="Preview">
                             <a class="dropdown-item" href="#">Difficulty</a>
@@ -70,12 +70,10 @@
 
             </nav>
         </div>
-        <!--onmouseover="showMe(this);"-->
         <div class="card aligned text-md-center" th:each="project : ${projects}">
             <div class="card-block">
                 <img class="hideMe" style="width: 336px; height: 280px" th:src="@{/} + ${project.logo}" alt="Sample Image"/>
                 <div th:id="${project.id}" class="card-img-overlay caption showMe">
-                    <!--<div style="float: right; padding-right:5px; padding-top: 5px" class="octicon octicon-bookmark" th:text="${#numbers.formatDecimal(film.stars, 0, 1)}">9.0</div>-->
                     <br/>
                     <h4 style="padding-top: 10px" th:text="TITLE">Dr. House</h4>
                     <ul style="padding-top: 5px; font-size: 0.9em">

@@ -29,7 +29,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
-    private static final String LOGO_NAME = "germany-logo.jpg";
+    private static final String LOGO_NAME = "logo.png";
 
     /**
      * The instance of the TemplateEngine class is provided by Spring Boot
@@ -108,10 +108,9 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         mimeMessageHelper.setText(htmlContent, true); // true = isHtml
         mimeMessageHelper.setTo(recipientAddress);
         mimeMessageHelper.setSubject(subject);
+        mimeMessageHelper.setFrom("noreply@gmail.com");
 
-//        mimeMessageHelper.setText(message + " \n" + "http://localhost:8080" + confirmationUrl);
-
-        mimeMessageHelper.addInline(LOGO_NAME, new ClassPathResource("static/img/germany-logo.jpg"));
+        mimeMessageHelper.addInline(LOGO_NAME, new ClassPathResource("static/img/logo.png"));
 
         log.info("JavaMailSender performs an email dispatch");
         mailSender.send(mimeMessage);

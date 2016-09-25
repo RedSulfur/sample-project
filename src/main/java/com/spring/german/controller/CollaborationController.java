@@ -75,6 +75,10 @@ public class CollaborationController {
                                        HttpServletRequest request) {
 
         log.info("Parameter is not an array: {}", request.getSession().getAttribute("technologies"));
+
+        List<String> techs = (List<String>) request.getSession().getAttribute("technologies");
+        techs.forEach(t -> log.info("One of your techs: {}", t));
+
         request.getSession().removeAttribute("technologies");
 
         return this.getDefaultView();

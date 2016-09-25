@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,13 +25,10 @@ public class GalleryController {
     @RequestMapping(value = "/gallery", method = RequestMethod.GET)
     public String getProjects(Model model) {
 
-        /*projectRepository.findByTechnologiesContaining("Maven")
-                .stream().map(Project::getTechnologies)
-                .collect(Collectors.toList()).forEach(p -> list.add(p.split(",")));*/
-
         List<Project> projects = projectRepository.getProjectsWithSpecificTechnologies();
 
         projects.forEach(project -> log.info("Technology: {}", project.getTechnologies()));
+        projects.forEach(project -> log.info("Logo for specific technology: {}", project.getLogo()));
 
         model.addAttribute("projects", projects);
 
