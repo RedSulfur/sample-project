@@ -44,7 +44,7 @@ VALUES ('DBA');
 --  Populate one Admin User which will further create other users for the application using GUI
 
 INSERT INTO app_user(sso_id, password, first_name, last_name, email, state)
-VALUES ('RedSulfur','$2a$10$Fb7/daJELSrdgJ4gkNL9Gu1KPS.2aYrqLXN38tNXzFV8mfHeA80mi', 'John','Doe','sulfur@gmail.com', 'Active');
+VALUES ('RedSulfur','$2a$10$tq5k2IeIfFEQcvqUgP2QAOYpF7CsnXnxDJsdwwG1bNs9vL0IrKQ7e', 'John','Doe','sulfur@gmail.com', 'Active');
 
 --  Populate JOIN Table
 

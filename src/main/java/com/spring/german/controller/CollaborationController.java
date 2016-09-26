@@ -58,9 +58,10 @@ public class CollaborationController {
     public ModelAndView getRepoData(@ModelAttribute(value = "repoName") String repoName,
                                     HttpServletRequest request, Principal principal) {
         Assert.notNull(repoName);
+
         log.info("Repository name fetched: {}", repoName);
-        log.info("Current logged in user: {}", principal.getName());
         String username = principal.getName();
+        log.info("Currently logged in user: {}", username);
 
         List<String> technologies = collaborationService.getTechnologies(username, repoName);
         request.getSession().setAttribute("technologies", technologies);
