@@ -75,9 +75,10 @@
                 <img class="hideMe" style="width: 336px; height: 280px" th:src="@{/} + ${project.logo}" alt="Sample Image"/>
                 <div th:id="${project.id}" class="card-img-overlay caption showMe">
                     <br/>
-                    <h4 style="padding-top: 10px" th:text="TITLE">Dr. House</h4>
+                    <h4 style="padding-top: 10px; padding-bottom: 10px" th:text="TITLE"></h4>
+                    <p th:text="${tech}" th:each="tech : ${project.technologies}"></p>
                     <ul style="padding-top: 5px; font-size: 0.9em">
-                        <li th:text="${technology}" th:each="technology : ${#strings.arraySplit(project.technologies, ',')}"></li>
+                        <li th:text="${technology}" th:each="technology : ${technologies}"></li>
                     </ul>
                 </div>
             </div>

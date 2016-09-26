@@ -1,5 +1,7 @@
 package com.spring.german.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,7 +11,8 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String technologies;
+    @Type(type = "com.spring.german.util.CustomStringArray")
+    private String[] technologies;
 
     private String logo;
 
@@ -25,11 +28,11 @@ public class Project {
         this.id = id;
     }
 
-    public String getTechnologies() {
+    public String[] getTechnologies() {
         return technologies;
     }
 
-    public void setTechnologies(String technologies) {
+    public void setTechnologies(String[] technologies) {
         this.technologies = technologies;
     }
 

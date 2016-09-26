@@ -1,6 +1,10 @@
 package com.spring.german.controller;
 
+import com.spring.german.entity.Project;
+import com.spring.german.entity.User;
+import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.CollaborationService;
+import com.spring.german.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -22,10 +27,16 @@ public class CollaborationController {
     private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
 
     private CollaborationService collaborationService;
+    private UserService userService;
+    private ProjectRepository projectRepository;
 
     @Autowired
-    public CollaborationController(CollaborationService collaborationService) {
+    public CollaborationController(CollaborationService collaborationService,
+                                   UserService userService,
+                                   ProjectRepository projectRepository) {
         this.collaborationService = collaborationService;
+        this.userService = userService;
+        this.projectRepository = projectRepository;
     }
 
     /**
@@ -73,12 +84,22 @@ public class CollaborationController {
 
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView publishProject(@ModelAttribute(value = "techs") String technologies,
-                                       HttpServletRequest request) {
+                                       HttpServletRequest request, Principal principal) {
 
         log.info("Parameter is not an array: {}", request.getSession().getAttribute("technologies"));
 
         List<String> techs = (List<String>) request.getSession().getAttribute("technologies");
         techs.forEach(t -> log.info("One of your techs: {}", t));
+
+        String[] arrayToSave = techs.toArray(new String[techs.size()]);
+        String username = principal.getName();
+        User user = userService.findBySso(username);
+        log.info("User fetched by username(Collaboration controller): {}", user);
+        Project project = new Project();
+        project.setTechnologies(arrayToSave);
+        project.setUser(user);
+        log.info("Project to be saved: {}", project);
+        projectRepository.save(project);
 
         request.getSession().removeAttribute("technologies");
 

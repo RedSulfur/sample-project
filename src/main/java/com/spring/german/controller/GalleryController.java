@@ -27,8 +27,7 @@ public class GalleryController {
 
         List<Project> projects = projectRepository.getProjectsWithSpecificTechnologies();
 
-        projects.forEach(project -> log.info("Technology: {}", project.getTechnologies()));
-        projects.forEach(project -> log.info("Logo for specific technology: {}", project.getLogo()));
+        projects.forEach(project -> log.info("Technology: {}", Arrays.toString(project.getTechnologies())));
 
         model.addAttribute("projects", projects);
 
