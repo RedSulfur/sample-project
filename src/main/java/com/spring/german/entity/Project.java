@@ -1,8 +1,8 @@
 package com.spring.german.entity;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Project {
@@ -11,14 +11,23 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Type(type = "com.spring.german.util.CustomStringArray")
-    private String[] technologies;
-
     private String logo;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "projects_technologies",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "technology_id")})
+    private Set<Technology> technologies = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Project(String logo, Set<Technology> technologies, User user) {
+        this.logo = logo;
+        this.technologies = technologies;
+        this.user = user;
+    }
 
     public long getId() {
         return id;
@@ -26,14 +35,6 @@ public class Project {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String[] getTechnologies() {
-        return technologies;
-    }
-
-    public void setTechnologies(String[] technologies) {
-        this.technologies = technologies;
     }
 
     public String getLogo() {

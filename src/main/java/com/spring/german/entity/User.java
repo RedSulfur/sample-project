@@ -50,7 +50,6 @@ public class User {
     @JoinTable(name = "app_user_user_profile",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_profile_id") })
-
     private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -25,11 +25,11 @@ public class GalleryController {
     @RequestMapping(value = "/gallery", method = RequestMethod.GET)
     public String getProjects(Model model) {
 
-        List<Project> projects = projectRepository.getProjectsWithSpecificTechnologies();
-
-        projects.forEach(project -> log.info("Technology: {}", Arrays.toString(project.getTechnologies())));
-
-        model.addAttribute("projects", projects);
+//        List<Project> projects = projectRepository.getProjectsWithSpecificTechnologies("Maven,JPA");
+//
+//        projects.forEach(project -> log.info("Technology: {}", Arrays.toString(project.getTechnologies())));
+//
+//        model.addAttribute("projects", projects);
 
         return "gallery";
     }

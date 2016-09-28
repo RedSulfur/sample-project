@@ -1,8 +1,10 @@
 package com.spring.german.controller;
 
 import com.spring.german.entity.Project;
+import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
 import com.spring.german.repository.ProjectRepository;
+import com.spring.german.repository.TechnologyRepository;
 import com.spring.german.service.CollaborationService;
 import com.spring.german.service.UserService;
 import org.slf4j.Logger;
@@ -13,13 +15,14 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.security.Principal;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class CollaborationController {
@@ -29,11 +32,13 @@ public class CollaborationController {
     private CollaborationService collaborationService;
     private UserService userService;
     private ProjectRepository projectRepository;
+    private TechnologyRepository technologyRepository;
 
     @Autowired
     public CollaborationController(CollaborationService collaborationService,
                                    UserService userService,
-                                   ProjectRepository projectRepository) {
+                                   ProjectRepository projectRepository,
+                                   TechnologyRepository technologyRepository) {
         this.collaborationService = collaborationService;
         this.userService = userService;
         this.projectRepository = projectRepository;
@@ -74,7 +79,7 @@ public class CollaborationController {
         String username = principal.getName();
         log.info("Currently logged in user: {}", username);
 
-        List<String> technologies = collaborationService.getTechnologies(username, repoName);
+        Set<String> technologies = collaborationService.getTechnologies(username, repoName);
         request.getSession().setAttribute("technologies", technologies);
 
         ModelAndView mav = this.getDefaultView();
@@ -86,11 +91,27 @@ public class CollaborationController {
     public ModelAndView publishProject(@ModelAttribute(value = "techs") String technologies,
                                        HttpServletRequest request, Principal principal) {
 
-        log.info("Parameter is not an array: {}", request.getSession().getAttribute("technologies"));
+        log.info("Technologies set: {}", request.getSession().getAttribute("technologies"));
 
-        List<String> techs = (List<String>) request.getSession().getAttribute("technologies");
+        Set<String> techs = (Set<String>) request.getSession().getAttribute("technologies");
         techs.forEach(t -> log.info("One of your techs: {}", t));
 
+        String username = principal.getName();
+        User user = userService.findBySso(username);
+        log.info("User fetched by username(Collaboration controller): {}", user);
+
+
+
+        /*HashSet<Technology> technologiesToSave = new HashSet<>();
+        techs.forEach(t -> {
+                log.info("T: {}", t);
+                Technology saved = technologyRepository.save(new Technology(t));
+                log.info("Technology saved: {}", saved);
+                technologiesToSave.add(saved);
+            }
+        );*/
+
+      /*
         String[] arrayToSave = techs.toArray(new String[techs.size()]);
         String username = principal.getName();
         User user = userService.findBySso(username);
@@ -100,8 +121,8 @@ public class CollaborationController {
         project.setUser(user);
         log.info("Project to be saved: {}", project);
         projectRepository.save(project);
-
-        request.getSession().removeAttribute("technologies");
+      */
+      request.getSession().removeAttribute("technologies");
 
         return this.getDefaultView();
     }

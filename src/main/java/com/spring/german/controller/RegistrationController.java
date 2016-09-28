@@ -38,9 +38,6 @@ public class RegistrationController {
     private UserValidator validator;
 
     @Autowired
-    private ServletContext servletContext;
-
-    @Autowired
     ApplicationEventPublisher eventPublisher;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
