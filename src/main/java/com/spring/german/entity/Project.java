@@ -20,13 +20,18 @@ public class Project {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Project() {
+    }
+
+    public Project(String logo, User user) {
+        this.logo = logo;
+        this.user = user;
+    }
+
     public Project(String logo, List<Technology> technologies, User user) {
         this.logo = logo;
         this.technologies = technologies;
         this.user = user;
-    }
-
-    public Project() {
     }
 
     public long getId() {

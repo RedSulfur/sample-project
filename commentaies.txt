@@ -1,0 +1,16 @@
+/**
+ * Commentary to a saving procedure
+ * (Collaboration controller, publishProject method)
+ *
+ * 1) In child entity class you need to have a constructor
+ * with the reference of type of owner of the relationship
+ * among its arguments.
+ *
+ * 2) You should not save child entity at first.
+ *
+ * 3) When you pass a list of child entities to a corresponding setter of
+ * your main entity (to the owner of the relationship) and perform a save
+ * operation, Spring Data JPA will trigger assignments to all
+ * fields that represent interconnections between entities that
+ * rely on main entity which is being passed.
+ */

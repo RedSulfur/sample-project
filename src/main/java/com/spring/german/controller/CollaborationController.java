@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,7 @@ public class CollaborationController {
     private CollaborationService collaborationService;
     private UserService userService;
     private ProjectRepository projectRepository;
+    private TechnologyRepository technologyRepository;
 
     @Autowired
     public CollaborationController(CollaborationService collaborationService,
@@ -70,7 +72,7 @@ public class CollaborationController {
      */
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
     public ModelAndView getTechnologiesByRepo(@ModelAttribute(value = "repoName") String repoName,
-                                    HttpServletRequest request, Principal principal) {
+                                              HttpServletRequest request, Principal principal) {
         Assert.notNull(repoName);
 
         log.info("Repository name fetched: {}", repoName);
@@ -86,52 +88,38 @@ public class CollaborationController {
     }
 
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
-    public ModelAndView publishProject(@ModelAttribute(value = "techs") String technologies,
-                                       HttpServletRequest request, Principal principal) {
+    public ModelAndView publishProject(HttpServletRequest request, Principal principal) {
 
         log.info("Technologies list: {}", request.getSession().getAttribute("technologies"));
 
-        List<String> techs = (List<String>) request.getSession().getAttribute("technologies");
+        List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
 
         String username = principal.getName();
         User user = userService.findBySso(username);
         log.info("User fetched by username(Collaboration controller): {}", user);
 
-        List<Technology> collect = techs.stream()
-                .map(t -> new Technology(t))
-                .collect(Collectors.toList());
+        collaborationService.saveProjectWithTechnologies(username, technologies);
 
-        Project project = new Project();
-        project.setUser(user);
-        project.setTechnologies();
+        Project project = new Project("default", user);
 
-        userService.save()
+        List<Technology> technologiesToSave = technologies.stream()
+                .map(t -> {
+                    Technology technology = new Technology(t, project);
+                    return technology;
+                }).collect(Collectors.toList());
 
+        project.setTechnologies(technologiesToSave);
 
-
-        /*HashSet<Technology> technologiesToSave = new HashSet<>();
-        techs.forEach(t -> {
-                log.info("T: {}", t);
-                Technology saved = technologyRepository.save(new Technology(t));
-                log.info("Technology saved: {}", saved);
-                technologiesToSave.add(saved);
-            }
-        );*/
-
-      /*
-        String[] arrayToSave = techs.toArray(new String[techs.size()]);
-        String username = principal.getName();
-        User user = userService.findBySso(username);
-        log.info("User fetched by username(Collaboration controller): {}", user);
-        Project project = new Project();
-        project.setTechnologies(arrayToSave);
-        project.setUser(user);
-        log.info("Project to be saved: {}", project);
         projectRepository.save(project);
-      */
-      request.getSession().removeAttribute("technologies");
+
+        request.getSession().removeAttribute("technologies");
 
         return this.getDefaultView();
+    }
+
+    @RequestMapping(value = "/clear", method = RequestMethod.GET)
+    public void getTechnologiesByRepo(HttpServletRequest request) {
+        request.getSession().removeAttribute("technologies");
     }
 
     private ModelAndView getDefaultView() {

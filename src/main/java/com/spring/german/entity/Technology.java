@@ -22,6 +22,11 @@ public class Technology {
         this.name = name;
     }
 
+    public Technology(String name, Project project) {
+        this.name = name;
+        this.project = project;
+    }
+
     public long getId() {
         return id;
     }

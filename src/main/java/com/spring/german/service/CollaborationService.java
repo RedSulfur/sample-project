@@ -46,4 +46,10 @@ public class CollaborationService {
         }
         return technologies;
     }
+
+    public void saveProjectWithTechnologies(String username, List<String> technologies) {
+
+
+
+    }
 }

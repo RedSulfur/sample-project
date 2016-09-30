@@ -61,6 +61,7 @@ CREATE TABLE project (
   CONSTRAINT project_pk PRIMARY KEY (id),
   CONSTRAINT project_fk FOREIGN KEY (user_id)
   REFERENCES app_user(id)
+  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE technology (
@@ -70,6 +71,7 @@ CREATE TABLE technology (
   CONSTRAINT technology_pk PRIMARY KEY (id),
   CONSTRAINT technology_fk FOREIGN KEY (project_id)
   REFERENCES project (id)
+  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO project (id, logo, user_id) VALUES (1, 'img/boot.png', 1);
