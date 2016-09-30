@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +24,7 @@ public class CollaborationService {
 
     private static final Logger log = LoggerFactory.getLogger(CollaborationService.class);
 
-    public Set<String> getTechnologies(String username, String repoName) {
+    public List<String> getTechnologies(String username, String repoName) {
 
         String body;
         try {
@@ -37,7 +39,7 @@ public class CollaborationService {
             throw new CustomException("There is no such user on github, or " +
                     "repository name you've specified is non existent", e);
         }
-        Set<String> technologies = new HashSet<>();
+        List<String> technologies = new ArrayList<>();
         Matcher m = Pattern.compile(REGEX).matcher(body);
         while (m.find()) {
             technologies.add(m.group(1));

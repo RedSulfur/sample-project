@@ -6,22 +6,6 @@
 
     <script src="../static/js/caption-slide-down.js" th:src="@{js/caption-slide-down.js}"/>
 
-    <script type="text/javascript">
-        /*<![CDATA[*/
-        $(document).on('mouseenter', '.hideMe', function () {
-            var id = $(this).closest("div").find('.caption').attr('id');
-            var show = document.getElementById(id);
-            $(show).fadeIn(300);
-            $(show).css('background-color', "white");
-        });
-        $(document).on('mouseleave', '.showMe', function () {
-            var id = $(this).attr('id');
-            var caption = document.getElementById(id);
-            $(caption).hide();
-        });
-        /*]]>*/
-    </script>
-
     <!--include github icons (octicons)-->
     <link href="../static/build/font/octicons.css" type="text/css" th:href="@{/build/font/octicons.css}"
           rel="stylesheet"/>
@@ -84,7 +68,6 @@
 
                 <a type="submit" th:href="@{/publish}"
                    class="btn btn-success" role="button">Offer project</a>
-                <!--th:value="${technologies}" th:name="technologies"-->
             </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="buzz">Not yet implemented</div>
@@ -93,25 +76,5 @@
 </div>
 
 <div th:include="fragments/footer :: footer"></div>
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js}"
-        integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY"
-        crossorigin="anonymous"/>
-
-<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js}"
-        integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB"
-        crossorigin="anonymous"/>
-<script th:src="@{/js/vendor/holder.min.js}"/>
-<script type="text/javascript">
-    /*<![CDATA[*/
-    $(function () {
-        Holder.addTheme("thumb", { background: "#55595c", foreground: "#eceeef", text: "Thumbnail" });
-    });
-    /*]]>*/
-</script>
-<script th:src="@{/dist/js/bootstrap.min.js}"/>
 </body>
 </html>

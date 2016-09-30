@@ -1,5 +1,7 @@
 package com.spring.german.controller;
 
+import com.spring.german.entity.Project;
+import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.repository.TechnologyRepository;
@@ -18,7 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.security.Principal;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CollaborationController {
@@ -28,7 +31,6 @@ public class CollaborationController {
     private CollaborationService collaborationService;
     private UserService userService;
     private ProjectRepository projectRepository;
-    private TechnologyRepository technologyRepository;
 
     @Autowired
     public CollaborationController(CollaborationService collaborationService,
@@ -67,7 +69,7 @@ public class CollaborationController {
      * @throws IOException
      */
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
-    public ModelAndView getRepoData(@ModelAttribute(value = "repoName") String repoName,
+    public ModelAndView getTechnologiesByRepo(@ModelAttribute(value = "repoName") String repoName,
                                     HttpServletRequest request, Principal principal) {
         Assert.notNull(repoName);
 
@@ -75,7 +77,7 @@ public class CollaborationController {
         String username = principal.getName();
         log.info("Currently logged in user: {}", username);
 
-        Set<String> technologies = collaborationService.getTechnologies(username, repoName);
+        List<String> technologies = collaborationService.getTechnologies(username, repoName);
         request.getSession().setAttribute("technologies", technologies);
 
         ModelAndView mav = this.getDefaultView();
@@ -87,14 +89,23 @@ public class CollaborationController {
     public ModelAndView publishProject(@ModelAttribute(value = "techs") String technologies,
                                        HttpServletRequest request, Principal principal) {
 
-        log.info("Technologies set: {}", request.getSession().getAttribute("technologies"));
+        log.info("Technologies list: {}", request.getSession().getAttribute("technologies"));
 
-        Set<String> techs = (Set<String>) request.getSession().getAttribute("technologies");
-        techs.forEach(t -> log.info("One of your techs: {}", t));
+        List<String> techs = (List<String>) request.getSession().getAttribute("technologies");
 
         String username = principal.getName();
         User user = userService.findBySso(username);
         log.info("User fetched by username(Collaboration controller): {}", user);
+
+        List<Technology> collect = techs.stream()
+                .map(t -> new Technology(t))
+                .collect(Collectors.toList());
+
+        Project project = new Project();
+        project.setUser(user);
+        project.setTechnologies();
+
+        userService.save()
 
 
 

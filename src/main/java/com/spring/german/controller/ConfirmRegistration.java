@@ -51,7 +51,7 @@ public class ConfirmRegistration {
         user.setState(State.ACTIVE.getState());
         userService.updateUser(user);
 
-        return "hello-world";
+        return "gallery";
     }
 
 }
