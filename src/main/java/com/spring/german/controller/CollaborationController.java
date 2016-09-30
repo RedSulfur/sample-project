@@ -1,9 +1,6 @@
 package com.spring.german.controller;
 
-import com.spring.german.repository.ProjectRepository;
-import com.spring.german.repository.TechnologyRepository;
 import com.spring.german.service.CollaborationService;
-import com.spring.german.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +22,10 @@ public class CollaborationController {
     private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
 
     private CollaborationService collaborationService;
-    private UserService userService;
-    private ProjectRepository projectRepository;
-    private TechnologyRepository technologyRepository;
 
     @Autowired
-    public CollaborationController(CollaborationService collaborationService,
-                                   UserService userService,
-                                   ProjectRepository projectRepository,
-                                   TechnologyRepository technologyRepository) {
+    public CollaborationController(CollaborationService collaborationService) {
         this.collaborationService = collaborationService;
-        this.userService = userService;
-        this.projectRepository = projectRepository;
     }
 
     /**
@@ -53,7 +42,7 @@ public class CollaborationController {
     /**
      * Searches for the readme file at user's GitHub repository
      * and establishes a url connection to it. After connection
-     * to file was acquired controller performs its processing
+     * to file was acquired, controller performs its processing
      * in order to obtain the name of every technology that was
      * used to create the given repository.
      *
@@ -77,11 +66,26 @@ public class CollaborationController {
         List<String> technologies = collaborationService.getTechnologies(username, repoName);
         request.getSession().setAttribute("technologies", technologies);
 
-        ModelAndView mav = this.getDefaultView();
-
-        return mav;
+        return this.getDefaultView();
     }
 
+    /**
+     * On accessing the /publish endpoint, method gets all the technology
+     * names that were passed to it as a session attribute. Defines a
+     * name of the currently logged in user and maps a list of strings
+     * that represent technologies to the list of the corresponding objects.
+     * These {@link com.spring.german.entity.Technology} objects are being
+     * associated with the obtained user and his project. This entwined
+     * chain is being saved afterwards. When finishing its work method clears
+     * the session.
+     *
+     * @param  request   an object that is used to obtain technology names from
+     *                   the session
+     * @param  principal {@link Principal} object is needed to determine
+     *                   a username of the current user
+     * @return {@link ModelAndView} object that contains no model attributes and
+     *         a default view name.
+     */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView publishProject(HttpServletRequest request, Principal principal) {
 
@@ -99,6 +103,15 @@ public class CollaborationController {
         return this.getDefaultView();
     }
 
+    /**
+     *
+     * Supplies all the methods from {@link CollaborationController} with
+     * the default view object. It is used to redirect to a default resource
+     * when controller's method finishes its work.
+     *
+     * @return {@link ModelAndView} object that contains a default view name for
+     *                              the given controller
+     */
     private ModelAndView getDefaultView() {
         return new ModelAndView("collaboration");
     }
