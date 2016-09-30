@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    @Query(value = "select * from project where technologies @> CAST('{Maven, JPA}' AS varchar[])", nativeQuery = true)
-    List<Project> getProjectsWithSpecificTechnologies();
+
+    List<Project> findDistinctByTechnologiesNameIn(List<String> names);
 }

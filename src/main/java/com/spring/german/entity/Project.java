@@ -1,8 +1,8 @@
 package com.spring.german.entity;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Project {
@@ -13,20 +13,20 @@ public class Project {
 
     private String logo;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "projects_technologies",
-            joinColumns = {@JoinColumn(name = "project_id")},
-            inverseJoinColumns = {@JoinColumn(name = "technology_id")})
-    private Set<Technology> technologies = new HashSet<>();
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Technology> technologies = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Project(String logo, Set<Technology> technologies, User user) {
+    public Project(String logo, List<Technology> technologies, User user) {
         this.logo = logo;
         this.technologies = technologies;
         this.user = user;
+    }
+
+    public Project() {
     }
 
     public long getId() {
@@ -51,6 +51,14 @@ public class Project {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Technology> getTechnologies() {
+        return technologies;
+    }
+
+    public void setTechnologies(List<Technology> technologies) {
+        this.technologies = technologies;
     }
 
     @Override

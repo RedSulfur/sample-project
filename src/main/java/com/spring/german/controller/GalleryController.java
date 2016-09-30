@@ -7,12 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class GalleryController {
@@ -22,14 +24,25 @@ public class GalleryController {
     @Autowired
     private ProjectRepository projectRepository;
 
-    @RequestMapping(value = "/gallery", method = RequestMethod.GET)
-    public String getProjects(Model model) {
+    @RequestMapping(value = "/gallery", method = RequestMethod.POST)
+    public ModelAndView getProjects(ModelAndView mav, @ModelAttribute(value = "technologies") String technologies) {
 
-//        List<Project> projects = projectRepository.getProjectsWithSpecificTechnologies("Maven,JPA");
-//
-//        projects.forEach(project -> log.info("Technology: {}", Arrays.toString(project.getTechnologies())));
-//
-//        model.addAttribute("projects", projects);
+        log.info("In GalleryController");
+        log.info("{}", technologies);
+
+        List<Project> projects = projectRepository.findDistinctByTechnologiesNameIn(Arrays.asList(technologies));
+
+        projects.forEach(p -> log.info("Project fetched: {}", p.toString()));
+
+        mav.addObject("projects", projects);
+        mav.setViewName("gallery");
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/gallery", method = RequestMethod.GET)
+    public String showGallery(Model model) {
+
 
         return "gallery";
     }

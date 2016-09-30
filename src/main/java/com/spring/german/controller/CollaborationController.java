@@ -1,7 +1,5 @@
 package com.spring.german.controller;
 
-import com.spring.german.entity.Project;
-import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.repository.TechnologyRepository;
@@ -20,8 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.security.Principal;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Controller

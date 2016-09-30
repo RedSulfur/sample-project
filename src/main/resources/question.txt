@@ -1,0 +1,21 @@
+I have a simple webapp where users can provide a set of technologies that is being used in their projects. Now I want to list all the projects that contain only specific technologies.
+
+I've achieved this by creating an array of strings in my project table (I've used PostgreSQL). An array represents a set of technologies:
+
+CREATE TABLE project(
+id bigserial PRIMARY KEY,
+technologies varchar(255)[]
+);
+
+INSERT INTO project (technologies)
+VALUES ('{Thymeleaf,Hibernate,PostgreSQL,Spring,Gradle}');
+//more inserts
+and then by running a query with contains @> operator:
+
+@Query(value = "select * from project where technologies @> CAST('{Gradle, Spring}' AS varchar[])", nativeQuery = true)
+List<Project> findProjectsWithSpecificTechnologies();
+But I don't feel like it is a right approach, because I'm trying to store a sequence of items in a single column, which does not correspond well with basic RD principles.
+
+I also imagine, that it is a better practice to utilize composition and avoid primitive types in entities.
+
+So would it be better to create a separate entity for technologies and to configure one-to-many relationship between projects and technologies? If so, how could i implement that findProjectsWithSpecificTechnologies() method in this case? Or maybe should I consider NoSQL for this kind of problem?

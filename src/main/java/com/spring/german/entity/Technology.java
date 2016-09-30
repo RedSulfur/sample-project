@@ -1,7 +1,6 @@
 package com.spring.german.entity;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 public class Technology {
@@ -10,13 +9,17 @@ public class Technology {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String technology;
+    private String name;
 
-    @ManyToMany(mappedBy = "technologies")
-    private Set<Project> projects;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
-    public Technology(String technology) {
-        this.technology = technology;
+    public Technology() {
+    }
+
+    public Technology(String name) {
+        this.name = name;
     }
 
     public long getId() {
@@ -27,27 +30,27 @@ public class Technology {
         this.id = id;
     }
 
-    public String getTechnology() {
-        return technology;
+    public String getName() {
+        return name;
     }
 
-    public void setTechnology(String technology) {
-        this.technology = technology;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Set<Project> getProjects() {
-        return projects;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjects(Set<Project> projects) {
-        this.projects = projects;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Override
     public String toString() {
         return "Technology{" +
                 "id=" + id +
-                ", technology='" + technology + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

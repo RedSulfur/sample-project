@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
-        th:href="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
+            th:href="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js}"/>
 
     <script src="../static/js/caption-slide-down.js" th:src="@{js/caption-slide-down.js}"/>
 
@@ -31,7 +31,7 @@
     <link href="../static/dist/css/bootstrap.css" th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
 
 
-<!-- Custom styles for this template -->
+    <!-- Custom styles for this template -->
     <link href="../static/css/gallery.css" th:href="@{/css/gallery.css}" rel="stylesheet"/>
 </head>
 
@@ -45,40 +45,43 @@
         <div class="container centered" style="margin-top: 15px; margin-bottom: 15px">
             <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
 
-                <!-- Links -->
                 <ul class="nav navbar-nav">
-                    <li class="nav-item" style="padding-top: 5px">
-                        <span class="octicon octicon-search"></span>
-                    </li>
-                    <li class="nav-item">
-                        <input type="text" class="form-control"/>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link 1</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            Order By
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="Preview">
-                            <a class="dropdown-item" href="#">Difficulty</a>
-                            <a class="dropdown-item" href="#">Rating</a>
-                            <a class="dropdown-item" href="#">Dropdown Link 3</a>
-                        </div>
-                    </li>
+                    <form th:action="@{/gallery}" th:method="POST">
+                        <li class="nav-item" style="padding-top: 5px">
+                            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </li>
+                        <li class="nav-item">
+                            <input th:value="${technologies}" th:name="technologies" type="text"
+                                   placeholder="Separate tech-ies with coma" class="form-control"/>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link 1</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+                               role="button" aria-haspopup="true" aria-expanded="false">
+                                Order By
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="Preview">
+                                <a class="dropdown-item" href="#">Difficulty</a>
+                                <a class="dropdown-item" href="#">Rating</a>
+                                <a class="dropdown-item" href="#">Dropdown Link 3</a>
+                            </div>
+                        </li>
+                    </form>
                 </ul>
 
             </nav>
         </div>
         <div class="card aligned text-md-center" th:each="project : ${projects}">
             <div class="card-block">
-                <img class="hideMe" style="width: 336px; height: 280px" th:src="@{/} + ${project.logo}" alt="Sample Image"/>
+                <img class="hideMe" style="width: 336px; height: 280px" th:src="@{/} + ${project.logo}"
+                     alt="Sample Image"/>
                 <div th:id="${project.id}" class="card-img-overlay caption showMe">
                     <br/>
                     <h4 style="padding-top: 10px; padding-bottom: 10px" th:text="TITLE"></h4>
-                    <p th:text="${tech}" th:each="tech : ${project.technologies}"></p>
                     <ul style="padding-top: 5px; font-size: 0.9em">
-                        <li th:text="${technology}" th:each="technology : ${technologies}"></li>
+                        <li th:text="${tech.name}" th:each="tech : ${project.technologies}"></li>
                     </ul>
                 </div>
             </div>
