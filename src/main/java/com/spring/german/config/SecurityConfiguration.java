@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Autowired
     @Qualifier("customUserDetailsService")
@@ -45,31 +45,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
 
+    /**
+     * Method ensures that any URL that starts with "/gallery" or "/collaborate" will
+     * be restricted to users who have the role "ROLE_ADMIN".
+     * Creates a custom login page with ‘/login’ url, which will
+     * accept ssoId as username and password as http request parameters.
+     * It will also ensure that instead of showing the default HTTP 403 page
+     * when any 403 exception [http access denied] occurs a specific informative
+     * error page will be shown.
+     *
+     * @param  http {@link HttpSecurity} object that is used to specify
+     *              access restrictions to every endpoint in the project
+     * @throws Exception if an error occurs
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-
                 .antMatchers("/", "/home", "/h2/**").permitAll()
-                /**
-                 * Any URL that starts with "/gallery" will be restricted to users who have the role
-                 * "ROLE_ADMIN". You will notice that since we are invoking the hasRole method we
-                 * do not need to specify the "ROLE_" prefix.
-                 */
-                .antMatchers("/gallery").access("hasRole('ROLE_ADMIN')")
-                /**
-                 * This code creates a custom login page with ‘/login’ url, which will
-                 * accept ssoId as username and password Http request parameters.
-                 */
+                .antMatchers("/gallery", "/collaborate").access("hasRole('ROLE_ADMIN')")
                 .and().formLogin().loginPage("/login")
                 .usernameParameter("ssoId").passwordParameter("password")
                 .and().csrf().requireCsrfProtectionMatcher(new UrlFilter("/h2"))
-                /**
-                 * will catch all 403 [http access denied] exceptions and display our user
-                 * defined page instead of showing default HTTP 403 page [ which is not so helpful anyway].
-                 */
                 .and().exceptionHandling().accessDeniedPage("/Access_Denied");
-
         http.headers().frameOptions().disable();
     }
 }
