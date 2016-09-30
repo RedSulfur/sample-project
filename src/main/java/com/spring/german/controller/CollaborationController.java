@@ -1,8 +1,5 @@
 package com.spring.german.controller;
 
-import com.spring.german.entity.Project;
-import com.spring.german.entity.Technology;
-import com.spring.german.entity.User;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.repository.TechnologyRepository;
 import com.spring.german.service.CollaborationService;
@@ -20,9 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class CollaborationController {
@@ -90,36 +85,18 @@ public class CollaborationController {
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView publishProject(HttpServletRequest request, Principal principal) {
 
-        log.info("Technologies list: {}", request.getSession().getAttribute("technologies"));
+        log.info("Technologies list obtained from collaboration.html: {}",
+                request.getSession().getAttribute("technologies"));
 
         List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
 
         String username = principal.getName();
-        User user = userService.findBySso(username);
-        log.info("User fetched by username(Collaboration controller): {}", user);
 
         collaborationService.saveProjectWithTechnologies(username, technologies);
-
-        Project project = new Project("default", user);
-
-        List<Technology> technologiesToSave = technologies.stream()
-                .map(t -> {
-                    Technology technology = new Technology(t, project);
-                    return technology;
-                }).collect(Collectors.toList());
-
-        project.setTechnologies(technologiesToSave);
-
-        projectRepository.save(project);
 
         request.getSession().removeAttribute("technologies");
 
         return this.getDefaultView();
-    }
-
-    @RequestMapping(value = "/clear", method = RequestMethod.GET)
-    public void getTechnologiesByRepo(HttpServletRequest request) {
-        request.getSession().removeAttribute("technologies");
     }
 
     private ModelAndView getDefaultView() {

@@ -14,3 +14,18 @@
  * fields that represent interconnections between entities that
  * rely on main entity which is being passed.
  */
+
+/**
+ * Constructor parameters for the User class
+ *
+ * username - the username presented to the DaoAuthenticationProvider
+ * password - the password that should be presented to the DaoAuthenticationProvider
+ * enabled - set to true if the user is enabled
+ * accountNonExpired - set to true if the account has not expired
+ * credentialsNonExpired - set to true if the credentials have not expired
+ * accountNonLocked - set to true if the account is not locked
+ * authorities - the authorities that should be granted to the caller
+ * if they presented the correct username and password and the user is enabled. Not null.
+ */
+
+

@@ -19,7 +19,7 @@ import java.util.List;
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
-    Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
+    private final static Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     @Autowired
     private UserService userService;
@@ -29,31 +29,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String ssoId) throws UsernameNotFoundException {
 
         User user = userService.findBySso(ssoId);
-        logger.info("SsoId that is being used for the role fetching: {}", ssoId);
-        logger.info("User fetched using ssoId: {}", user);
+        log.info("SsoId that is being used for the role fetching: {}", ssoId);
+        log.info("User fetched using ssoId: {}", user);
 
 
         if (user == null) {
             System.out.println("User was not found");
             throw new UsernameNotFoundException("User not found");
         }
-        /**
-         * Constructor parameters for the User class
-         *
-         * username - the username presented to the DaoAuthenticationProvider
-         * password - the password that should be presented to the DaoAuthenticationProvider
-         * enabled - set to true if the user is enabled
-         * accountNonExpired - set to true if the account has not expired
-         * credentialsNonExpired - set to true if the credentials have not expired
-         * accountNonLocked - set to true if the account is not locked
-         * authorities - the authorities that should be granted to the caller
-         * if they presented the correct username and password and the user is enabled. Not null.
-         */
+
         org.springframework.security.core.userdetails.User result = new org.springframework.security.core.userdetails.User(
                 user.getSsoId(), user.getPassword(), user.getState().equals("Active")
                 , true, true, true, getGrantedAuthorities(user));
 
-        logger.info("Userdetail was created: {}", result);
+        log.info("UserDetail was created: {}", result);
         return result;
     }
 
@@ -61,11 +50,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
         for(UserProfile userProfile : user.getUserProfiles()){
-            logger.info("UserProfile: {}", userProfile);
-            logger.info("**********WARN*********** ROLE_ + ", userProfile.getType());
+            log.info("Profiles for the given user: {}", userProfile);
+            log.info("ROLE_ + ", userProfile.getType());
             authorities.add(new SimpleGrantedAuthority("ROLE_" + userProfile.getType()));
         }
-        logger.info("authorities: {}", authorities);
+        log.info("authorities: {}", authorities);
 
         return authorities;
     }

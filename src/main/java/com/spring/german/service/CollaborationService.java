@@ -1,9 +1,14 @@
 package com.spring.german.service;
 
+import com.spring.german.entity.Project;
+import com.spring.german.entity.Technology;
+import com.spring.german.entity.User;
 import com.spring.german.exceptions.CustomException;
+import com.spring.german.repository.ProjectRepository;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,9 +21,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class CollaborationService {
+
+    private UserService userService;
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    public CollaborationService(UserService userService,
+                                ProjectRepository projectRepository) {
+        this.userService = userService;
+        this.projectRepository = projectRepository;
+    }
 
     private static final String REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)";
 
@@ -49,7 +65,19 @@ public class CollaborationService {
 
     public void saveProjectWithTechnologies(String username, List<String> technologies) {
 
+        User user = userService.findBySso(username);
+        log.info("User fetched by username (in CollaborationService): {}", user);
 
+        Project project = new Project("default", user);
 
+        List<Technology> technologiesToSave = technologies.stream()
+                .map(t -> {
+                    Technology technology = new Technology(t, project);
+                    return technology;
+                }).collect(Collectors.toList());
+
+        project.setTechnologies(technologiesToSave);
+
+        projectRepository.save(project);
     }
 }
