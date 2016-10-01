@@ -46,10 +46,6 @@ public class RegistrationControllerTest {
     @Rule
     public ExpectedException thrown= ExpectedException.none();
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
     @Test
     public void shouldNotRedirectOnGetRequestToRegistrationPage()
             throws Exception {

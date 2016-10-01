@@ -29,7 +29,7 @@ public class RegistrationController {
 
     public static final String REGISTRATION_PAGE = "/registration";
 
-    Logger log = LoggerFactory.getLogger(GalleryController.class);
+    private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
 
     @Autowired
     private UserService userService;

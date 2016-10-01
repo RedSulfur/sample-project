@@ -32,9 +32,6 @@ public class GalleryControllerTest {
     @Autowired
     private ApplicationContext applicationContext;
 
-//    @MockBean
-//    private FilmRepository filmRepository;
-
     @Before
     public void setup() {
         mvc = MockMvcBuilders

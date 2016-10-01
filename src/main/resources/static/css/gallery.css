@@ -6,6 +6,10 @@ body {
     margin-bottom: 0;
 }
 
+.technologies-search {
+    width: 230px;
+}
+
 .navbar-collapse .container-fluid {
     padding: 2rem 2.5rem;
     border-bottom: 1px solid #55595c;
@@ -37,7 +41,7 @@ body {
     width: 50%;
     height: 50%;
     min-width: 200px;
-    max-width: 500px;
+    max-width: 510px;
     padding: 20px;
 }
 

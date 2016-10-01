@@ -20,8 +20,12 @@ public class GalleryController {
 
     Logger log = LoggerFactory.getLogger(GalleryController.class);
 
-    @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    public GalleryController(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
 
     @RequestMapping(value = "/gallery", method = RequestMethod.POST)
     public ModelAndView getProjects(ModelAndView mav, @ModelAttribute(value = "technologies") String technologies) {

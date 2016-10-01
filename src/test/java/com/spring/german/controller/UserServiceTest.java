@@ -13,14 +13,9 @@ import static org.mockito.Matchers.anyString;
 
 public class UserServiceTest {
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private VerificationTokenRepository tokenRepository;
+    @Mock private PasswordEncoder passwordEncoder;
+    @Mock private UserRepository userRepository;
+    @Mock private VerificationTokenRepository tokenRepository;
 
     @InjectMocks
     private UserServiceImpl userService;

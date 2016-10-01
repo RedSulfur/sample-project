@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
+<link href="../../static/css/header.css" th:href="@{/css/header.css}" rel="stylesheet"/>
 
 <body>
 
@@ -9,7 +10,8 @@
         <div class="container-fluid">
             <div class="about">
                 <h4>About</h4>
-                <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+                <p class="text-muted">A website designed to help people to find associates for their learning activity.
+                    You can offer any project that you want to collaborate on or to find one for yourself. </p>
             </div>
             <div class="social">
                 <h4>Contact</h4>
@@ -29,10 +31,23 @@
             </button>
             <a href="#" class="navbar-brand">Album</a>
             <a href="registration.html" th:href="@{/registration}" class="navbar text-muted pull-md-right">Register</a>
+            <form class="navbar text-muted pull-md-right" id="logout_form" th:action="@{/logout}" method="POST">
+                <a class="text-muted" href="javascript:{}" onclick="document.getElementById('logout_form').submit(); return false;">
+                    Logout
+                </a>
+                <input type="hidden" th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+            </form>
         </div>
     </div>
 </div>
-
-
 </body>
 </html>
+
+<!--
+<nav class="nav navbar-nav pull-xs-left">
+    <a class="nav-item nav-link" href="#">Dashboard</a>
+    <a class="nav-item nav-link" href="#">Settings</a>
+    <a class="nav-item nav-link" href="#">Profile</a>
+    <a class="nav-item nav-link" href="#">Help</a>
+</nav>-->
