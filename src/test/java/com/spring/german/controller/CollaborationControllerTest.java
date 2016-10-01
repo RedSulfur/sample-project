@@ -45,8 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class CollaborationControllerTest {
 
-    private static final String VALID_GITHUB_USER = "RedSulfur";
-    private static final String VALID_GITHUB_REPOSITORY = "sample-project";
+    public static final String VALID_GITHUB_USER = "RedSulfur";
+    public static final String VALID_GITHUB_REPOSITORY = "sample-project";
     private List<String> validTechnologies;
 
     @Autowired

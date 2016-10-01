@@ -3,18 +3,14 @@ package com.spring.german.controller;
 import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.service.ProjectService;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(GalleryController.class)
 public class GalleryControllerTest {
 
-    private static final String TECHNOLOGIES_TO_SEARCH = "Gradle,JPA";
+    public static final String TECHNOLOGIES_TO_SEARCH = "Gradle,JPA";
     private List<Technology> validTechnologies;
     private List<Project> projects;
 
@@ -82,7 +78,7 @@ public class GalleryControllerTest {
     public void shouldFindAllTheProjectsByStringOfTechnologies()
             throws Exception {
 
-        given(projectService.findByTechnologyNames(TECHNOLOGIES_TO_SEARCH))
+        given(projectService.findByTechnologyNames(anyString()))
                 .willReturn(projects);
 
         mvc.perform(post("/gallery")
@@ -90,7 +86,7 @@ public class GalleryControllerTest {
                         .password("pass")
                         .roles("USER", "ADMIN"))
                         .contentType(APPLICATION_JSON)
-                        .param("technologies", TECHNOLOGIES_TO_SEARCH))
+                        .param("technologies", anyString()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("gallery"))
                 .andExpect(model().hasNoErrors())

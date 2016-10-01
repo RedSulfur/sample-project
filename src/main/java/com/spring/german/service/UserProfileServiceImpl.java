@@ -15,25 +15,19 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public List<UserProfile> findAll() {
-
         List<UserProfile> userProfiles = userProfileRepository.findAll();
         return userProfiles;
-
     }
 
     @Override
     public UserProfile findByType(String type) {
-
         UserProfile userProfile = userProfileRepository.findByType(type);
         return userProfile;
-
     }
 
     @Override
     public UserProfile findById(long id) {
-
         UserProfile userProfile = userProfileRepository.findOne(id);
         return userProfile;
-
     }
 }
