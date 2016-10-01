@@ -29,22 +29,18 @@ public class UserRepositoryTest {
 
         Arrays.asList("Sam", "Cary", "Tom", "Jane", "Patrick")
                 .forEach(
-                        u -> {
-                            userRepository
-                                    .save(new User("User" + u, "Pass" + u, "FName" + u,
-                                            "LName" + u, u + "@gmail.com", "ACTIVE",
-                                            new HashSet<UserProfile>()));
-                        }
+                        u -> userRepository
+                                .save(new User("User" + u, "Pass" + u, "FName" + u,
+                                        "LName" + u, u + "@gmail.com", "ACTIVE",
+                                        new HashSet<>()))
                 );
 
         Arrays.asList("Mark", "Jim", "Sally")
                 .forEach(
-                        u -> {
-                            userRepository
-                                    .save(new User("User" + u, "Pass" + u, "FName" + u,
-                                            "LName" + u, u + "@gmail.com", "INACTIVE",
-                                            new HashSet<UserProfile>()));
-                        }
+                        u -> userRepository
+                                .save(new User("User" + u, "Pass" + u, "FName" + u,
+                                        "LName" + u, u + "@gmail.com", "INACTIVE",
+                                        new HashSet<>()))
                 );
     }
 
