@@ -102,7 +102,7 @@ INSERT INTO technology (id, name, project_id) VALUES (13, 'AngularJS', 3);
 INSERT INTO technology (id, name, project_id) VALUES (14, 'Spring Boot', 3);
 INSERT INTO technology (id, name, project_id) VALUES (15, 'Maven', 3);
 
-INSERT INTO technology (id, name, project_id) VALUES (16, 'Spting Batch', 4);
+INSERT INTO technology (id, name, project_id) VALUES (16, 'Spring Batch', 4);
 INSERT INTO technology (id, name, project_id) VALUES (17, 'JPA', 4);
 INSERT INTO technology (id, name, project_id) VALUES (18, 'Hibernate', 4);
 INSERT INTO technology (id, name, project_id) VALUES (19, 'Spring Boot', 4);

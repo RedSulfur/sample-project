@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(CollaborationController.class)
 @WebAppConfiguration
-public class CollaborationServiceTest {
+public class CollaborationControllerTest {
 
     private static final String VALID_GITHUB_USER = "RedSulfur";
     private static final String VALID_GITHUB_REPOSITORY = "sample-project";
