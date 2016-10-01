@@ -3,9 +3,12 @@ package com.spring.german.controller;
 import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.service.ProjectService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +23,9 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,8 +48,6 @@ public class GalleryControllerTest {
 
     @Before
     public void setup() {
-
-        this.mvc = MockMvcBuilders.standaloneSetup(new GalleryController(projectService)).build();
 
         validTechnologies = Arrays.stream(("Travis Build,Spring Thymeleaf,Spring MVC,Spring validation," +
                 "Gradle,Spring Security,Bootstrap")
@@ -91,5 +95,8 @@ public class GalleryControllerTest {
                 .andExpect(view().name("gallery"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("projects", hasSize(1)));
+
+        verify(projectService, times(1)).findByTechnologyNames(anyString());
+
     }
 }
