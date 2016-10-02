@@ -12,11 +12,23 @@ import java.net.URL;
 import java.net.URLConnection;
 
 @Component
-public class ReadmeReader {
+public class ReadmeParser {
 
-    private static final Logger log = LoggerFactory.getLogger(ReadmeReader.class);
+    private static final Logger log = LoggerFactory.getLogger(ReadmeParser.class);
 
-    public String readReadmeFromGithubRepository(String username, String repoName) {
+    /**
+     * Searches for the readme file at user's GitHub repository
+     * and establishes a url connection to it. After connection
+     * to the file was acquired, method performs its processing
+     * in order to obtain a string representation of the fetched
+     * data.
+     *
+     * @param username  user's github nickname
+     * @param repoName  user's repository name
+     * @return          string representation of the readme contents
+     *                  at the given repository
+     */
+    public String parseReadmeFromGithubRepository(String username, String repoName) {
 
         String body;
         try {

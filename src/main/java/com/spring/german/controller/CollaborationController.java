@@ -38,11 +38,7 @@ public class CollaborationController {
     }
 
     /**
-     * Searches for the readme file at user's GitHub repository
-     * and establishes a url connection to it. After connection
-     * to file was acquired, controller performs its processing
-     * in order to obtain the name of every technology that was
-     * used to create the given repository.
+
      *
      * @param repoName  name of the repository to be processed
      * @param principal {@link Principal} object is needed to determine
@@ -73,17 +69,14 @@ public class CollaborationController {
     /**
      * On accessing the /publish endpoint, method gets all the technology
      * names that were passed to it as a session attribute. Defines a
-     * name of the currently logged in user and maps a list of strings
-     * that represent technologies to the list of the corresponding objects.
-     * These {@link com.spring.german.entity.Technology} objects are being
-     * associated with the obtained user and a new project. This entwined
-     * chain is being saved afterwards. When finishing its work method clears
-     * the session.
+     * name of the currently logged in user and passes it to a
+     * {@code collaborationService#saveProjectWithTechnologies}.
+     * When finishing its work method clears the session.
      *
      * @param request   an object that is used to obtain technology names from
      *                  the session
      * @param principal {@link Principal} object is needed to determine
-     *                  a username of   the current user
+     *                  a username of the current user
      * @return          {@link ModelAndView} object that contains no model attributes and
      *                  a default view name.
      */

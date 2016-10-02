@@ -15,6 +15,7 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Locale;
 
 @Component
 public class EmailHelper {
@@ -43,15 +44,24 @@ public class EmailHelper {
     }
 
     /**
+     * Constructs an {@link HtmlContent} object that has a string
+     * in its field containing the result of evaluating the specified
+     * template with the provided context. This object contains also
+     * a confirmation endpoint which is appended by a unique UUID token.
+     * The returning object will encapsulate a user's email which will
+     * be used for the further email dispatch.
      *
-     * @param user
-     * @param event
-     * @param token
-     * @return
+     * @param user  object that is used to extract user's email address
+     * @param event object is used to determine user's current locale
+     * @param token string that is used to construct a unique registration
+     *              confirmation link
+     *
+     * @return      fully constructed instance of an {@link HtmlContent} class
      */
     public HtmlContent constructEmailMessage(User user, OnRegistrationCompleteEvent event, String token) {
 
         String recipientAddress = user.getEmail();
+        Locale locale = event.getLocale();
         log.info("Destination email: {}", user.getEmail());
         log.info("You will prepend the following url to your link: {}", event.getAppUrl());
         log.info("JavaMailSender performs an email dispatch");
@@ -59,11 +69,11 @@ public class EmailHelper {
         String subject = "Registration Confirmation";
         String confirmationUrl
                 = event.getAppUrl() + "/registrationConfirm?token=" + token;
-        String message = messages.getMessage("message.registration.success", null, event.getLocale());
+        String message = messages.getMessage("message.registration.success", null, locale);
         log.info("Based on user's locale, the following message, was fetched " +
-                "from the properties file: {{}, locale: {}}", message, event.getLocale());
+                "from the properties file: {{}, locale: {}}", message, locale);
 
-        final Context ctx = new Context(event.getLocale());
+        final Context ctx = new Context(locale);
         ctx.setVariable("name", user.getFirstName());
         ctx.setVariable("body", message + " \n" + "http://localhost:8080" + confirmationUrl);
         ctx.setVariable("imageResourceName", LOGO_NAME); // so that we can reference it from HTML
@@ -74,6 +84,15 @@ public class EmailHelper {
         return htmlContent;
     }
 
+    /**
+     * Method creates a MIME style email message. Provides a recipient address
+     * for the created message, specifies an inline image and a message body,
+     * determines a subject of the message and an information about sender.
+     * Performs an email dispatch.
+     *
+     * @param htmlContent an object that encapsulates all the required for an email dispatch
+     *                    information
+     */
     public void sendEmail(HtmlContent htmlContent) {
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -85,6 +104,8 @@ public class EmailHelper {
             mimeMessageHelper.setSubject(htmlContent.getSubject());
             mimeMessageHelper.setFrom("noreply@gmail.com");
             mimeMessageHelper.addInline(LOGO_NAME, new ClassPathResource("static/img/logo.png"));
+
+            mailSender.send(mimeMessage);
 
         } catch (MessagingException e) {
             e.printStackTrace();
