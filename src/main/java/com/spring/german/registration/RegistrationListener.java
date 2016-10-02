@@ -2,6 +2,8 @@ package com.spring.german.registration;
 
 import com.spring.german.entity.User;
 import com.spring.german.service.UserService;
+import com.spring.german.util.EmailHelper;
+import com.spring.german.util.HtmlContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,33 +31,19 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
-    private static final String LOGO_NAME = "logo.png";
-
-    /**
-     * The instance of the TemplateEngine class is provided by Spring Boot
-     * Thymeleaf auto configuration. All we need to do is to call the process()
-     * method which expects the name of the template that we want to use and
-     * the context object that acts as a container for our model.
-     */
-    @Autowired
-    private TemplateEngine templateEngine;
-    @Autowired
     private UserService service;
-    @Autowired
-    private MessageSource messages;
-    @Autowired
-    private JavaMailSender mailSender;
+    private EmailHelper emailHelper;
 
-    @Inject
-    private ApplicationContext context;
+    @Autowired
+    public RegistrationListener(UserService service,
+                                EmailHelper emailHelper) {
+        this.service = service;
+        this.emailHelper = emailHelper;
+    }
 
     @Override
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-        try {
             this.confirmRegistration(event);
-        } catch (IOException | MessagingException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -70,46 +58,17 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
      * The UUID is generated using a cryptographically strong pseudo random number
      * generator.
      *
-     * As was mentioned above, any javax.mail.AuthenticationFailedException
-     * thrown by JavaMailSender will be handled by the controller.
      * @param event
      */
-    private void confirmRegistration(OnRegistrationCompleteEvent event) throws IOException, MessagingException {
+    private void confirmRegistration(OnRegistrationCompleteEvent event) {
         User user = event.getUser();
         log.info("RegistrationListener accepts the following user: {}", event.getUser());
 
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
 
-        String recipientAddress = user.getEmail();
-        log.info("Destination email: {}", user.getEmail());
-        log.info("You will prepend the following url to your link: {}", event.getAppUrl());
-        String subject = "Registration Confirmation";
-        String confirmationUrl
-                = event.getAppUrl() + "/registrationConfirm?token=" + token;
-        String message = messages.getMessage("message.registration.success", null, event.getLocale());
-        log.info("Based on user's locale, the following message, was fetched " +
-                "from the properties file: {{}, locale: {}}", message, event.getLocale());
+        HtmlContent htmlContent = emailHelper.constructEmailMessage(user, event, token);
 
-        // Prepare the evaluation context
-        final Context ctx = new Context(event.getLocale());
-        ctx.setVariable("name", user.getFirstName());
-        ctx.setVariable("body", message + " \n" + "http://localhost:8080" + confirmationUrl);
-        ctx.setVariable("imageResourceName", LOGO_NAME); // so that we can reference it from HTML
-
-
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-
-        final String htmlContent = this.templateEngine.process("email-inlineimage", ctx);
-        mimeMessageHelper.setText(htmlContent, true); // true = isHtml
-        mimeMessageHelper.setTo(recipientAddress);
-        mimeMessageHelper.setSubject(subject);
-        mimeMessageHelper.setFrom("noreply@gmail.com");
-
-        mimeMessageHelper.addInline(LOGO_NAME, new ClassPathResource("static/img/logo.png"));
-
-        log.info("JavaMailSender performs an email dispatch");
-        mailSender.send(mimeMessage);
+        emailHelper.sendEmail(htmlContent);
     }
 }

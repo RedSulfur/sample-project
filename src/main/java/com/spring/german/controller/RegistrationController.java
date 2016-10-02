@@ -52,7 +52,6 @@ public class RegistrationController {
         return model;
     }
 
-
     //TODO: Change return page to the display result page when result page is ready
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)

@@ -118,7 +118,7 @@ public class CollaborationController {
 
 
     /**
-     * Provides helper methods for its outer class {@see CollaborationController}
+     * Provides logging methods for its outer class {@see CollaborationController}
      */
     private static class CollaborationControllerLogger {
 
