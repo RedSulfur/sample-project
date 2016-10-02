@@ -19,8 +19,6 @@ import java.util.List;
 @Controller
 public class CollaborationController {
 
-    private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
-
     private CollaborationService collaborationService;
 
     @Autowired
@@ -59,12 +57,14 @@ public class CollaborationController {
                                               HttpServletRequest request, Principal principal) {
         Assert.notNull(repoName);
 
-        log.info("Repository name fetched: {}", repoName);
+        CollaborationControllerLogger.logFetchedRepositoryName(repoName);
         String username = principal.getName();
-        log.info("Currently logged in user: {}", username);
+        CollaborationControllerLogger.logCurrentlyLoggedInUser(username);
 
-        List<String> technologies = collaborationService.getTechnologies(username, repoName);
-        log.info("Obtained technologies: {}", technologies);
+        List<String> technologies =
+                collaborationService.getTechnologiesFromGithubRepositoy(username, repoName);
+
+        CollaborationControllerLogger.logAllTheExtractedTechnologies(technologies);
         request.getSession().setAttribute("technologies", technologies);
 
         return this.getDefaultView();
@@ -76,24 +76,23 @@ public class CollaborationController {
      * name of the currently logged in user and maps a list of strings
      * that represent technologies to the list of the corresponding objects.
      * These {@link com.spring.german.entity.Technology} objects are being
-     * associated with the obtained user and his project. This entwined
+     * associated with the obtained user and a new project. This entwined
      * chain is being saved afterwards. When finishing its work method clears
      * the session.
      *
-     * @param  request   an object that is used to obtain technology names from
-     *                   the session
-     * @param  principal {@link Principal} object is needed to determine
-     *                   a username of the current user
-     * @return {@link ModelAndView} object that contains no model attributes and
-     *         a default view name.
+     * @param request   an object that is used to obtain technology names from
+     *                  the session
+     * @param principal {@link Principal} object is needed to determine
+     *                  a username of   the current user
+     * @return          {@link ModelAndView} object that contains no model attributes and
+     *                  a default view name.
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView publishProject(HttpServletRequest request, Principal principal) {
 
-        log.info("Technologies list obtained from collaboration.html: {}",
-                request.getSession().getAttribute("technologies"));
-
         List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
+
+        CollaborationControllerLogger.logTechnologiesObtainedFromRequest(technologies);
 
         String username = principal.getName();
 
@@ -115,5 +114,30 @@ public class CollaborationController {
      */
     private ModelAndView getDefaultView() {
         return new ModelAndView("collaboration");
+    }
+
+
+    /**
+     * Provides helper methods for its outer class {@see CollaborationController}
+     */
+    private static class CollaborationControllerLogger {
+
+        private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
+
+        private static void logFetchedRepositoryName(String repoName) {
+            log.info("Repository name fetched: {}", repoName);
+        }
+
+        private static void logCurrentlyLoggedInUser(String username) {
+            log.info("Currently logged in user: {}", username);
+        }
+
+        private static void logAllTheExtractedTechnologies(List<String> technologies) {
+            log.info("Extracted technologies: {}", technologies);
+        }
+
+        public static void logTechnologiesObtainedFromRequest(List<String> technologies) {
+            log.info("Technologies list obtained from collaboration.html: {}", technologies);
+        }
     }
 }

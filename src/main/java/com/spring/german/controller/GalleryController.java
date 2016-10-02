@@ -31,6 +31,17 @@ public class GalleryController {
         return "gallery";
     }
 
+    /**
+     * Fetches from database all the projects that have any of the technologies
+     * provided by user. Saves these projects in model and specifies a page
+     * where these projects will be displayed as a view name.
+     *
+     * @param mav           object that is used to store projects and to specify
+     *                      model name.
+     * @param technologies  list that is used to search corresponding projects
+     * @return              {@link ModelAndView} object that contains no model
+     *                      attributes and a default view name.
+     */
     @RequestMapping(value = "/gallery", method = RequestMethod.POST)
     public ModelAndView getProjects(ModelAndView mav,
                                     @ModelAttribute(value = "technologies") String technologies) {
@@ -39,11 +50,21 @@ public class GalleryController {
 
         List<Project> projects = projectService.findByTechnologyNames(technologies);
 
-        projects.forEach(p -> log.info("Project fetched: {}", p.toString()));
+        GalleryControllerLogger.logAllTheExtractedProjects(projects);
 
         mav.addObject("projects", projects);
         mav.setViewName("gallery");
 
         return mav;
+    }
+
+    /**
+     * Provides helper methods for its outer class {@see GalleryController}
+     */
+    private static class GalleryControllerLogger {
+
+        private static void logAllTheExtractedProjects(List<Project> projects) {
+            projects.forEach(p -> log.info("Project fetched: {}", p.toString()));
+        }
     }
 }

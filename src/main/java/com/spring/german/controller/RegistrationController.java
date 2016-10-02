@@ -27,16 +27,18 @@ public class RegistrationController {
 
     public static final String REGISTRATION_PAGE = "/registration";
 
-    private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private UserValidator validator;
+    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    ApplicationEventPublisher eventPublisher;
+    public RegistrationController(UserService userService,
+                                  UserValidator validator,
+                                  ApplicationEventPublisher eventPublisher) {
+        this.userService = userService;
+        this.validator = validator;
+        this.eventPublisher = eventPublisher;
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
@@ -50,9 +52,9 @@ public class RegistrationController {
         return model;
     }
 
-    /**
-     * TODO: Change return page to the display result page when result page is ready
-     */
+
+    //TODO: Change return page to the display result page when result page is ready
+
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registerUser(@ModelAttribute(value = "user")
                                    @Validated @Valid User user,
@@ -64,23 +66,49 @@ public class RegistrationController {
             return REGISTRATION_PAGE;
         }
 
+        RegistrationControllerLogger.logUserConstructedFromPostBody(user);
+
         User savedUser = userService.save(user);
-        log.info("User was retrieved from the post method body and stored in the database: {}", savedUser);
 
         try {
             String appUrl = request.getContextPath();
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent
                     (savedUser, request.getLocale(), appUrl));
         } catch (Exception e) {
-            StackTraceElement[] stackTrace = e.getStackTrace();
-            List<String> list = new ArrayList<>();
-            for (StackTraceElement aStackTrace : stackTrace) {
-                list.add(aStackTrace.toString() + "\n");
-            }
-            log.info("Error description: {}", list.toString());
+            String errorDescription = constructErrorDescription(e);
+            RegistrationControllerLogger.logErrorDuringPublishingEvent(errorDescription);
             return "access-denied";
         }
 
         return REGISTRATION_PAGE;
+    }
+
+    private String constructErrorDescription(Exception e) {
+
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        List<String> list = new ArrayList<>();
+        for (StackTraceElement aStackTrace : stackTrace) {
+            list.add(aStackTrace.toString() + "\n");
+        }
+        String errorDescription = list.toString();
+
+        return errorDescription;
+    }
+
+    /**
+     * Provides helper methods for its outer class {@see RegistrationController}
+     */
+    private static class RegistrationControllerLogger {
+
+        private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
+
+        private static void logUserConstructedFromPostBody(User user) {
+            log.info("User was retrieved from the post method body and stored in the database: {}",
+                    user);
+        }
+
+        private static void logErrorDuringPublishingEvent(String errorDescription) {
+            log.info("Error description: {}", errorDescription);
+        }
     }
 }
