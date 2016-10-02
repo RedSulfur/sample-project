@@ -15,10 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -52,6 +50,9 @@ public class RegistrationController {
         return model;
     }
 
+    /**
+     * TODO: Change return page to the display result page when result page is ready
+     */
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registerUser(@ModelAttribute(value = "user")
                                    @Validated @Valid User user,
@@ -73,16 +74,13 @@ public class RegistrationController {
         } catch (Exception e) {
             StackTraceElement[] stackTrace = e.getStackTrace();
             List<String> list = new ArrayList<>();
-            for(int i = 0; i < stackTrace.length; i ++) {
-                list.add(stackTrace[i].toString() + "\n");
+            for (StackTraceElement aStackTrace : stackTrace) {
+                list.add(aStackTrace.toString() + "\n");
             }
             log.info("Error description: {}", list.toString());
             return "access-denied";
         }
 
-        /**
-         * TODO: Change this page to the display result page when it is ready
-         */
         return REGISTRATION_PAGE;
     }
 }

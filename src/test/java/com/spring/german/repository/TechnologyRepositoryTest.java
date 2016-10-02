@@ -1,7 +1,6 @@
 package com.spring.german.repository;
 
 import com.spring.german.entity.Technology;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

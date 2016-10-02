@@ -16,9 +16,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -71,10 +69,7 @@ public class CollaborationService {
         Project project = new Project("default", user);
 
         List<Technology> technologiesToSave = technologies.stream()
-                .map(t -> {
-                    Technology technology = new Technology(t, project);
-                    return technology;
-                }).collect(Collectors.toList());
+                .map(t -> new Technology(t, project)).collect(Collectors.toList());
 
         project.setTechnologies(technologiesToSave);
 

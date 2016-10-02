@@ -2,7 +2,6 @@ package com.spring.german.entity;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -50,7 +49,7 @@ public class User {
     @JoinTable(name = "app_user_user_profile",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_profile_id") })
-    private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
+    private Set<UserProfile> userProfiles = new HashSet<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Project> projects;

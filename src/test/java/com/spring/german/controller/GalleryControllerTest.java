@@ -33,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GalleryControllerTest {
 
     public static final String TECHNOLOGIES_TO_SEARCH = "Gradle,JPA";
-    private List<Technology> validTechnologies;
     private List<Project> projects;
 
     @Autowired
@@ -45,7 +44,7 @@ public class GalleryControllerTest {
     @Before
     public void setup() {
 
-        validTechnologies = Arrays.stream(("Travis Build,Spring Thymeleaf,Spring MVC,Spring validation," +
+        List<Technology> validTechnologies = Arrays.stream(("Travis Build,Spring Thymeleaf,Spring MVC,Spring validation," +
                 "Gradle,Spring Security,Bootstrap")
                 .split(",")).map(Technology::new)
                 .collect(Collectors.toList());

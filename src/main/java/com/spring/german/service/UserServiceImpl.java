@@ -23,9 +23,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
-        User savedUser = userRepository.save(u);
 
-        return savedUser;
+        return userRepository.save(u);
     }
 
     @Override
@@ -35,34 +34,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(long id) {
-        User user = userRepository.findOne(id);
-        return user;
+        return userRepository.findOne(id);
     }
 
     @Override
     public User findBySso(String sso) {
-        User user = userRepository.findBySsoId(sso);
-        return user;
+        return userRepository.findBySsoId(sso);
     }
 
     @Override
     public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        return user;
+        return userRepository.findByEmail(email);
     }
 
     private boolean emailExist(String email) {
         User user = userRepository.findByEmail(email);
-        if (user != null) {
-            return true;
-        }
-        return false;
+        return user != null;
     }
 
     @Override
     public User getUser(String verificationToken) {
-        User user = tokenRepository.findByToken(verificationToken).getUser();
-        return user;
+        return tokenRepository.findByToken(verificationToken).getUser();
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
 import com.spring.german.service.UserServiceImpl;
 import com.spring.german.validation.UserValidator;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
