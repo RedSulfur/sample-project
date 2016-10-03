@@ -1,4 +1,4 @@
-#Learn German
+#Collaboratory
 A website designed to help people find associates for their learning activity.
 You can offer any project that you want to collaborate on or to find one for yourself.<br />
 _Still in development_
