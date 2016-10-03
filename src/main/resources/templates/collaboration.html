@@ -48,17 +48,17 @@
                 <form th:action="@{/collaborate}" method="POST">
                     <div class="input-group">
                         <input th:href="@{/gallery}" th:value="${repoName}" th:name="repoName" type="text"
-                               class="form-control" placeholder="Repository name..."></input>
+                               class="form-control" placeholder="Type in: 'sample-project'..."></input>
                         <span class="input-group-btn">
                             <input type="submit" class="btn btn-secondary"></input>
                         </span>
                     </div>
                 </form>
             </div>
-            <label class="custom-file">
+            <!--<label class="custom-file">
                 <input type="file" id="file" class="custom-file-input"></input>
                 <span class="custom-file-control"></span>
-            </label>
+            </label>-->
 
             <div th:if="${not #lists.isEmpty(#httpSession.getAttribute('technologies'))}" class="list-group">
                 <h2 style="font-family: 'Oswald', serif">After submission users will be able to find your project

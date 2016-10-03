@@ -31,11 +31,14 @@
             </button>
             <a href="#" class="navbar-brand">Album</a>
             <a href="registration.html" th:href="@{/registration}" class="navbar text-muted pull-md-right">Register</a>
+            <!--Logout is triggered by javascript in order to pass csrf token in body of the post request.-->
+            <!--It is not recommended to logout via get methods-->
             <form class="navbar text-muted pull-md-right" id="logout_form" th:action="@{/logout}" method="POST">
                 <a class="text-muted" href="javascript:{}" onclick="document.getElementById('logout_form').submit(); return false;">
                     Logout
                 </a>
             </form>
+            <a href="collaboration.html" th:href="@{/collaborate}" class="navbar text-muted pull-md-right">Collaborate</a>
         </div>
     </div>
 </div>
