@@ -4,6 +4,7 @@ import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
 import com.spring.german.repository.ProjectRepository;
+import com.spring.german.service.interfaces.Searching;
 import com.spring.german.util.ReadmeParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,12 @@ import java.util.stream.Collectors;
 @Service
 public class CollaborationService {
 
-    private UserService userService;
+    private Searching<User> userService;
     private ProjectRepository projectRepository;
     private ReadmeParser readmeParser;
 
     @Autowired
-    public CollaborationService(UserService userService,
+    public CollaborationService(Searching<User> userService,
                                 ProjectRepository projectRepository,
                                 ReadmeParser readmeParser) {
         this.userService = userService;
@@ -68,7 +69,7 @@ public class CollaborationService {
      */
     public void saveProjectWithTechnologies(String username, List<String> technologies) {
 
-        User user = userService.findBySso(username);
+        User user = userService.searchEntityByKey(username);
 
         Project project = new Project("default", user);
 

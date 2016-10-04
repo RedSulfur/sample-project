@@ -2,7 +2,6 @@ package com.spring.german.controller;
 
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
-import com.spring.german.service.UserServiceImpl;
 import com.spring.german.validation.UserValidator;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +36,7 @@ public class RegistrationControllerTest {
     @MockBean private PasswordEncoder passwordEncoder;
     @MockBean private UserRepository userRepository;
     @MockBean private VerificationTokenRepository tokenRepository;
-    @MockBean private UserServiceImpl userService;
+    @MockBean private EntityByIdFinder userService;
     @MockBean private ApplicationEventPublisher eventPublisher;
     @MockBean private RegistrationController controller;
     @MockBean private UserValidator validator;

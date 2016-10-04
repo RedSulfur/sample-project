@@ -3,7 +3,8 @@ package com.spring.german.controller;
 import com.spring.german.entity.State;
 import com.spring.german.entity.User;
 import com.spring.german.entity.VerificationToken;
-import com.spring.german.service.UserService;
+import com.spring.german.service.interfaces.Searching;
+import com.spring.german.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,13 @@ import java.util.Locale;
 @Controller
 public class ConfirmRegistrationController {
 
+    private Searching<VerificationToken> tokenSearching;
     private UserService userService;
 
     @Autowired
-    public ConfirmRegistrationController(UserService userService) {
+    public ConfirmRegistrationController(Searching<VerificationToken> tokenSearching,
+                                         UserService userService) {
+        this.tokenSearching = tokenSearching;
         this.userService = userService;
     }
 
@@ -47,7 +51,7 @@ public class ConfirmRegistrationController {
 
         Locale locale = request.getLocale();
         
-        VerificationToken verificationToken = userService.getVerificationToken(tokenName);
+        VerificationToken verificationToken = tokenSearching.searchEntityByKey(tokenName);
 
         ConfirmRegistrationControllerLogger.logVerificationTokenExpirationDate(verificationToken);
         

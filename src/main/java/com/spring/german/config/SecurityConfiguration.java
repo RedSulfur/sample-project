@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final Logger log = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Autowired
-    @Qualifier("customUserDetailsService")
+    @Qualifier("customUserDetailsServiceImplementation")
     private UserDetailsService userDetailsService;
 
     @Autowired

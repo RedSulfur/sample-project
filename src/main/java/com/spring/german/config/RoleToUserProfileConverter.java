@@ -1,8 +1,7 @@
 package com.spring.german.config;
 
 import com.spring.german.entity.UserProfile;
-import com.spring.german.service.CustomUserDetailsService;
-import com.spring.german.service.UserProfileService;
+import com.spring.german.service.interfaces.Finding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,14 @@ import org.springframework.stereotype.Component;
 @Component("roleToUserProfileConverter")
 public class RoleToUserProfileConverter implements Converter<Object, UserProfile> {
 
-    Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RoleToUserProfileConverter.class);
+
+    private Finding<UserProfile> userProfileService;
 
     @Autowired
-    UserProfileService userProfileService;
+    public RoleToUserProfileConverter(Finding<UserProfile> userProfileService) {
+        this.userProfileService = userProfileService;
+    }
 
     /*
      * Gets UserProfile by Id
@@ -29,7 +32,7 @@ public class RoleToUserProfileConverter implements Converter<Object, UserProfile
      */
     public UserProfile convert(Object element) {
         Integer id = Integer.parseInt((String)element);
-        UserProfile profile= userProfileService.findById(id);
+        UserProfile profile = userProfileService.findById(id);
         logger.info("Profile: {}", profile);
         return profile;
     }

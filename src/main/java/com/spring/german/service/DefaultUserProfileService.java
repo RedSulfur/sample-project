@@ -2,13 +2,16 @@ package com.spring.german.service;
 
 import com.spring.german.entity.UserProfile;
 import com.spring.german.repository.UserProfileRepository;
+import com.spring.german.service.interfaces.Finding;
+import com.spring.german.service.interfaces.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service("userProfileService")
-public class UserProfileServiceImpl implements UserProfileService {
+public class DefaultUserProfileService implements UserProfileService,
+        Finding<UserProfile> {
 
     @Autowired
     private UserProfileRepository userProfileRepository;

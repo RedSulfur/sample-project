@@ -2,7 +2,6 @@ package com.spring.german.controller;
 
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
-import com.spring.german.service.UserServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
@@ -18,7 +17,7 @@ public class UserServiceTest {
     @Mock private VerificationTokenRepository tokenRepository;
 
     @InjectMocks
-    private UserServiceImpl userService;
+    private EntityByIdFinder userService;
 
     @Before
     public void setup() {

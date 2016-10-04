@@ -1,8 +1,8 @@
 package com.spring.german.validation;
 
-import com.spring.german.controller.GalleryController;
 import com.spring.german.entity.User;
-import com.spring.german.service.UserService;
+import com.spring.german.service.interfaces.Searching;
+import com.spring.german.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,20 @@ import java.util.Optional;
 @EnableConfigurationProperties
 public class UserValidator implements Validator {
 
-    Logger log = LoggerFactory.getLogger(GalleryController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserValidator.class);
 
-    @Autowired
-    private UserService service;
-
-    @Autowired
+    private Searching<User> userSearching;
+    private UserService userService;
     private MessageSource messages;
+
+    @Autowired
+    public UserValidator(Searching<User> userSearching,
+                         UserService userService,
+                         MessageSource messages) {
+        this.userSearching = userSearching;
+        this.userService = userService;
+        this.messages = messages;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -38,8 +45,8 @@ public class UserValidator implements Validator {
         User user = (User) target;
         log.info("UserValidator processes the following user: " + user.toString());
 
-        Optional optionalBySsoId = Optional.ofNullable(service.findBySso(user.getSsoId()));
-        Optional optionalByEmail = Optional.ofNullable(service.findByEmail(user.getEmail()));
+        Optional optionalBySsoId = Optional.ofNullable(userSearching.searchEntityByKey(user.getSsoId()));
+        Optional optionalByEmail = Optional.ofNullable(userService.findByEmail(user.getEmail()));
 
         if (optionalByEmail.isPresent()) {
             errors.rejectValue("email", "Registered Email",

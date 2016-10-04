@@ -1,26 +1,15 @@
 package com.spring.german.registration;
 
 import com.spring.german.entity.User;
-import com.spring.german.service.UserService;
+import com.spring.german.service.interfaces.Creating;
 import com.spring.german.util.EmailHelper;
 import com.spring.german.util.HtmlContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-import javax.inject.Inject;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -31,13 +20,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
     Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
-    private UserService service;
+    private Creating creator;
     private EmailHelper emailHelper;
 
     @Autowired
-    public RegistrationListener(UserService service,
+    public RegistrationListener(Creating creator,
                                 EmailHelper emailHelper) {
-        this.service = service;
+        this.creator = creator;
         this.emailHelper = emailHelper;
     }
 
@@ -65,7 +54,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         log.info("RegistrationListener accepts the following user: {}", event.getUser());
 
         String token = UUID.randomUUID().toString();
-        service.createVerificationToken(user, token);
+        creator.createVerificationToken(user, token);
 
         HtmlContent htmlContent = emailHelper.constructEmailMessage(user, event, token);
 

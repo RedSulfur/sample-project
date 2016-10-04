@@ -2,7 +2,7 @@ package com.spring.german.controller;
 
 import com.spring.german.entity.User;
 import com.spring.german.registration.OnRegistrationCompleteEvent;
-import com.spring.german.service.UserService;
+import com.spring.german.service.interfaces.UserService;
 import com.spring.german.validation.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

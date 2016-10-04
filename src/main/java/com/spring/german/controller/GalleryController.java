@@ -1,7 +1,7 @@
 package com.spring.german.controller;
 
 import com.spring.german.entity.Project;
-import com.spring.german.service.ProjectService;
+import com.spring.german.service.interfaces.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

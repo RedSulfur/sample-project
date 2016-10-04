@@ -2,7 +2,7 @@ package com.spring.german.controller;
 
 import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
-import com.spring.german.service.ProjectService;
+import com.spring.german.service.interfaces.ProjectService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ public class GalleryControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private ProjectService projectService;
+    private ProjectService technologiesFinder;
 
     @Before
     public void setup() {
@@ -77,7 +77,7 @@ public class GalleryControllerTest {
     public void shouldFindAllTheProjectsByStringOfTechnologies()
             throws Exception {
 
-        given(projectService.findByTechnologyNames(anyString()))
+        given(technologiesFinder.findByTechnologyNames(anyString()))
                 .willReturn(projects);
 
         mvc.perform(post("/gallery")
@@ -91,7 +91,7 @@ public class GalleryControllerTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("projects", hasSize(1)));
 
-        verify(projectService, times(1)).findByTechnologyNames(anyString());
+        verify(technologiesFinder, times(1)).findByTechnologyNames(anyString());
 
     }
 }
