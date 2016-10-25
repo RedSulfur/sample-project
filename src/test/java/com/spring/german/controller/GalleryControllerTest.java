@@ -17,29 +17,31 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(GalleryController.class)
 public class GalleryControllerTest {
 
-    public static final String TECHNOLOGIES_TO_SEARCH = "Gradle,JPA";
     private List<Project> projects;
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private ProjectService technologiesFinder;
+    private ProjectService projectService;
 
     @Before
     public void setup() {
@@ -77,7 +79,7 @@ public class GalleryControllerTest {
     public void shouldFindAllTheProjectsByStringOfTechnologies()
             throws Exception {
 
-        given(technologiesFinder.findByTechnologyNames(anyString()))
+        given(projectService.findByTechnologyNames(anyString()))
                 .willReturn(projects);
 
         mvc.perform(post("/gallery")
@@ -91,7 +93,6 @@ public class GalleryControllerTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("projects", hasSize(1)));
 
-        verify(technologiesFinder, times(1)).findByTechnologyNames(anyString());
-
+        verify(projectService, times(1)).findByTechnologyNames(anyString());
     }
 }

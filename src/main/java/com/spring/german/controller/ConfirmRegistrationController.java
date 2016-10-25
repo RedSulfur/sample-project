@@ -21,6 +21,8 @@ import java.util.Locale;
 @Controller
 public class ConfirmRegistrationController {
 
+    private static final Logger log = LoggerFactory.getLogger(ConfirmRegistrationController.class);
+
     private Searching<VerificationToken> tokenSearching;
     private UserService userService;
 
@@ -46,7 +48,9 @@ public class ConfirmRegistrationController {
     public ModelAndView confirmRegistration (WebRequest request,
                                        @RequestParam("token") String tokenName) {
 
+
         Locale locale = request.getLocale();
+        log.info("Locale: {}", locale);
         VerificationToken verificationToken = tokenSearching.searchEntityByKey(tokenName);
         ConfirmRegistrationControllerLogger.logVerificationTokenExpirationDate(verificationToken);
         
@@ -57,7 +61,7 @@ public class ConfirmRegistrationController {
         User user = verificationToken.getUser();
         Calendar instance = Calendar.getInstance();
 
-        if((verificationToken.getExpiryDate().getTime() - instance.getTime().getTime())<= 0) {
+        if((verificationToken.getExpiryDate().getTime() - instance.getTime().getTime()) <= 0) {
             return getErrorModelAndView(locale);
         }
 

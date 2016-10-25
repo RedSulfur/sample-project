@@ -1,11 +1,12 @@
-package com.spring.german.controller;
+package com.spring.german.service;
 
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
-import com.spring.german.service.DefaultUserService;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.BDDMockito.given;

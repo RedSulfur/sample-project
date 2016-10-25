@@ -18,15 +18,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RegistrationController.class)
@@ -44,7 +46,7 @@ public class RegistrationControllerTest {
     @MockBean private UserValidator validator;
 
     @Rule
-    public ExpectedException thrown= ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void shouldNotRedirectOnGetRequestToRegistrationPage()
@@ -69,8 +71,6 @@ public class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("ssoId", "nickname")
                 .param("password", "pass")
-                .param("firstName", "John")
-                .param("lastName", "Doe")
                 .param("email", "john@doe.com"))
 
                 .andExpect(status().isOk())
@@ -78,48 +78,8 @@ public class RegistrationControllerTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("user", hasProperty("ssoId", is("nickname"))))
                 .andExpect(model().attribute("user", hasProperty("password", is("pass"))))
-                .andExpect(model().attribute("user", hasProperty("firstName", is("John"))))
-                .andExpect(model().attribute("user", hasProperty("lastName", is("Doe"))))
                 .andExpect(model().attribute("user", hasProperty("email", is("john@doe.com"))))
                 .andExpect(forwardedUrl(null));
-    }
-
-    @Test
-    public void shouldRespondWithMultipleErrorsOnMissingFirstAndLastName()
-            throws Exception {
-        mvc.perform(post("/registration").with(user("admin").password("pass")
-                .roles("ADMIN", "USER")).contentType(MediaType.APPLICATION_JSON)
-                .param("ssoId", "username")
-                .param("password", "password")
-                .param("firstName", "")
-                .param("lastName", "")
-                .param("email", "user@gmail.com"))
-
-                .andExpect(view().name("registration"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrors("user", "firstName"))
-                .andExpect(model().attributeHasFieldErrorCode("user", "firstName", anyOf(is("NotEmpty"), is("Size"))))
-                .andExpect(model().attributeHasFieldErrors("user", "lastName"))
-                .andExpect(model().attributeHasFieldErrorCode("user", "lastName", anyOf(is("NotEmpty"), is("Size"))))
-                .andExpect(model().errorCount(4));
-    }
-
-    @Test
-    public void shouldRespondWithAnErrorOnMalformedEmail()
-            throws Exception {
-        mvc.perform(post("/registration").with(user("admin").password("pass")
-                .roles("ADMIN", "USER")).contentType(MediaType.APPLICATION_JSON)
-                .param("ssoId", "username")
-                .param("password", "password")
-                .param("firstName", "John")
-                .param("lastName", "Doe")
-                .param("email", "$malformed$###"))
-
-                .andExpect(view().name("registration"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasFieldErrors("user", "email"))
-                .andExpect(model().attributeHasFieldErrorCode("user", "email", "Email"))
-                .andExpect(model().errorCount(1));
     }
 
     @Test
@@ -129,8 +89,6 @@ public class RegistrationControllerTest {
                 .roles("ADMIN", "USER")).contentType(MediaType.APPLICATION_JSON)
                 .param("ssoId", "")
                 .param("password", "password")
-                .param("firstName", "John")
-                .param("lastName", "Doe")
                 .param("email", "john@doe.com"))
 
                 .andExpect(view().name("registration"))
@@ -141,19 +99,51 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void shouldRespondWithAnErrorOnMissingPassword()
+    public void shouldRespondWithAnErrorOnEmptyPassword()
             throws Exception {
         mvc.perform(post("/registration").with(user("admin").password("pass")
                 .roles("ADMIN", "USER")).contentType(MediaType.APPLICATION_JSON)
-                .param("ssoId", "nickname")
+                .param("ssoId", "username")
                 .param("password", "")
-                .param("firstName", "John")
-                .param("lastName", "Doe")
-                .param("email", "john@doe.com"))
+                .param("email", "user@gmail.com"))
 
                 .andExpect(view().name("registration"))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasFieldErrors("user", "password"))
+                .andExpect(model().attributeHasFieldErrorCode("user", "password",
+                        anyOf(is("NotEmpty"), is("Size"))))
+                .andExpect(model().errorCount(2));
+    }
+
+    @Test
+    public void shouldRespondWithAnErrorIfPasswordIsTooShort()
+            throws Exception {
+        mvc.perform(post("/registration").with(user("admin").password("pass")
+                .roles("ADMIN", "USER")).contentType(MediaType.APPLICATION_JSON)
+                .param("ssoId", "username")
+                .param("password", "123")
+                .param("email", "user@gmail.com"))
+
+                .andExpect(view().name("registration"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrors("user", "password"))
+                .andExpect(model().attributeHasFieldErrorCode("user", "password", is("Size")))
+                .andExpect(model().errorCount(1));
+    }
+
+    @Test
+    public void shouldRespondWithAnErrorOnMalformedEmail()
+            throws Exception {
+        mvc.perform(post("/registration").with(user("admin").password("pass")
+                .roles("ADMIN", "USER")).contentType(MediaType.APPLICATION_JSON)
+                .param("ssoId", "username")
+                .param("password", "password")
+                .param("email", "$malformed$###"))
+
+                .andExpect(view().name("registration"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrors("user", "email"))
+                .andExpect(model().attributeHasFieldErrorCode("user", "email", "Email"))
                 .andExpect(model().errorCount(1));
     }
 }
