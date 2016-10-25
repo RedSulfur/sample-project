@@ -29,4 +29,9 @@ public class DefaultProjectService implements ProjectService {
 
         return projects;
     }
+
+    @Override
+    public Project save(Project project) {
+        return projectRepository.save(project);
+    }
 }

@@ -29,16 +29,16 @@ public class UserRepositoryTest {
         Arrays.asList("Sam", "Cary", "Tom", "Jane", "Patrick")
                 .forEach(
                         u -> userRepository
-                                .save(new User("User" + u, "Pass" + u, "FName" + u,
-                                        "LName" + u, u + "@gmail.com", "ACTIVE",
+                                .save(new User("User" + u, "Pass" + u,
+                                        u + "@gmail.com", "ACTIVE",
                                         new HashSet<>()))
                 );
 
         Arrays.asList("Mark", "Jim", "Sally")
                 .forEach(
                         u -> userRepository
-                                .save(new User("User" + u, "Pass" + u, "FName" + u,
-                                        "LName" + u, u + "@gmail.com", "INACTIVE",
+                                .save(new User("User" + u, "Pass" + u,
+                                        u + "@gmail.com", "INACTIVE",
                                         new HashSet<>()))
                 );
     }
@@ -47,7 +47,7 @@ public class UserRepositoryTest {
     public void findBySsoShouldReturnUser() throws Exception {
 
         User obtainedUser = this.userRepository.findBySsoId("UserSam");
-        assertThat(obtainedUser.getFirstName(), is("FNameSam"));
+        assertThat(obtainedUser.getSsoId(), is("FNameSam"));
         assertThat(obtainedUser.getUserProfiles().isEmpty(), is(true));
     }
 

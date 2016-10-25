@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js}"/>
 
-    <script src="../static/js/caption-slide-down.js" th:src="@{js/caption-slide-down.js}"/>
+    <script th:src="@{js/caption-slide-down.js}"/>
 
     <!--include github icons (octicons)-->
-    <link href="../static/build/font/octicons.css" type="text/css" th:href="@{/build/font/octicons.css}"
+    <link th:href="@{/build/font/octicons.css}"
           rel="stylesheet"/>
 
     <!-- Bootstrap core CSS -->
-    <link href="../static/dist/css/bootstrap.min.css" th:href="@{/dist/css/bootstrap.min.css}"
+    <link th:href="@{/dist/css/bootstrap.min.css}"
           rel="stylesheet"/>
-    <link href="../static/dist/css/bootstrap.css" th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
-
+    <link th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
 
     <!-- Custom styles for this template -->
-    <link href="../static/css/gallery.css" th:href="@{/css/gallery.css}" rel="stylesheet"/>
+    <link th:href="@{/css/gallery.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -55,10 +53,6 @@
                     </div>
                 </form>
             </div>
-            <!--<label class="custom-file">
-                <input type="file" id="file" class="custom-file-input"></input>
-                <span class="custom-file-control"></span>
-            </label>-->
 
             <div th:if="${not #lists.isEmpty(#httpSession.getAttribute('technologies'))}" class="list-group">
                 <h2 style="font-family: 'Oswald', serif">After submission users will be able to find your project

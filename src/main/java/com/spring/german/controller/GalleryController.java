@@ -32,9 +32,9 @@ public class GalleryController {
     }
 
     /**
-     * Fetches from database all the projects that have any of the technologies
+     * Fetches all the projects from database that have any of the technologies
      * provided by user. Saves these projects in model and specifies a page
-     * where these projects will be displayed as a view name.
+     * where these projects will be displayed.
      *
      * @param mav           object that is used to store projects and to specify
      *                      model name.

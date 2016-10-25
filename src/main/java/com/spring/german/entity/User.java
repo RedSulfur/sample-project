@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,16 +24,6 @@ public class User {
     @NotEmpty
     @Column(name = "password")
     private String password;
-
-    @NotEmpty
-    @Size(min = 2, max = 15)
-    @Column(name = "first_name")
-    private String firstName;
-
-    @NotEmpty
-    @Size(min = 2, max = 15)
-    @Column(name = "last_name")
-    private String lastName;
 
     @NotEmpty
     @Email
@@ -58,15 +47,11 @@ public class User {
     }
 
     public User(String ssoId, String password,
-                String firstName,
-                String lastName,
                 String email,
                 String state,
                 Set<UserProfile> userProfiles) {
         this.ssoId = ssoId;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.email = email;
         this.state = state;
         this.userProfiles = userProfiles;
@@ -94,22 +79,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -144,9 +113,6 @@ public class User {
         this.projects = projects;
     }
 
-    /**
-     * TODO: Is this code sample relevant?
-     */
     @Override
     public int hashCode() {
         final long prime = 31;
@@ -178,7 +144,6 @@ public class User {
     @Override
     public String toString() {
         return "User [id=" + id + ", ssoId=" + ssoId + ", password=" + password
-                + ", firstName=" + firstName + ", lastName=" + lastName
                 + ", email=" + email + ", state=" + state + ", userProfiles=" + userProfiles +"]";
     }
 

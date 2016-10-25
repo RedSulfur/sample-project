@@ -58,7 +58,8 @@ public class RegistrationController {
     public String registerUser(@ModelAttribute(value = "user")
                                    @Validated @Valid User user,
                                BindingResult result,
-                               Model model, HttpServletRequest request) {
+                               Model model,
+                               HttpServletRequest request) {
 
         validator.validate(user, result);
         if(result.hasErrors()) {

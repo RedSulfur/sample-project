@@ -5,7 +5,6 @@ import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.Searching;
-import com.spring.german.util.ReadmeParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,31 +19,27 @@ public class CollaborationService {
 
     private Searching<User> userService;
     private ProjectRepository projectRepository;
-    private ReadmeParser readmeParser;
 
     @Autowired
     public CollaborationService(Searching<User> userService,
-                                ProjectRepository projectRepository,
-                                ReadmeParser readmeParser) {
+                                ProjectRepository projectRepository) {
         this.userService = userService;
         this.projectRepository = projectRepository;
-        this.readmeParser = readmeParser;
     }
 
     private static final String REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)";
 
+    //TODO: Rework javadoc
     /**
-     * Takes a string that was returned by {@code ReadmeParser#parseReadmeFromGithubRepository}
+     *
      * and applies a regular expression to it in order to determine the name of every
      * technology that was used to create a project from the given repository.
      *
-     * @param username  user's github nickname
-     * @param repoName  user's repository name
      * @return          technologies list
      */
-    public List<String> getTechnologiesFromGithubRepositoy(String username, String repoName) {
+    public List<String> getTechnologiesFromGithubRepositoy(String userName, String repoName) {
 
-        String body = readmeParser.parseReadmeFromGithubRepository(username, repoName);
+        String body = Project.getReadmeFromGithubRepository(userName, repoName);
 
         List<String> technologies = new ArrayList<>();
         Matcher m = Pattern.compile(REGEX).matcher(body);
@@ -70,14 +65,10 @@ public class CollaborationService {
     public void saveProjectWithTechnologies(String username, List<String> technologies) {
 
         User user = userService.searchEntityByKey(username);
-
         Project project = new Project("default", user);
-
         List<Technology> technologiesToSave = technologies.stream()
                 .map(t -> new Technology(t, project)).collect(Collectors.toList());
-
         project.setTechnologies(technologiesToSave);
-
         projectRepository.save(project);
     }
 }

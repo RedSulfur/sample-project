@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class CollaborationController {
+
+    private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
 
     private CollaborationService collaborationService;
 
@@ -26,20 +28,12 @@ public class CollaborationController {
         this.collaborationService = collaborationService;
     }
 
-    /**
-     * When issued by a respective get method renders
-     * a template called collaboration.html
-     *
-     * @return a respective template name
-     */
     @RequestMapping(value = "/collaborate", method = RequestMethod.GET)
     public ModelAndView getRepoName() {
         return this.getDefaultView();
     }
 
     /**
-
-     *
      * @param repoName  name of the repository to be processed
      * @param principal {@link Principal} object is needed to determine
      *                  a username of the current user
@@ -54,12 +48,10 @@ public class CollaborationController {
         Assert.notNull(repoName);
 
         CollaborationControllerLogger.logFetchedRepositoryName(repoName);
-        String username = principal.getName();
-        CollaborationControllerLogger.logCurrentlyLoggedInUser(username);
-
+        String userName = principal.getName();
+        CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
         List<String> technologies =
-                collaborationService.getTechnologiesFromGithubRepositoy(username, repoName);
-
+                collaborationService.getTechnologiesFromGithubRepositoy(userName, repoName);
         CollaborationControllerLogger.logAllTheExtractedTechnologies(technologies);
         request.getSession().setAttribute("technologies", technologies);
 
@@ -67,10 +59,9 @@ public class CollaborationController {
     }
 
     /**
-     * On accessing the /publish endpoint, method gets all the technology
-     * names that were passed to it as a session attribute. Defines a
-     * name of the currently logged in user and passes it to a
-     * {@code collaborationService#saveProjectWithTechnologies}.
+     * Gets all the technology names passed as a session attribute.
+     * Defines a name of the currently logged in user which is used
+     * to persist project into the database.
      * When finishing its work method clears the session.
      *
      * @param request   an object that is used to obtain technology names from
@@ -81,19 +72,15 @@ public class CollaborationController {
      *                  a default view name.
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
-    public ModelAndView publishProject(HttpServletRequest request, Principal principal) {
+    public String publishProject(HttpServletRequest request, Principal principal) {
 
         List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
-
         CollaborationControllerLogger.logTechnologiesObtainedFromRequest(technologies);
-
         String username = principal.getName();
-
         collaborationService.saveProjectWithTechnologies(username, technologies);
-
         request.getSession().removeAttribute("technologies");
 
-        return this.getDefaultView();
+        return "collaboration";
     }
 
     /**
@@ -108,7 +95,6 @@ public class CollaborationController {
     private ModelAndView getDefaultView() {
         return new ModelAndView("collaboration");
     }
-
 
     /**
      * Provides logging methods for its outer class {@see CollaborationController}

@@ -8,8 +8,6 @@ CREATE TABLE app_user (
   id bigserial NOT NULL,
   sso_id character varying(30),
   password character varying(100),
-  first_name character varying(30),
-  last_name character varying(30),
   email character varying(30),
   state character varying(30),
   CONSTRAINT app_user_pk PRIMARY KEY (id)
@@ -45,8 +43,8 @@ VALUES ('DBA');
 
 --  Populate one Admin User which will further create other users for the application using GUI
 
-INSERT INTO app_user(sso_id, password, first_name, last_name, email, state)
-VALUES ('RedSulfur','$2a$10$tq5k2IeIfFEQcvqUgP2QAOYpF7CsnXnxDJsdwwG1bNs9vL0IrKQ7e', 'John','Doe','sulfur@gmail.com', 'Active');
+INSERT INTO app_user(sso_id, password, email, state)
+VALUES ('RedSulfur','$2a$10$tq5k2IeIfFEQcvqUgP2QAOYpF7CsnXnxDJsdwwG1bNs9vL0IrKQ7e','sulfur@gmail.com', 'Active');
 
 --  Populate JOIN Table
 
@@ -57,6 +55,7 @@ where app_user.sso_id='RedSulfur' and profile.type='ADMIN';
 CREATE TABLE project (
   id bigserial NOT NULL,
   logo character varying(255),
+  repo_name character varying(255),
   user_id INTEGER,
   CONSTRAINT project_pk PRIMARY KEY (id),
   CONSTRAINT project_fk FOREIGN KEY (user_id)
@@ -74,15 +73,15 @@ CREATE TABLE technology (
   ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO project (id, logo, user_id) VALUES (1, 'img/boot.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (2, 'img/git.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (3, 'img/gradle.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (4, 'img/hibernate.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (5, 'img/maven.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (6, 'img/postgres.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (7, 'img/spring.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (8, 'img/sql.png', 1);
-INSERT INTO project (id, logo, user_id) VALUES (9, 'img/thymeleaf.png', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (1, 'img/boot.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (2, 'img/git.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (3, 'img/gradle.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (4, 'img/hibernate.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (5, 'img/maven.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (6, 'img/postgres.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (7, 'img/spring.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (8, 'img/sql.png', 'refactor-repo', 1);
+INSERT INTO project (id, logo, repo_name, user_id) VALUES (9, 'img/thymeleaf.png', 'refactor-repo', 1);
 
 INSERT INTO technology (id, name, project_id) VALUES (1, 'Spring Data', 1);
 INSERT INTO technology (id, name, project_id) VALUES (2, 'JPA', 1);

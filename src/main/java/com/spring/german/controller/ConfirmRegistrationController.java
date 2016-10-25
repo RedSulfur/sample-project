@@ -33,12 +33,9 @@ public class ConfirmRegistrationController {
 
     /**
      * User reaches an endpoint corresponding to this method by following
-     * a confirmation link in the email message. Method extracts a string
-     * that represents a verification token name from a request parameter.
-     * Checks whether an expiration time of the given token has not passed,
-     * if it has passed, redirects user to a page that clearly describes an
-     * occurred problem. If verification token is valid, specifies a page
-     * where user can start searching for projects.
+     * a confirmation link in the email message. Method extracts a verification
+     * token name from a request parameter and checks whether an expiration time
+     * of the provided token has not passed.
      *
      * @param request   an object that is used to determine a user's locale
      * @param tokenName name of the verification token
@@ -50,9 +47,7 @@ public class ConfirmRegistrationController {
                                        @RequestParam("token") String tokenName) {
 
         Locale locale = request.getLocale();
-        
         VerificationToken verificationToken = tokenSearching.searchEntityByKey(tokenName);
-
         ConfirmRegistrationControllerLogger.logVerificationTokenExpirationDate(verificationToken);
         
         if (verificationToken == null) {
@@ -74,8 +69,6 @@ public class ConfirmRegistrationController {
 
     /**
      * Creates a default {@link ModelAndView} object
-     *
-     * @return default {@link ModelAndView}
      */
     private ModelAndView getDefaultModelAndView() {
         return new ModelAndView("gallery");
@@ -83,8 +76,6 @@ public class ConfirmRegistrationController {
 
     /**
      * Creates an error {@link ModelAndView} object
-     *
-     * @return error {@link ModelAndView}
      */
     private ModelAndView getErrorModelAndView(Locale locale) {
         ModelAndView modelAndView = new ModelAndView("gallery");

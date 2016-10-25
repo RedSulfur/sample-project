@@ -24,11 +24,11 @@
     </script>
 
     <!--include github icons (octicons)-->
-    <link href="../static/build/font/octicons.css" type="text/css" th:href="@{/build/font/octicons.css}" rel="stylesheet"/>
+    <link type="text/css" th:href="@{/build/font/octicons.css}" rel="stylesheet"/>
 
     <!-- Bootstrap core CSS -->
-    <link href="../static/dist/css/bootstrap.min.css" th:href="@{/dist/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link href="../static/dist/css/bootstrap.css" th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/dist/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/dist/css/bootstrap.css}" rel="stylesheet"/>
 
 
     <!-- Custom styles for this template -->
@@ -81,8 +81,8 @@
                 <div th:id="${project.id}" class="card-img-overlay caption showMe">
                     <br/>
                     <h4 style="padding-top: 10px; padding-bottom: 10px" th:text="TITLE"></h4>
-                    <ul style="padding-top: 5px; font-size: 0.9em">
-                        <li th:text="${tech.name}" th:each="tech : ${project.technologies}"></li>
+                    <ul style="padding-top: 5px; font-size: 4vh; list-style-position: inside;">
+                        <li style="font-family: 'Oswald', serif; " th:text="${tech.name}" th:each="tech : ${project.technologies}"></li>
                     </ul>
                 </div>
             </div>
