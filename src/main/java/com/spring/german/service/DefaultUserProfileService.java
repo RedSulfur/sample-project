@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("userProfileService")
 public class DefaultUserProfileService implements UserProfileService,
@@ -28,8 +29,8 @@ public class DefaultUserProfileService implements UserProfileService,
     }
 
     @Override
-    public UserProfile getEntityByKey(String key) {
-        return userProfileRepository.findByType(key);
+    public Optional<UserProfile> getEntityByKey(String key) {
+        return Optional.of(userProfileRepository.findByType(key));
     }
 
     @Override

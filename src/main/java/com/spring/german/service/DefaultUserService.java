@@ -1,5 +1,6 @@
 package com.spring.german.service;
 
+import com.spring.german.entity.State;
 import com.spring.german.entity.User;
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
@@ -9,6 +10,8 @@ import com.spring.german.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class DefaultUserService implements UserService,
@@ -38,7 +41,8 @@ public class DefaultUserService implements UserService,
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUserState(User user) {
+        user.setState(State.ACTIVE.getState());
         return userRepository.save(user);
     }
 
@@ -48,8 +52,8 @@ public class DefaultUserService implements UserService,
     }
 
     @Override
-    public User getEntityByKey(String key) {
-        return userRepository.findBySsoId(key);
+    public Optional<User> getEntityByKey(String key) {
+        return Optional.of(userRepository.findBySsoId(key));
     }
 
     private boolean emailExists(String email) {

@@ -16,25 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserDetailsService implements Searching<UserDetails> {
+public class UserDetailsService {
 
     private final static Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 
     @Autowired
     private Searching<User> userService;
 
-    @Override
     public UserDetails getEntityByKey(String key) {
 
-        log.info("In UserDetailsService: {}", key);
-        User user = userService.getEntityByKey(key);
-        log.info("SsoId that is being used for the role fetching: {}", key);
-        log.info("User fetched using ssoId: {}", user);
-
-        if (user == null) {
-            System.out.println("User was not found");
-            throw new UsernameNotFoundException("User not found");
-        }
+        User user = userService.getEntityByKey(key)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         org.springframework.security.core.userdetails.User result = new org.springframework.security.core.userdetails.User(
                 user.getSsoId(), user.getPassword(), user.getState().equals("Active")

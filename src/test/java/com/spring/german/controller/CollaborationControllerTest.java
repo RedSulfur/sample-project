@@ -70,7 +70,7 @@ public class CollaborationControllerTest {
     public void shouldReturnAllTechnologiesOnValidRepoName() throws Exception {
 
         given(collaborationService
-                .getTechnologiesFromGithubRepositoy(VALID_GITHUB_USER, VALID_GITHUB_REPOSITORY))
+                .getReadmeFromGithubRepositoy(VALID_GITHUB_USER, VALID_GITHUB_REPOSITORY))
                 .willReturn(validTechnologies);
 
         mvc.perform(post("/collaborate").session(session)

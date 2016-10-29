@@ -24,9 +24,9 @@ public class VerificationTokenRepositoryTest {
     @Test
     public void findByToken() throws Exception {
 
-        //VerificationToken tokenToSave = verificationTokenRepository.save(new VerificationToken("placeholder"));
+        //VerificationTokenService tokenToSave = verificationTokenRepository.save(new VerificationTokenService("placeholder"));
 
-        //VerificationToken tokenFromDb = verificationTokenRepository.findOne(1L);
+        //VerificationTokenService tokenFromDb = verificationTokenRepository.findOne(1L);
         //assertThat(tokenFromDb.getToken(), is("placeholder"));
     }
 }

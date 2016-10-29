@@ -3,7 +3,7 @@ package com.spring.german.controller;
 import com.spring.german.entity.User;
 import com.spring.german.entity.VerificationToken;
 import com.spring.german.repository.UserRepository;
-import com.spring.german.service.VerificationTokenService;
+import com.spring.german.service.DefaultVerificationTokenService;
 import com.spring.german.service.interfaces.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class ConfirmRegistrationControllerTest {
     @MockBean private PasswordEncoder passwordEncoder;
     @MockBean private UserRepository userRepository;
     @MockBean private UserService userService;
-    @MockBean private VerificationTokenService verificationTokenService;
+    @MockBean private DefaultVerificationTokenService verificationTokenService;
 
     @Before
     public void setUp() {
@@ -72,6 +72,6 @@ public class ConfirmRegistrationControllerTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name("gallery"));
 
-        verify(userService, times(1)).updateUser(anyObject());
+        verify(userService, times(1)).updateUserState(anyObject());
     }
 }

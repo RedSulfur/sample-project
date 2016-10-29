@@ -1,11 +1,11 @@
 package com.spring.german.controller;
 
+import com.spring.german.exceptions.EmptyRepositoryNameException;
 import com.spring.german.service.CollaborationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
+import static java.util.Optional.of;
+
 @Controller
 public class CollaborationController {
-
-    private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
 
     private CollaborationService collaborationService;
 
@@ -33,6 +33,8 @@ public class CollaborationController {
     }
 
     /**
+     * Enables requested technologies to be displayed at corresponding view
+     *
      * @param repoName  name of the repository to be processed
      * @param principal {@link Principal} object is needed to determine
      *                  a username of currently logged in user
@@ -40,17 +42,38 @@ public class CollaborationController {
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
     public ModelAndView getTechnologiesByRepoName(@ModelAttribute(value = "repoName") String repoName,
                                               HttpServletRequest request, Principal principal) {
-        Assert.notNull(repoName);
 
-        CollaborationControllerLogger.logFetchedRepositoryName(repoName);
+        String notEmptyRepoName = getRepoNameIfNotNull(repoName);
+
+        CollaborationControllerLogger.logFetchedRepositoryName(notEmptyRepoName);
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-        List<String> technologies =
-                collaborationService.getTechnologiesFromGithubRepositoy(userName, repoName);
-        CollaborationControllerLogger.logAllTheExtractedTechnologies(technologies);
-        request.getSession().setAttribute("technologies", technologies);
+
+        populateSessionWithTechnologies(userName, notEmptyRepoName, request);
 
         return this.getDefaultView();
+    }
+
+    private String getRepoNameIfNotNull(String repoName) {
+
+        return of(repoName).orElseThrow(() ->
+                new EmptyRepositoryNameException("You have not provided any repository name"));
+
+    }
+
+    /**
+     *
+     * @param userName
+     * @param notEmptyRepoName
+     * @param request
+     */
+    private void populateSessionWithTechnologies(String userName,
+                                                 String notEmptyRepoName,
+                                                 HttpServletRequest request) {
+        List<String> technologies =
+                collaborationService.getReadmeFromGithubRepositoy(userName, notEmptyRepoName);
+        CollaborationControllerLogger.logAllTheExtractedTechnologies(technologies);
+        request.getSession().setAttribute("technologies", technologies);
     }
 
     /**
@@ -80,12 +103,7 @@ public class CollaborationController {
     }
 
     /**
-     * Supplies all the methods from {@link CollaborationController} with
-     * the default view object. It is used to redirect to a default resource
-     * when controller's method finishes its work.
-     *
-     * @return {@link ModelAndView} object that contains a default view name for
-     *                              the given controller
+     * Supplies all the  with the default view object.
      */
     private ModelAndView getDefaultView() {
         return new ModelAndView("collaboration");

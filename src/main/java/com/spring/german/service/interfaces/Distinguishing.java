@@ -3,7 +3,7 @@ package com.spring.german.service.interfaces;
 /*
 "Pick one word per concept"
 i already have
-List<String> getTechnologiesFromGithubRepositoy
+List<String> getReadmeFromGithubRepositoy
 List<Project> getProjectsByTechnologyNames
 List<GrantedAuthority> getGrantedAuthorities
 and so on so forth

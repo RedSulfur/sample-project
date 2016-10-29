@@ -52,8 +52,6 @@ public class RegistrationController {
         return model;
     }
 
-    //TODO: Change return page to the display result page when result page is ready
-
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registerUser(@ModelAttribute(value = "user")
                                    @Validated @Valid User user,
@@ -75,24 +73,10 @@ public class RegistrationController {
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent
                     (savedUser, request.getLocale(), appUrl));
         } catch (Exception e) {
-            String errorDescription = constructErrorDescription(e);
-            RegistrationControllerLogger.logErrorDuringPublishingEvent(errorDescription);
             return "access-denied";
         }
 
         return REGISTRATION_PAGE;
-    }
-
-    private String constructErrorDescription(Exception e) {
-
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        List<String> list = new ArrayList<>();
-        for (StackTraceElement aStackTrace : stackTrace) {
-            list.add(aStackTrace.toString() + "\n");
-        }
-        String errorDescription = list.toString();
-
-        return errorDescription;
     }
 
     /**
@@ -105,10 +89,6 @@ public class RegistrationController {
         private static void logUserConstructedFromPostBody(User user) {
             log.info("User was retrieved from the post method body and stored in the database: {}",
                     user);
-        }
-
-        private static void logErrorDuringPublishingEvent(String errorDescription) {
-            log.info("Error description: {}", errorDescription);
         }
     }
 }

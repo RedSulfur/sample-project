@@ -1,7 +1,7 @@
 package com.spring.german.registration;
 
 import com.spring.german.entity.User;
-import com.spring.german.service.interfaces.Creating;
+import com.spring.german.service.interfaces.VerificationTokenService;
 import com.spring.german.util.EmailUtil;
 import com.spring.german.util.EventHandler;
 import com.spring.german.util.HtmlContent;
@@ -22,12 +22,12 @@ public class RegistrationListener
 
     Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
-    private Creating creator;
+    private VerificationTokenService creator;
     private EmailUtil emailUtil;
     private EventHandler eventHandler;
 
     @Autowired
-    public RegistrationListener(Creating creator,
+    public RegistrationListener(VerificationTokenService creator,
                                 EmailUtil emailUtil,
                                 EventHandler eventHandler) {
         this.creator = creator;

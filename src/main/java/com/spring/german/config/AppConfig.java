@@ -60,7 +60,7 @@ public class AppConfig {
             mailSenderImpl.setPassword(env.getRequiredProperty("smtp.password"));
         // Caused by: java.lang.IllegalStateException: required key [smtp.host] not found
         } catch (IllegalStateException e) {
-            log.error("Could not resolve email.properties.  See email.properties.sample");
+            log.error("Could not resolve email.properties. See email.properties.sample");
             throw e;
         }
         log.info("Mail sender properties were set to: {host:{}, port:{}, username:{}, " +

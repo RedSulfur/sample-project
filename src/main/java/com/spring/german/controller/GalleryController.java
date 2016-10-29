@@ -33,14 +33,12 @@ public class GalleryController {
 
     /**
      * Fetches all the projects from database that have any of the technologies
-     * provided by user. Saves these projects in model and specifies a page
+     * provided by user, places these projects into the model and specifies a page
      * where these projects will be displayed.
      *
      * @param mav           object that is used to store projects and to specify
      *                      model name.
      * @param technologies  list that is used to search corresponding projects
-     * @return              {@link ModelAndView} object that contains no model
-     *                      attributes and a default view name.
      */
     @RequestMapping(value = "/gallery", method = RequestMethod.POST)
     public ModelAndView getProjects(ModelAndView mav,

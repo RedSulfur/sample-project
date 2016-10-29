@@ -1,8 +1,7 @@
 package com.spring.german.controller;
 
-import com.spring.german.entity.State;
-import com.spring.german.entity.User;
 import com.spring.german.entity.VerificationToken;
+import com.spring.german.exceptions.TokenNotFoundException;
 import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.UserService;
 import org.slf4j.Logger;
@@ -15,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Calendar;
 import java.util.Locale;
+import java.util.Optional;
+
+import static com.spring.german.service.interfaces.VerificationTokenService.isTokenExpired;
 
 @Controller
 public class ConfirmRegistrationController {
@@ -25,22 +26,22 @@ public class ConfirmRegistrationController {
 
     public static final String GALLERY_PAGE = "gallery";
 
-    private Searching<VerificationToken> tokenSearching;
+    private Searching<VerificationToken> verificationTokenService;
     private UserService userService;
 
     @Autowired
-    public ConfirmRegistrationController(Searching<VerificationToken> tokenSearching,
+    public ConfirmRegistrationController(Searching<VerificationToken> verificationTokenService,
                                          UserService userService) {
-        this.tokenSearching = tokenSearching;
+        this.verificationTokenService = verificationTokenService;
         this.userService = userService;
     }
 
     /**
-     * Method checks whether an expiration time of the {@code VerificationToken}
-     * object has not passed.
+     * Checks whether an expiration time of the {@code VerificationTokenService}
+     * object has not passed and defines a view depending on the result of this check
      *
      * @param request   an object that is used to determine a user's locale
-     * @param tokenName name of {@code VerificationToken} which expiration
+     * @param tokenName name of {@code VerificationTokenService} which expiration
      *                  time is being verified
      */
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
@@ -49,25 +50,17 @@ public class ConfirmRegistrationController {
 
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
-        VerificationToken verificationToken = tokenSearching.getEntityByKey(tokenName);
 
-        //TODO: verificationToken has nice toString()
-        ConfirmRegistrationControllerLogger.logVerificationTokenExpirationDate(verificationToken);
+        Optional<VerificationToken> potentiallyEmptyToken = verificationTokenService.getEntityByKey(tokenName);
 
-        log.info("confirmRegistration#verificationToken: {}", verificationToken);
-        if (verificationToken == null) {
+        VerificationToken verificationToken = potentiallyEmptyToken
+                .orElseThrow(() -> new TokenNotFoundException("User not Found"));
+
+        if(isTokenExpired(verificationToken)) {
             return this.getDefaultModelAndView();
+        } else {
+            userService.updateUserState(verificationToken.getUser());
         }
-
-        User user = verificationToken.getUser();
-        Calendar instance = Calendar.getInstance();
-
-        if((verificationToken.getExpiryDate().getTime() - instance.getTime().getTime()) <= 0) {
-            return this.getDefaultModelAndView();
-        }
-
-        user.setState(State.ACTIVE.getState());
-        userService.updateUser(user);
 
         return this.getDefaultModelAndView();
     }
@@ -80,17 +73,4 @@ public class ConfirmRegistrationController {
     }
 
     //TODO: create an error getErrorModelAndView method
-
-    /**
-     * Provides helper methods for its outer class
-     */
-    private static class ConfirmRegistrationControllerLogger {
-
-        private static final Logger log = LoggerFactory.getLogger(ConfirmRegistrationController.class);
-
-        private static void logVerificationTokenExpirationDate(VerificationToken verificationToken) {
-            log.info("Verification token was extracted from the database, its expire date is: {}",
-                    verificationToken.getExpiryDate());
-        }
-    }
 }

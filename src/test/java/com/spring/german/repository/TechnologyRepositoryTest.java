@@ -43,13 +43,12 @@ public class TechnologyRepositoryTest {
     public void shouldReturnUpdatedTechnologyAfterUpdate()
             throws Exception {
 
-        // TODO: similar variable names?
-        Technology technologyToUpdate = technologyRepository.findOne(1L);
-        assertThat(technologyToUpdate.getName(), is("Spring Data"));
+        Technology sampleTechnology = technologyRepository.findOne(1L);
+        assertThat(sampleTechnology.getName(), is("Spring Data"));
 
-        technologyToUpdate.setName("Spring Batch");
+        sampleTechnology.setName("Spring Batch");
 
-        Technology updatedTechnology = technologyRepository.save(technologyToUpdate);
+        Technology updatedTechnology = technologyRepository.save(sampleTechnology);
         assertThat(updatedTechnology.getName(), is("Spring Batch"));
     }
 }
