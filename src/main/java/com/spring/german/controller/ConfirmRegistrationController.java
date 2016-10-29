@@ -23,6 +23,8 @@ public class ConfirmRegistrationController {
 
     private static final Logger log = LoggerFactory.getLogger(ConfirmRegistrationController.class);
 
+    public static final String GALLERY_PAGE = "gallery";
+
     private Searching<VerificationToken> tokenSearching;
     private UserService userService;
 
@@ -34,35 +36,34 @@ public class ConfirmRegistrationController {
     }
 
     /**
-     * User reaches an endpoint corresponding to this method by following
-     * a confirmation link in the email message. Method extracts a verification
-     * token name from a request parameter and checks whether an expiration time
-     * of the provided token has not passed.
+     * Method checks whether an expiration time of the {@code VerificationToken}
+     * object has not passed.
      *
      * @param request   an object that is used to determine a user's locale
-     * @param tokenName name of the verification token
-     * @return          {@link ModelAndView} object that contains no model
-     *                  attributes and a default view name.
+     * @param tokenName name of {@code VerificationToken} which expiration
+     *                  time is being verified
      */
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
     public ModelAndView confirmRegistration (WebRequest request,
                                        @RequestParam("token") String tokenName) {
 
-
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
         VerificationToken verificationToken = tokenSearching.searchEntityByKey(tokenName);
+
+        //TODO: verificationToken has nice toString()
         ConfirmRegistrationControllerLogger.logVerificationTokenExpirationDate(verificationToken);
-        
+
+        log.info("confirmRegistration#verificationToken: {}", verificationToken);
         if (verificationToken == null) {
-            return getErrorModelAndView(locale);
+            return this.getDefaultModelAndView();
         }
 
         User user = verificationToken.getUser();
         Calendar instance = Calendar.getInstance();
 
         if((verificationToken.getExpiryDate().getTime() - instance.getTime().getTime()) <= 0) {
-            return getErrorModelAndView(locale);
+            return this.getDefaultModelAndView();
         }
 
         user.setState(State.ACTIVE.getState());
@@ -75,17 +76,10 @@ public class ConfirmRegistrationController {
      * Creates a default {@link ModelAndView} object
      */
     private ModelAndView getDefaultModelAndView() {
-        return new ModelAndView("gallery");
+        return new ModelAndView(GALLERY_PAGE);
     }
 
-    /**
-     * Creates an error {@link ModelAndView} object
-     */
-    private ModelAndView getErrorModelAndView(Locale locale) {
-        ModelAndView modelAndView = new ModelAndView("gallery");
-        modelAndView.addObject("lang", locale);
-        return modelAndView;
-    }
+    //TODO: create an error getErrorModelAndView method
 
     /**
      * Provides helper methods for its outer class

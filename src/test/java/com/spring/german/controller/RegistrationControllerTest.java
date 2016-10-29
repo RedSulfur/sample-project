@@ -37,13 +37,7 @@ public class RegistrationControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean private PasswordEncoder passwordEncoder;
-    @MockBean private UserRepository userRepository;
-    @MockBean private VerificationTokenRepository tokenRepository;
-    @MockBean private Searching<User> userSearching;
-    @MockBean private ApplicationEventPublisher eventPublisher;
     @MockBean private RegistrationController controller;
-    @MockBean private UserValidator validator;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

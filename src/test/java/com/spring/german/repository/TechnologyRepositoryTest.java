@@ -20,8 +20,6 @@ import static org.junit.Assert.assertThat;
 @DataJpaTest
 public class TechnologyRepositoryTest {
 
-    public static final List<String> TECHNOLOGIES_TO_SEARCH_BY = Arrays.asList("Ant", "Gradle");
-
     @Autowired
     private TechnologyRepository technologyRepository;
 
@@ -45,12 +43,13 @@ public class TechnologyRepositoryTest {
     public void shouldReturnUpdatedTechnologyAfterUpdate()
             throws Exception {
 
+        // TODO: similar variable names?
         Technology technologyToUpdate = technologyRepository.findOne(1L);
         assertThat(technologyToUpdate.getName(), is("Spring Data"));
 
         technologyToUpdate.setName("Spring Batch");
 
-        Technology updated = technologyRepository.save(technologyToUpdate);
-        assertThat(updated.getName(), is("Spring Batch"));
+        Technology updatedTechnology = technologyRepository.save(technologyToUpdate);
+        assertThat(updatedTechnology.getName(), is("Spring Batch"));
     }
 }

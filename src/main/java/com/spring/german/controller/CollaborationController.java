@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -29,21 +28,17 @@ public class CollaborationController {
     }
 
     @RequestMapping(value = "/collaborate", method = RequestMethod.GET)
-    public ModelAndView getRepoName() {
+    public ModelAndView displayCollaborationPage() {
         return this.getDefaultView();
     }
 
     /**
      * @param repoName  name of the repository to be processed
      * @param principal {@link Principal} object is needed to determine
-     *                  a username of the current user
-     *
-     * @return  {@link ModelAndView} object that contains a view
-     *          name and a list of technologies
-     * @throws IOException
+     *                  a username of currently logged in user
      */
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
-    public ModelAndView getTechnologiesByRepo(@ModelAttribute(value = "repoName") String repoName,
+    public ModelAndView getTechnologiesByRepoName(@ModelAttribute(value = "repoName") String repoName,
                                               HttpServletRequest request, Principal principal) {
         Assert.notNull(repoName);
 
@@ -61,7 +56,8 @@ public class CollaborationController {
     /**
      * Gets all the technology names passed as a session attribute.
      * Defines a name of the currently logged in user which is used
-     * to persist project into the database.
+     * to persist project into the database. Saves a new Project
+     * associated with obtained technologies.
      * When finishing its work method clears the session.
      *
      * @param request   an object that is used to obtain technology names from
@@ -72,7 +68,7 @@ public class CollaborationController {
      *                  a default view name.
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
-    public String publishProject(HttpServletRequest request, Principal principal) {
+    public ModelAndView publishProject(HttpServletRequest request, Principal principal) {
 
         List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
         CollaborationControllerLogger.logTechnologiesObtainedFromRequest(technologies);
@@ -80,11 +76,10 @@ public class CollaborationController {
         collaborationService.saveProjectWithTechnologies(username, technologies);
         request.getSession().removeAttribute("technologies");
 
-        return "collaboration";
+        return this.getDefaultView();
     }
 
     /**
-     *
      * Supplies all the methods from {@link CollaborationController} with
      * the default view object. It is used to redirect to a default resource
      * when controller's method finishes its work.

@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -31,8 +32,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+// TODO: Figure out how to get rid of @WebAppConfiguration
 @RunWith(SpringRunner.class)
 @WebMvcTest(CollaborationController.class)
+@WebAppConfiguration
 public class CollaborationControllerTest {
 
     public static final String VALID_GITHUB_USER = "RedSulfur";

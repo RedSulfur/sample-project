@@ -57,7 +57,7 @@ public class CollaborationService {
      * chain is being saved afterwards.
      *
      * @param username     string that is used to extract a corresponding
-     *                     {@link User} object from the database
+     *                     {@link User} from the database
      * @param technologies list of strings that is used to create a list of
      *                     {@link com.spring.german.entity.Technology} objects
      *                     for the further association

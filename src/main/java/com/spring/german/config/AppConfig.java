@@ -33,7 +33,7 @@ public class AppConfig {
      * @return The wrapper servlet of the database
      */
     @Bean
-    public ServletRegistrationBean h2servletRegistration() {
+    public ServletRegistrationBean h2ServletRegistration() {
         ServletRegistrationBean registration = new ServletRegistrationBean(new WebServlet());
         registration.addUrlMappings("/h2/*");
         return registration;
@@ -58,6 +58,7 @@ public class AppConfig {
             mailSenderImpl.setPort(env.getRequiredProperty("smtp.port", Integer.class));
             mailSenderImpl.setUsername(env.getRequiredProperty("smtp.username"));
             mailSenderImpl.setPassword(env.getRequiredProperty("smtp.password"));
+        // Caused by: java.lang.IllegalStateException: required key [smtp.host] not found
         } catch (IllegalStateException e) {
             log.error("Could not resolve email.properties.  See email.properties.sample");
             throw e;
