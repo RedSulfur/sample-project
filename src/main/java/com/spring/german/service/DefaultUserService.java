@@ -3,7 +3,7 @@ package com.spring.german.service;
 import com.spring.german.entity.User;
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
-import com.spring.german.service.interfaces.Finding;
+import com.spring.german.service.interfaces.Distinguishing;
 import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DefaultUserService implements UserService,
-        Finding<User>,
+        Distinguishing<User>,
         Searching<User> {
 
     private PasswordEncoder passwordEncoder;
@@ -43,12 +43,12 @@ public class DefaultUserService implements UserService,
     }
 
     @Override
-    public User findById(long id) {
+    public User getById(long id) {
         return userRepository.findOne(id);
     }
 
     @Override
-    public User searchEntityByKey(String key) {
+    public User getEntityByKey(String key) {
         return userRepository.findBySsoId(key);
     }
 

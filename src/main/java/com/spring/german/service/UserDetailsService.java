@@ -24,10 +24,10 @@ public class UserDetailsService implements Searching<UserDetails> {
     private Searching<User> userService;
 
     @Override
-    public UserDetails searchEntityByKey(String key) {
+    public UserDetails getEntityByKey(String key) {
 
         log.info("In UserDetailsService: {}", key);
-        User user = userService.searchEntityByKey(key);
+        User user = userService.getEntityByKey(key);
         log.info("SsoId that is being used for the role fetching: {}", key);
         log.info("User fetched using ssoId: {}", user);
 

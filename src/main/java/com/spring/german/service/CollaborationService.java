@@ -64,7 +64,7 @@ public class CollaborationService {
      */
     public void saveProjectWithTechnologies(String username, List<String> technologies) {
 
-        User user = userService.searchEntityByKey(username);
+        User user = userService.getEntityByKey(username);
         Project project = new Project("default", user);
         List<Technology> technologiesToSave = technologies.stream()
                 .map(t -> new Technology(t, project)).collect(Collectors.toList());

@@ -24,6 +24,6 @@ public class UserDetailsServiceAdapter
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDetailsService.searchEntityByKey(username);
+        return userDetailsService.getEntityByKey(username);
     }
 }

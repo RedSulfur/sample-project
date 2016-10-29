@@ -5,6 +5,6 @@ import com.spring.german.entity.Project;
 import java.util.List;
 
 public interface ProjectService {
-    List<Project> findByTechnologyNames(String technologies);
+    List<Project> getProjectsByTechnologyNames(String technologies);
     Project save(Project project);
 }

@@ -20,7 +20,7 @@ public class DefaultProjectService implements ProjectService {
     }
 
     @Override
-    public List<Project> findByTechnologyNames(String technologies) {
+    public List<Project> getProjectsByTechnologyNames(String technologies) {
 
         List<String> technologiesToSearchBy = Arrays.asList(technologies.split(","));
 

@@ -2,7 +2,8 @@ package com.spring.german.service;
 
 import com.spring.german.entity.UserProfile;
 import com.spring.german.repository.UserProfileRepository;
-import com.spring.german.service.interfaces.Finding;
+import com.spring.german.service.interfaces.Distinguishing;
+import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Service("userProfileService")
 public class DefaultUserProfileService implements UserProfileService,
-        Finding<UserProfile> {
+        Distinguishing<UserProfile>, Searching<UserProfile> {
 
     @Autowired
     private UserProfileRepository userProfileRepository;
@@ -27,7 +28,12 @@ public class DefaultUserProfileService implements UserProfileService,
     }
 
     @Override
-    public UserProfile findById(long id) {
+    public UserProfile getEntityByKey(String key) {
+        return userProfileRepository.findByType(key);
+    }
+
+    @Override
+    public UserProfile getById(long id) {
         return userProfileRepository.findOne(id);
     }
 }

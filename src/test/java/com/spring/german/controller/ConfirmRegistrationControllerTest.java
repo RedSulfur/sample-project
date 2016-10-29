@@ -4,7 +4,6 @@ import com.spring.german.entity.User;
 import com.spring.german.entity.VerificationToken;
 import com.spring.german.repository.UserRepository;
 import com.spring.german.service.VerificationTokenService;
-import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +25,6 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -60,7 +58,7 @@ public class ConfirmRegistrationControllerTest {
     @Test
     public void shouldUpdateUserStateOnRegistrationConfirmation() throws Exception {
 
-        given(verificationTokenService.searchEntityByKey(anyString()))
+        given(verificationTokenService.getEntityByKey(anyString()))
                 .willReturn(validVerificationToken);
 
         mvc.perform(get("/registrationConfirm")

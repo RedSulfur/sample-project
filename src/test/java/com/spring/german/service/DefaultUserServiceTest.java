@@ -29,6 +29,6 @@ public class DefaultUserServiceTest {
     @Test
     public void registerUser() throws Exception {
         given(this.userRepository.findBySsoId(anyString())).willReturn(null);
-        userService.searchEntityByKey(anyString());
+        userService.getEntityByKey(anyString());
     }
 }

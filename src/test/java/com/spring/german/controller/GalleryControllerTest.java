@@ -79,7 +79,7 @@ public class GalleryControllerTest {
     public void shouldFindAllTheProjectsByStringOfTechnologies()
             throws Exception {
 
-        given(projectService.findByTechnologyNames(anyString()))
+        given(projectService.getProjectsByTechnologyNames(anyString()))
                 .willReturn(projects);
 
         mvc.perform(post("/gallery")
@@ -93,6 +93,6 @@ public class GalleryControllerTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("projects", hasSize(1)));
 
-        verify(projectService, times(1)).findByTechnologyNames(anyString());
+        verify(projectService, times(1)).getProjectsByTechnologyNames(anyString());
     }
 }

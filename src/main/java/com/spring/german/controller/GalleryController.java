@@ -48,7 +48,7 @@ public class GalleryController {
 
         log.info("{}", technologies);
 
-        List<Project> projects = projectService.findByTechnologyNames(technologies);
+        List<Project> projects = projectService.getProjectsByTechnologyNames(technologies);
 
         GalleryControllerLogger.logAllTheExtractedProjects(projects);
 

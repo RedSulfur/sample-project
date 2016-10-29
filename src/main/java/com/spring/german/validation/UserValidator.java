@@ -45,7 +45,7 @@ public class UserValidator implements Validator {
         User user = (User) target;
         log.info("UserValidator processes the following user: " + user.toString());
 
-        Optional optionalBySsoId = Optional.ofNullable(userSearching.searchEntityByKey(user.getSsoId()));
+        Optional optionalBySsoId = Optional.ofNullable(userSearching.getEntityByKey(user.getSsoId()));
         Optional optionalByEmail = Optional.ofNullable(userService.findByEmail(user.getEmail()));
 
         if (optionalByEmail.isPresent()) {

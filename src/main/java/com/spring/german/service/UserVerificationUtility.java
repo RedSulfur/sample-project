@@ -15,7 +15,7 @@ public class UserVerificationUtility implements Searching<User> {
     }
 
     @Override
-    public User searchEntityByKey(String key) {
+    public User getEntityByKey(String key) {
         return tokenRepository.findByToken(key).getUser();
     }
 }

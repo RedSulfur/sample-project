@@ -26,7 +26,7 @@ public class VerificationTokenService implements Searching<VerificationToken>,
     }
 
     @Override
-    public VerificationToken searchEntityByKey(String key) {
+    public VerificationToken getEntityByKey(String key) {
         return tokenRepository.findByToken(key);
     }
 }

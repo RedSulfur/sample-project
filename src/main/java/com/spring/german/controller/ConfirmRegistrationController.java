@@ -49,7 +49,7 @@ public class ConfirmRegistrationController {
 
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
-        VerificationToken verificationToken = tokenSearching.searchEntityByKey(tokenName);
+        VerificationToken verificationToken = tokenSearching.getEntityByKey(tokenName);
 
         //TODO: verificationToken has nice toString()
         ConfirmRegistrationControllerLogger.logVerificationTokenExpirationDate(verificationToken);
