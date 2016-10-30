@@ -13,5 +13,5 @@ List<GrantedAuthority> getGrantedAuthorities
 and so on so forth
  */
 public interface Searching<T> {
-    Optional<T> getEntityByKey(String key);
+    T getEntityByKey(String key);
 }

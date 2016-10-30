@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,8 +24,7 @@ public class UserDetailsService {
 
     public UserDetails getEntityByKey(String key) {
 
-        User user = userService.getEntityByKey(key)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userService.getEntityByKey(key);
 
         org.springframework.security.core.userdetails.User result = new org.springframework.security.core.userdetails.User(
                 user.getSsoId(), user.getPassword(), user.getState().equals("Active")

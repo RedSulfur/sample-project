@@ -41,6 +41,7 @@ public class Project {
         this.user = user;
     }
 
+    //TODO: correct place for it?
     /**
      * Searches for the readme file at user's GitHub repository
      * and establishes a url connection to it. After connection

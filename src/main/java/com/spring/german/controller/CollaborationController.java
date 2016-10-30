@@ -1,6 +1,5 @@
 package com.spring.german.controller;
 
-import com.spring.german.exceptions.EmptyRepositoryNameException;
 import com.spring.german.service.CollaborationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
-
-import static java.util.Optional.of;
 
 @Controller
 public class CollaborationController {
@@ -43,37 +40,11 @@ public class CollaborationController {
     public ModelAndView getTechnologiesByRepoName(@ModelAttribute(value = "repoName") String repoName,
                                               HttpServletRequest request, Principal principal) {
 
-        String notEmptyRepoName = getRepoNameIfNotNull(repoName);
-
-        CollaborationControllerLogger.logFetchedRepositoryName(notEmptyRepoName);
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-
-        populateSessionWithTechnologies(userName, notEmptyRepoName, request);
+        collaborationService.populateSessionWithTechnologies(userName, repoName, request);
 
         return this.getDefaultView();
-    }
-
-    private String getRepoNameIfNotNull(String repoName) {
-
-        return of(repoName).orElseThrow(() ->
-                new EmptyRepositoryNameException("You have not provided any repository name"));
-
-    }
-
-    /**
-     *
-     * @param userName
-     * @param notEmptyRepoName
-     * @param request
-     */
-    private void populateSessionWithTechnologies(String userName,
-                                                 String notEmptyRepoName,
-                                                 HttpServletRequest request) {
-        List<String> technologies =
-                collaborationService.getReadmeFromGithubRepositoy(userName, notEmptyRepoName);
-        CollaborationControllerLogger.logAllTheExtractedTechnologies(technologies);
-        request.getSession().setAttribute("technologies", technologies);
     }
 
     /**
@@ -116,19 +87,11 @@ public class CollaborationController {
 
         private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
 
-        private static void logFetchedRepositoryName(String repoName) {
-            log.info("Repository name fetched: {}", repoName);
-        }
-
         private static void logCurrentlyLoggedInUser(String username) {
             log.info("Currently logged in user: {}", username);
         }
 
-        private static void logAllTheExtractedTechnologies(List<String> technologies) {
-            log.info("Extracted technologies: {}", technologies);
-        }
-
-        public static void logTechnologiesObtainedFromRequest(List<String> technologies) {
+        private static void logTechnologiesObtainedFromRequest(List<String> technologies) {
             log.info("Technologies list obtained from collaboration.html: {}", technologies);
         }
     }

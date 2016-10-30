@@ -1,7 +1,6 @@
 package com.spring.german.controller;
 
 import com.spring.german.entity.VerificationToken;
-import com.spring.german.exceptions.TokenNotFoundException;
 import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.UserService;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Locale;
-import java.util.Optional;
 
 import static com.spring.german.service.interfaces.VerificationTokenService.isTokenExpired;
 
@@ -45,16 +43,18 @@ public class ConfirmRegistrationController {
      *                  time is being verified
      */
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
-    public ModelAndView confirmRegistration (WebRequest request,
+    public void confirmRegistration (WebRequest request,
                                        @RequestParam("token") String tokenName) {
 
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
 
-        Optional<VerificationToken> potentiallyEmptyToken = verificationTokenService.getEntityByKey(tokenName);
+        VerificationToken verificationToken = verificationTokenService.getEntityByKey(tokenName);
 
-        VerificationToken verificationToken = potentiallyEmptyToken
-                .orElseThrow(() -> new TokenNotFoundException("User not Found"));
+        rejectOrApproveUserByToken(verificationToken);
+    }
+
+    private ModelAndView rejectOrApproveUserByToken(VerificationToken verificationToken) {
 
         if(isTokenExpired(verificationToken)) {
             return this.getDefaultModelAndView();

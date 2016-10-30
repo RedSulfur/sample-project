@@ -44,12 +44,12 @@ public class EventHandler {
                                     String token) {
 
         String recipientAddress = user.getEmail();
-        Locale locale = event.getLocale();
+        Locale locale = event.getDetails().getLocale();
         log.info("Destination email: {}", recipientAddress);
 
         String subject = "Registration Confirmation";
         String confirmationUrl
-                = event.getAppUrl() + "/registrationConfirm?token=" + token;
+                = event.getDetails().getAppUrl() + "/registrationConfirm?token=" + token;
         String message = messages.getMessage("message.registration.success", null, locale);
         log.info("Based on user's locale, the following message, was fetched " +
                 "from the properties file: {{}, locale: {}}", message, locale);

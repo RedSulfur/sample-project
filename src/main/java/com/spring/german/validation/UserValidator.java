@@ -15,6 +15,8 @@ import org.springframework.validation.Validator;
 import java.util.Locale;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 @Component
 @EnableConfigurationProperties
 public class UserValidator implements Validator {
@@ -45,8 +47,8 @@ public class UserValidator implements Validator {
         User user = (User) target;
         log.info("UserValidator processes the following user: " + user.toString());
 
-        Optional optionalBySsoId = Optional.ofNullable(userSearching.getEntityByKey(user.getSsoId()));
-        Optional optionalByEmail = Optional.ofNullable(userService.findByEmail(user.getEmail()));
+        Optional optionalBySsoId = ofNullable(userSearching.getEntityByKey(user.getSsoId()));
+        Optional optionalByEmail = ofNullable(userService.findByEmail(user.getEmail()));
 
         if (optionalByEmail.isPresent()) {
             errors.rejectValue("email", "Registered Email",

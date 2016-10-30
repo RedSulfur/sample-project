@@ -2,6 +2,7 @@ package com.spring.german.service;
 
 import com.spring.german.entity.State;
 import com.spring.german.entity.User;
+import com.spring.german.exceptions.UserNameNotFoundException;
 import com.spring.german.repository.UserRepository;
 import com.spring.german.repository.VerificationTokenRepository;
 import com.spring.german.service.interfaces.Distinguishing;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import static java.util.Optional.ofNullable;
 
 @Service
 public class DefaultUserService implements UserService,
@@ -52,8 +53,9 @@ public class DefaultUserService implements UserService,
     }
 
     @Override
-    public Optional<User> getEntityByKey(String key) {
-        return Optional.of(userRepository.findBySsoId(key));
+    public User getEntityByKey(String key) {
+        return ofNullable(userRepository.findBySsoId(key))
+                .orElseThrow(() -> new UserNameNotFoundException("User not found"));
     }
 
     private boolean emailExists(String email) {

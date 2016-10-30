@@ -2,13 +2,14 @@ package com.spring.german.service;
 
 import com.spring.german.entity.User;
 import com.spring.german.entity.VerificationToken;
+import com.spring.german.exceptions.TokenNotFoundException;
 import com.spring.german.repository.VerificationTokenRepository;
 import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import static java.util.Optional.of;
 
 @Service
 public class DefaultVerificationTokenService implements Searching<VerificationToken>,
@@ -28,7 +29,8 @@ public class DefaultVerificationTokenService implements Searching<VerificationTo
     }
 
     @Override
-    public Optional<VerificationToken> getEntityByKey(String key) {
-        return Optional.of(tokenRepository.findByToken(key));
+    public VerificationToken getEntityByKey(String key) {
+        return of(tokenRepository.findByToken(key))
+                .orElseThrow(() -> new TokenNotFoundException("User not Found"));
     }
 }

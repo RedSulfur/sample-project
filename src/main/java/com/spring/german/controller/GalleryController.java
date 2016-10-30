@@ -18,6 +18,7 @@ import java.util.List;
 public class GalleryController {
 
     private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
+    public static final String GALLERY_VIEW = "gallery";
 
     private ProjectService projectService;
 
@@ -27,8 +28,8 @@ public class GalleryController {
     }
 
     @RequestMapping(value = "/gallery", method = RequestMethod.GET)
-    public String showGallery(Model model) {
-        return "gallery";
+    public ModelAndView showGallery(Model model) {
+        return this.getDefaultModelAndView();
     }
 
     /**
@@ -50,10 +51,14 @@ public class GalleryController {
 
         GalleryControllerLogger.logAllTheExtractedProjects(projects);
 
+        mav.setViewName(GALLERY_VIEW);
         mav.addObject("projects", projects);
-        mav.setViewName("gallery");
 
         return mav;
+    }
+
+    private ModelAndView getDefaultModelAndView() {
+        return new ModelAndView(GALLERY_VIEW);
     }
 
     /**

@@ -4,18 +4,19 @@ import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
 import com.spring.german.exceptions.EmptyRepositoryNameException;
-import com.spring.german.exceptions.UserNameNotFoundException;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.Searching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.of;
+import static java.util.regex.Pattern.compile;
 
 @Service
 public class CollaborationService {
@@ -50,7 +51,7 @@ public class CollaborationService {
     private List<String> extractTechnologyNamesFromReadmeBody(String body) {
 
         List<String> technologies = new ArrayList<>();
-        Matcher m = Pattern.compile(REGEX).matcher(body);
+        Matcher m = compile(REGEX).matcher(body);
         while (m.find()) {
             technologies.add(m.group(1));
         }
@@ -73,9 +74,7 @@ public class CollaborationService {
      */
     public void saveProjectWithTechnologies(String username, List<String> technologies) {
 
-        //TODO: potentiallyEmptyUser / potentiallyNullUser
-        Optional<User> potentiallyEmptyUser = userService.getEntityByKey(username);
-        User user = potentiallyEmptyUser.orElseThrow(() -> new UserNameNotFoundException("User not found"));
+        User user = userService.getEntityByKey(username);
 
         Project project = new Project("default", user);
         List<Technology> technologiesToSave = technologies.stream()
@@ -83,5 +82,17 @@ public class CollaborationService {
         project.setTechnologies(technologiesToSave);
 
         projectRepository.save(project);
+    }
+
+
+    public void populateSessionWithTechnologies(String userName,
+                                                 String repoName,
+                                                 HttpServletRequest request) {
+
+        String notEmptyRepoName = of(repoName).orElseThrow(() ->
+                new EmptyRepositoryNameException("You have not provided any repository name"));
+        List<String> technologies =
+                getReadmeFromGithubRepositoy(userName, notEmptyRepoName);
+        request.getSession().setAttribute("technologies", technologies);
     }
 }

@@ -28,9 +28,11 @@ public class DefaultUserProfileService implements UserProfileService,
         return userProfileRepository.findByType(type);
     }
 
+    //TODO: implement appropriate exception
     @Override
-    public Optional<UserProfile> getEntityByKey(String key) {
-        return Optional.of(userProfileRepository.findByType(key));
+    public UserProfile getEntityByKey(String key) {
+        return Optional.of(userProfileRepository.findByType(key))
+                .orElseThrow(() -> new RuntimeException("mock"));
     }
 
     @Override
