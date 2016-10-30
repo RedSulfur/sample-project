@@ -1,13 +1,14 @@
 package com.spring.german.entity;
 
-import com.spring.german.exceptions.ReadmeNotFound;
-import org.apache.commons.io.IOUtils;
-
-import javax.persistence.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,33 +40,6 @@ public class Project {
         this.logo = logo;
         this.technologies = technologies;
         this.user = user;
-    }
-
-    //TODO: correct place for it?
-    /**
-     * Searches for the readme file at user's GitHub repository
-     * and establishes a url connection to it. After connection
-     * to the file was acquired, method performs its processing
-     * in order to obtain a string representation of the fetched
-     * data.
-     */
-    public static String getReadmeFromGithubRepository(String userName, String repoName) {
-
-        String readmeBody;
-        try {
-            URL url = new URL("https://raw.githubusercontent.com/"
-                    + userName + "/" + repoName + "/master/README.md");
-            URLConnection con = url.openConnection();
-            InputStream in = con.getInputStream();
-            String encoding = con.getContentEncoding();
-            encoding = encoding == null ? "UTF-8" : encoding;
-            readmeBody = IOUtils.toString(in, encoding);
-        } catch (IOException e) {
-            throw new ReadmeNotFound("There is no such user on github, or " +
-                    "repository name you've specified is non existent", e);
-        }
-
-        return readmeBody;
     }
 
     public long getId() {

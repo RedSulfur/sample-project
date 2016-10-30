@@ -4,12 +4,18 @@ import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
 import com.spring.german.exceptions.EmptyRepositoryNameException;
+import com.spring.german.exceptions.ReadmeNotFound;
 import com.spring.german.repository.ProjectRepository;
-import com.spring.german.service.interfaces.Searching;
+import com.spring.german.service.interfaces.UserService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -21,42 +27,29 @@ import static java.util.regex.Pattern.compile;
 @Service
 public class CollaborationService {
 
-    private Searching<User> userService;
     private ProjectRepository projectRepository;
+    private UserService userService;
 
     @Autowired
-    public CollaborationService(Searching<User> userService,
-                                ProjectRepository projectRepository) {
+    public CollaborationService(ProjectRepository projectRepository,
+                                UserService userService) {
         this.userService = userService;
         this.projectRepository = projectRepository;
     }
 
     private static final String REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)";
 
-    //TODO: Rework javadoc
-    /**
-     *
-     * and applies a regular expression to it in order to determine the name of every
-     * technology that was used to create a project from the given repository.
-     *
-     * @return          technologies list
-     */
-    public List<String> getReadmeFromGithubRepositoy(String userName, String repoNameOptional) {
+    public void populateSessionWithTechnologiesFromRepo(String userName,
+                                                        String repoName,
+                                                        HttpServletRequest request) {
 
-        String body = Project.getReadmeFromGithubRepository(userName, repoNameOptional);
+        String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
 
-        return extractTechnologyNamesFromReadmeBody(body);
-    }
+        String body = this.getReadmeFromGitHubRepository(userName, notEmptyRepoName);
 
-    private List<String> extractTechnologyNamesFromReadmeBody(String body) {
+        List<String> technologies = this.extractTechnologyNamesFromReadmeBody(body);
 
-        List<String> technologies = new ArrayList<>();
-        Matcher m = compile(REGEX).matcher(body);
-        while (m.find()) {
-            technologies.add(m.group(1));
-        }
-
-        return technologies;
+        request.getSession().setAttribute("technologies", technologies);
     }
 
     /**
@@ -74,7 +67,7 @@ public class CollaborationService {
      */
     public void saveProjectWithTechnologies(String username, List<String> technologies) {
 
-        User user = userService.getEntityByKey(username);
+        User user = userService.getUserBySsoId(username);
 
         Project project = new Project("default", user);
         List<Technology> technologiesToSave = technologies.stream()
@@ -84,15 +77,45 @@ public class CollaborationService {
         projectRepository.save(project);
     }
 
-
-    public void populateSessionWithTechnologies(String userName,
-                                                 String repoName,
-                                                 HttpServletRequest request) {
-
-        String notEmptyRepoName = of(repoName).orElseThrow(() ->
+    private String getNotEmptyRepoName(String repoName) {
+        return of(repoName).orElseThrow(() ->
                 new EmptyRepositoryNameException("You have not provided any repository name"));
-        List<String> technologies =
-                getReadmeFromGithubRepositoy(userName, notEmptyRepoName);
-        request.getSession().setAttribute("technologies", technologies);
+    }
+
+    /**
+     * Searches for the readme file at user's GitHub repository
+     * and establishes a url connection to it. After connection
+     * to the file was acquired, method performs its processing
+     * in order to obtain a string representation of the fetched
+     * data.
+     */
+    private String getReadmeFromGitHubRepository(String userName, String repoName) {
+
+        String readmeBody;
+        try {
+            URL url = new URL("https://raw.githubusercontent.com/"
+                    + userName + "/" + repoName + "/master/README.md");
+            URLConnection con = url.openConnection();
+            InputStream in = con.getInputStream();
+            String encoding = con.getContentEncoding();
+            encoding = encoding == null ? "UTF-8" : encoding;
+            readmeBody = IOUtils.toString(in, encoding);
+        } catch (IOException e) {
+            throw new ReadmeNotFound("There is no such user on github, or " +
+                    "repository name you've specified is non existent", e);
+        }
+
+        return readmeBody;
+    }
+
+    private List<String> extractTechnologyNamesFromReadmeBody(String body) {
+
+        List<String> technologies = new ArrayList<>();
+        Matcher m = compile(REGEX).matcher(body);
+        while (m.find()) {
+            technologies.add(m.group(1));
+        }
+
+        return technologies;
     }
 }

@@ -9,7 +9,7 @@ public interface VerificationTokenService {
 
     //TODO: correct place for it?
     static boolean isTokenExpired(VerificationToken verificationToken) {
-        return verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() >= 0;
+        return verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() <= 0;
     }
 
     void createVerificationToken(User user, String token);

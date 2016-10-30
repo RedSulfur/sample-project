@@ -66,8 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/gallery", "/collaborate").access("hasRole('ROLE_ADMIN')")
                 .and().formLogin().loginPage("/login")
                 .usernameParameter("ssoId").passwordParameter("password")
-                .and().csrf().requireCsrfProtectionMatcher(new UrlFilter("/h2"))
-                .and().exceptionHandling().accessDeniedPage("/Access_Denied");
+                .and().csrf().requireCsrfProtectionMatcher(new UrlFilter("/h2"));
         http.headers().frameOptions().disable();
     }
 }

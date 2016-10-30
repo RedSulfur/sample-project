@@ -43,21 +43,22 @@ public class ConfirmRegistrationController {
      *                  time is being verified
      */
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
-    public void confirmRegistration (WebRequest request,
+    public ModelAndView confirmRegistration (WebRequest request,
                                        @RequestParam("token") String tokenName) {
 
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
 
         VerificationToken verificationToken = verificationTokenService.getEntityByKey(tokenName);
+        log.info("verificationToken : {}", verificationToken);
 
-        rejectOrApproveUserByToken(verificationToken);
+        return this.getPageBasedOnTokenState(verificationToken);
     }
 
-    private ModelAndView rejectOrApproveUserByToken(VerificationToken verificationToken) {
+    private ModelAndView getPageBasedOnTokenState(VerificationToken verificationToken) {
 
         if(isTokenExpired(verificationToken)) {
-            return this.getDefaultModelAndView();
+            return this.getDefaultModelAndView(); //error page is not jet ready
         } else {
             userService.updateUserState(verificationToken.getUser());
         }

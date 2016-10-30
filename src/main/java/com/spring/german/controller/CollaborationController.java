@@ -42,7 +42,7 @@ public class CollaborationController {
 
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-        collaborationService.populateSessionWithTechnologies(userName, repoName, request);
+        collaborationService.populateSessionWithTechnologiesFromRepo(userName, repoName, request);
 
         return this.getDefaultView();
     }
@@ -62,7 +62,7 @@ public class CollaborationController {
      *                  a default view name.
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
-    public ModelAndView publishProject(HttpServletRequest request, Principal principal) {
+    public ModelAndView persistProject(HttpServletRequest request, Principal principal) {
 
         List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
         CollaborationControllerLogger.logTechnologiesObtainedFromRequest(technologies);
