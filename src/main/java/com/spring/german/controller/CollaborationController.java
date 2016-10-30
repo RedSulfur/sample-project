@@ -1,6 +1,7 @@
 package com.spring.german.controller;
 
 import com.spring.german.service.CollaborationService;
+import com.spring.german.util.GitHubRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,16 @@ public class CollaborationController {
 
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-        collaborationService.populateSessionWithTechnologiesFromRepo(userName, repoName, request);
+        GitHubRepository gitHubRepository = this.getGitHubRepositoryObject(repoName, userName);
+        collaborationService.populateSessionWithTechnologiesFromRepo(gitHubRepository, request);
 
         return this.getDefaultView();
     }
+
+    private GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
+        return new GitHubRepository(repoName, userName);
+    }
+
 
     /**
      * Gets all the technology names passed as a session attribute.

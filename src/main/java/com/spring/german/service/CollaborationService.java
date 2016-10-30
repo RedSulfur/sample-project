@@ -7,6 +7,7 @@ import com.spring.german.exceptions.EmptyRepositoryNameException;
 import com.spring.german.exceptions.ReadmeNotFound;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.UserService;
+import com.spring.german.util.GitHubRepository;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,16 +40,23 @@ public class CollaborationService {
 
     private static final String REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)";
 
+    public void populateSessionWithTechnologiesFromRepo(GitHubRepository gitHubRepository,
+                                                        HttpServletRequest request) {
+
+        String notEmptyRepoName = this.getNotEmptyRepoName(gitHubRepository.getRepoName());
+        String ownerName = gitHubRepository.getOwnerName();
+        String body = this.getReadmeFromGitHubRepository(ownerName, notEmptyRepoName);
+        List<String> technologies = this.extractTechnologyNamesFromReadmeBody(body);
+        request.getSession().setAttribute("technologies", technologies);
+    }
+
     public void populateSessionWithTechnologiesFromRepo(String userName,
                                                         String repoName,
                                                         HttpServletRequest request) {
 
         String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
-
         String body = this.getReadmeFromGitHubRepository(userName, notEmptyRepoName);
-
         List<String> technologies = this.extractTechnologyNamesFromReadmeBody(body);
-
         request.getSession().setAttribute("technologies", technologies);
     }
 
