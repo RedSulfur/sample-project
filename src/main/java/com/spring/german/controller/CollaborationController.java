@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
@@ -43,16 +44,12 @@ public class CollaborationController {
 
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-        GitHubRepository gitHubRepository = this.getGitHubRepositoryObject(repoName, userName);
-        collaborationService.populateSessionWithTechnologiesFromRepo(gitHubRepository, request);
+        GitHubRepository gitHubRepository = collaborationService.getGitHubRepositoryObject(repoName, userName);
+        HttpSession session = request.getSession();
+        collaborationService.populateSessionWithTechnologiesFromRepo(session, gitHubRepository);
 
         return this.getDefaultView();
     }
-
-    private GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
-        return new GitHubRepository(repoName, userName);
-    }
-
 
     /**
      * Gets all the technology names passed as a session attribute.

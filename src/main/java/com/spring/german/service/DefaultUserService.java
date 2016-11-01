@@ -19,8 +19,7 @@ public class DefaultUserService implements UserService,
 
     @Autowired
     public DefaultUserService(PasswordEncoder passwordEncoder,
-                              UserRepository userRepository,
-                              VerificationTokenRepository tokenRepository) {
+                              UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }

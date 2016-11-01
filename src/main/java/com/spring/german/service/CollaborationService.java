@@ -12,7 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -31,6 +31,10 @@ public class CollaborationService {
     private ProjectRepository projectRepository;
     private UserService userService;
 
+    // e.g. "[Spring Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html)"
+    // matches "Spring Thymeleaf"
+    private static final String TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE = "\\[([a-zA-z ]*)\\]\\(.+\\)";
+
     @Autowired
     public CollaborationService(ProjectRepository projectRepository,
                                 UserService userService) {
@@ -38,34 +42,24 @@ public class CollaborationService {
         this.projectRepository = projectRepository;
     }
 
-    private static final String REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)";
+    public void populateSessionWithTechnologiesFromRepo(HttpSession session,
+                                                        GitHubRepository gitHubRepository) {
 
-    public void populateSessionWithTechnologiesFromRepo(GitHubRepository gitHubRepository,
-                                                        HttpServletRequest request) {
-
-        String notEmptyRepoName = this.getNotEmptyRepoName(gitHubRepository.getRepoName());
-        String ownerName = gitHubRepository.getOwnerName();
-        String body = this.getReadmeFromGitHubRepository(ownerName, notEmptyRepoName);
-        List<String> technologies = this.extractTechnologyNamesFromReadmeBody(body);
-        request.getSession().setAttribute("technologies", technologies);
+        String readmeBody = this.getReadmeFromGitHubRepository(gitHubRepository);
+        List<String> technologies = this.extractTechnologyNamesFromReadmeBody(readmeBody);
+        session.setAttribute("technologies", technologies);
     }
 
-    public void populateSessionWithTechnologiesFromRepo(String userName,
-                                                        String repoName,
-                                                        HttpServletRequest request) {
-
+    public GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
         String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
-        String body = this.getReadmeFromGitHubRepository(userName, notEmptyRepoName);
-        List<String> technologies = this.extractTechnologyNamesFromReadmeBody(body);
-        request.getSession().setAttribute("technologies", technologies);
+        return new GitHubRepository(notEmptyRepoName, userName);
     }
 
     /**
      * Maps a list of the obtained strings that represent technologies
      * to the list of the corresponding objects.
      * These {@link com.spring.german.entity.Technology} objects are being
-     * associated with the extracted user and a new project. This entwined
-     * chain is being saved afterwards.
+     * associated with the extracted user and his new project.
      *
      * @param username     string that is used to extract a corresponding
      *                     {@link User} from the database
@@ -93,16 +87,16 @@ public class CollaborationService {
     /**
      * Searches for the readme file at user's GitHub repository
      * and establishes a url connection to it. After connection
-     * to the file was acquired, method performs its processing
-     * in order to obtain a string representation of the fetched
-     * data.
+     * to the file was acquired, method attempts to obtain a
+     * string representation of the fetched data.
      */
-    private String getReadmeFromGitHubRepository(String userName, String repoName) {
+    private String getReadmeFromGitHubRepository(GitHubRepository gitHubRepository) {
 
         String readmeBody;
         try {
             URL url = new URL("https://raw.githubusercontent.com/"
-                    + userName + "/" + repoName + "/master/README.md");
+                    + gitHubRepository.getOwnerName() + "/"
+                    + gitHubRepository.getRepoName() + "/master/README.md");
             URLConnection con = url.openConnection();
             InputStream in = con.getInputStream();
             String encoding = con.getContentEncoding();
@@ -119,7 +113,7 @@ public class CollaborationService {
     private List<String> extractTechnologyNamesFromReadmeBody(String body) {
 
         List<String> technologies = new ArrayList<>();
-        Matcher m = compile(REGEX).matcher(body);
+        Matcher m = compile(TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE).matcher(body);
         while (m.find()) {
             technologies.add(m.group(1));
         }
