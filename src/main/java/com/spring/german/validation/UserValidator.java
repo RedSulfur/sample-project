@@ -13,6 +13,7 @@ import org.springframework.validation.Validator;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static java.util.Optional.ofNullable;
 
@@ -43,17 +44,23 @@ public class UserValidator implements Validator {
         User user = (User) target;
         log.info("UserValidator processes the following user: " + user.toString());
 
-        Optional<User> optionalBySsoId = ofNullable(userService.getUserBySsoId(user.getSsoId()));
-        Optional<User> optionalByEmail = ofNullable(userService.findByEmail(user.getEmail()));
+        Optional<User> optionalBySsoId = this.getNullableUserBySsoId(user);
+        Optional<User> optionalByEmail = this.getNullableUserByEmail(user);
 
-        if (optionalBySsoId.isPresent()) {
-            errors.rejectValue("ssoId", "Duplicate Username",
-                    messages.getMessage("username.duplicate", null, new Locale("en_US")));
-        }
 
-        if (optionalByEmail.isPresent()) {
-            errors.rejectValue("email", "Registered Email",
-                    messages.getMessage("email.taken", null, new Locale("en_US")));
-        }
+        optionalByEmail.ifPresent(u -> errors.rejectValue("email", "Registered Email",
+                messages.getMessage("email.taken", null, new Locale("en_US"))));
+
+
+        optionalBySsoId.ifPresent(u -> errors.rejectValue("ssoId", "Duplicate Username",
+                messages.getMessage("username.duplicate", null, new Locale("en_US"))));
+    }
+
+    private Optional<User> getNullableUserBySsoId(User user) {
+        return ofNullable(userService.getUserBySsoId(user.getSsoId()));
+    }
+
+    private Optional<User> getNullableUserByEmail(User user) {
+        return ofNullable(userService.getByEmail(user.getEmail()));
     }
 }
