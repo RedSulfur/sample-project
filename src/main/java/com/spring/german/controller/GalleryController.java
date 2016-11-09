@@ -33,8 +33,8 @@ public class GalleryController {
     }
 
     /**
-     * Fetches all the projects from database that have any of the technologies
-     * provided by user, places these projects into the model and specifies a page
+     * Fetches all the projects from the database that have any technologies
+     * specified by user, puts these projects into the model and specifies a page
      * where these projects will be displayed.
      *
      * @param mav           object that is used to store projects and to specify
@@ -61,9 +61,6 @@ public class GalleryController {
         return new ModelAndView(GALLERY_VIEW);
     }
 
-    /**
-     * Provides helper methods for its outer class {@see GalleryController}
-     */
     private static class GalleryControllerLogger {
 
         private static void logAllTheExtractedProjects(List<Project> projects) {

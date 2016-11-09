@@ -92,9 +92,6 @@ public class RegistrationController {
         return new ModelAndView(LOGIN_PAGE);
     }
 
-    /**
-     * Provides helper methods for its outer class {@see RegistrationController}
-     */
     private static class RegistrationControllerLogger {
 
         private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
