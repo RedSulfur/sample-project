@@ -87,8 +87,9 @@ public class CollaborationService {
      * These {@link com.spring.german.entity.Technology} objects are being
      * associated with the extracted user and his new project.
      *
-     * @param username     string that is used to extract a corresponding
-     *                     {@link User} from the database
+     * @param username     string that is used to extract from the database
+     *                     an object that represents currently logged in user.
+     *                     {@see User}
      * @param technologies list of strings that is used to create a list of
      *                     {@link com.spring.german.entity.Technology} objects
      *                     for the further association
@@ -97,7 +98,7 @@ public class CollaborationService {
 
         User user = userService.getUserBySsoId(username);
 
-        Project project = new Project("default", user);
+        Project project = new Project("default", user);                                                     //TODO: Project name should be defined by user, of course. It is just a matter of time.
         List<Technology> technologiesToSave = technologies.stream()
                 .map(t -> new Technology(t, project)).collect(Collectors.toList());
         project.setTechnologies(technologiesToSave);
