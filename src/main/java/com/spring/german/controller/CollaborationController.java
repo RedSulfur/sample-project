@@ -52,18 +52,13 @@ public class CollaborationController {
     }
 
     /**
-     * Gets all the technology names passed as a session attribute.
-     * Defines a name of the currently logged in user which is used
-     * to persist project into the database. Saves a new Project
-     * associated with obtained technologies.
-     * When finishing its work method clears the session.
+     * Saves a new project associated with the current user and all the
+     * technologies that he has defined
      *
      * @param request   an object that is used to obtain technology names from
      *                  the session
      * @param principal {@link Principal} object is needed to determine
      *                  a username of the current user
-     * @return          {@link ModelAndView} object that contains no model attributes and
-     *                  a default view name.
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView persistProject(HttpServletRequest request, Principal principal) {
@@ -77,16 +72,10 @@ public class CollaborationController {
         return this.getDefaultView();
     }
 
-    /**
-     * Supplies all the  with the default view object.
-     */
     private ModelAndView getDefaultView() {
         return new ModelAndView("collaboration");
     }
 
-    /**
-     * Provides logging methods for its outer class {@see CollaborationController}
-     */
     private static class CollaborationControllerLogger {
 
         private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
