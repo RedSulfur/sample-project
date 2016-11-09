@@ -33,7 +33,7 @@ public class CollaborationService {
 
     // e.g. "[Spring Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html)"
     // matches "Spring Thymeleaf"
-    private static final String TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE = "\\[([a-zA-z ]*)\\]\\(.+\\)";
+    private static final String TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE_REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)"; //TODO: Is it a correct place for this variable? Isn't the name too long?
 
     @Autowired
     public CollaborationService(ProjectRepository projectRepository,
@@ -50,9 +50,40 @@ public class CollaborationService {
         session.setAttribute("technologies", technologies);
     }
 
+    private String getReadmeFromGitHubRepository(GitHubRepository gitHubRepository) {
+
+        String readmeBody;
+        try {
+            URL url = new URL("https://raw.githubusercontent.com/"
+                    + gitHubRepository.getOwnerName() + "/"
+                    + gitHubRepository.getRepoName() + "/master/README.md");
+            URLConnection con = url.openConnection();
+            InputStream in = con.getInputStream();
+            String encoding = con.getContentEncoding();
+            encoding = encoding == null ? "UTF-8" : encoding;
+            readmeBody = IOUtils.toString(in, encoding);
+        } catch (IOException e) {
+            throw new ReadmeNotFound("There is no such user on github, or " +
+                    "repository name you've specified is non existent", e);
+        }
+
+        return readmeBody;
+    }
+
     public GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
         String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
         return new GitHubRepository(notEmptyRepoName, userName);
+    }
+
+    private List<String> extractTechnologyNamesFromReadmeBody(String body) {
+
+        List<String> technologies = new ArrayList<>();
+        Matcher m = compile(TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE_REGEX).matcher(body);
+        while (m.find()) {
+            technologies.add(m.group(1));
+        }
+
+        return technologies;
     }
 
     /**
@@ -82,42 +113,5 @@ public class CollaborationService {
     private String getNotEmptyRepoName(String repoName) {
         return of(repoName).orElseThrow(() ->
                 new EmptyRepositoryNameException("You have not provided any repository name"));
-    }
-
-    /**
-     * Searches for the readme file at user's GitHub repository
-     * and establishes a url connection to it. After connection
-     * to the file was acquired, method attempts to obtain a
-     * string representation of the fetched data.
-     */
-    private String getReadmeFromGitHubRepository(GitHubRepository gitHubRepository) {
-
-        String readmeBody;
-        try {
-            URL url = new URL("https://raw.githubusercontent.com/"
-                    + gitHubRepository.getOwnerName() + "/"
-                    + gitHubRepository.getRepoName() + "/master/README.md");
-            URLConnection con = url.openConnection();
-            InputStream in = con.getInputStream();
-            String encoding = con.getContentEncoding();
-            encoding = encoding == null ? "UTF-8" : encoding;
-            readmeBody = IOUtils.toString(in, encoding);
-        } catch (IOException e) {
-            throw new ReadmeNotFound("There is no such user on github, or " +
-                    "repository name you've specified is non existent", e);
-        }
-
-        return readmeBody;
-    }
-
-    private List<String> extractTechnologyNamesFromReadmeBody(String body) {
-
-        List<String> technologies = new ArrayList<>();
-        Matcher m = compile(TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE).matcher(body);
-        while (m.find()) {
-            technologies.add(m.group(1));
-        }
-
-        return technologies;
     }
 }
