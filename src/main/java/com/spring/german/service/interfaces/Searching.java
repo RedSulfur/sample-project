@@ -1,7 +1,5 @@
 package com.spring.german.service.interfaces;
 
-import java.util.Optional;
-
 /*
 T getEntityByKey(String key);
 is not called T searchEntityByKey for

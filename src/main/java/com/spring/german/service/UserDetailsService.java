@@ -35,7 +35,7 @@ public class UserDetailsService {
             throw new UsernameNotFoundException("Username not found");
         }
 
-        org.springframework.security.core.userdetails.User result = new org.springframework.security.core.userdetails.User(
+        org.springframework.security.core.userdetails.User result = new org.springframework.security.core.userdetails.User( //TODO: Rename User entity to AppUser?
                 user.getSsoId(), user.getPassword(), user.getState().equals("Active")
                 , true, true, true, getGrantedAuthorities(user));
 

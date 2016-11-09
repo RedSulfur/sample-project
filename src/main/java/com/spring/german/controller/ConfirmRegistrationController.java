@@ -66,9 +66,6 @@ public class ConfirmRegistrationController {
         return this.getDefaultModelAndView();
     }
 
-    /**
-     * Creates a default {@link ModelAndView} object
-     */
     private ModelAndView getDefaultModelAndView() {
         return new ModelAndView(GALLERY_PAGE);
     }
