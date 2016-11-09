@@ -47,13 +47,11 @@ public class UserValidator implements Validator {
         Optional<User> optionalBySsoId = this.getNullableUserBySsoId(user);
         Optional<User> optionalByEmail = this.getNullableUserByEmail(user);
 
+        optionalBySsoId.ifPresent(u -> errors.rejectValue("ssoId", "Duplicate Username",
+                messages.getMessage("username.duplicate", null, new Locale("en_US"))));
 
         optionalByEmail.ifPresent(u -> errors.rejectValue("email", "Registered Email",
                 messages.getMessage("email.taken", null, new Locale("en_US"))));
-
-
-        optionalBySsoId.ifPresent(u -> errors.rejectValue("ssoId", "Duplicate Username",
-                messages.getMessage("username.duplicate", null, new Locale("en_US"))));
     }
 
     private Optional<User> getNullableUserBySsoId(User user) {
