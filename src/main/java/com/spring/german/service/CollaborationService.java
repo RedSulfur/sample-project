@@ -70,11 +70,6 @@ public class CollaborationService {
         return readmeBody;
     }
 
-    public GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
-        String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
-        return new GitHubRepository(notEmptyRepoName, userName);
-    }
-
     private List<String> extractTechnologyNamesFromReadmeBody(String body) {
 
         List<String> technologies = new ArrayList<>();
@@ -108,10 +103,5 @@ public class CollaborationService {
         project.setTechnologies(technologiesToSave);
 
         projectRepository.save(project);
-    }
-
-    private String getNotEmptyRepoName(String repoName) {
-        return of(repoName).orElseThrow(() ->
-                new EmptyRepositoryNameException("You have not provided any repository name"));
     }
 }

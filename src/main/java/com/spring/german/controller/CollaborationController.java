@@ -1,5 +1,6 @@
 package com.spring.german.controller;
 
+import com.spring.german.exceptions.EmptyRepositoryNameException;
 import com.spring.german.service.CollaborationService;
 import com.spring.german.util.GitHubRepository;
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
+
+import static java.util.Optional.of;
 
 @Controller
 public class CollaborationController {
@@ -44,11 +47,21 @@ public class CollaborationController {
 
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-        GitHubRepository gitHubRepository = collaborationService.getGitHubRepositoryObject(repoName, userName);
+        GitHubRepository gitHubRepository = this.getGitHubRepositoryObject(repoName, userName);
         HttpSession session = request.getSession();
         collaborationService.populateSessionWithTechnologiesFromRepo(session, gitHubRepository);
 
         return this.getDefaultView();
+    }
+
+    private GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
+        String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
+        return new GitHubRepository(notEmptyRepoName, userName);
+    }
+
+    private String getNotEmptyRepoName(String repoName) {
+        return of(repoName).orElseThrow(() ->
+                new EmptyRepositoryNameException("You have not provided any repository name"));
     }
 
     /**
