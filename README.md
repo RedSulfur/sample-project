@@ -4,6 +4,8 @@ You can offer any project that you want to collaborate on or to find one for you
 _Still in development_
 
 [![Travis Build](https://api.travis-ci.org/serhiizem/Collaboratory.svg?branch=master)](https://travis-ci.org/serhiizem/Collaboratory)
+[![Code Coverage](https://codecov.io/gh/serhiizem/Collaboratory/branch/master/graph/badge.svg)](https://codecov.io/gh/serhiizem/Collaboratory)
+
 
 **Technoligies involved:**<br />
 ⋅ [Spring Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html)<br />
