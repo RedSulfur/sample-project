@@ -32,12 +32,9 @@ public class GalleryController {
     }
 
     /**
-     * Fetches all the projects from the database that have any technologies
-     * specified by user, puts these projects into the model and specifies a page
-     * where these projects will be displayed.
+     * Takes care of displaying all the projects that have any technologies
+     * specified by user
      *
-     * @param mav           object that is used to store projects and to specify
-     *                      model name.
      * @param technologies  list that is used to search corresponding projects
      */
     @RequestMapping(value = "/gallery", method = RequestMethod.POST)

@@ -37,8 +37,8 @@ public class CollaborationController {
      * Enables requested technologies to be displayed at corresponding view
      *
      * @param repoName  name of the repository to be processed
-     * @param principal {@link Principal} object is needed to determine
-     *                  a username of currently logged in user
+     * @param principal object that is needed to determine a username of
+     *                  currently logged in user
      */
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
     public ModelAndView getTechnologiesByRepoName(@ModelAttribute(value = "repoName") String repoName,
@@ -68,8 +68,8 @@ public class CollaborationController {
      *
      * @param request   an object that is used to obtain technology names from
      *                  the session
-     * @param principal {@link Principal} object is needed to determine
-     *                  a username of the current user
+     * @param principal object that is needed to determine a username of
+     *                  currently logged in user
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView persistProject(HttpServletRequest request, Principal principal) {
