@@ -9,13 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class VerificationToken {
-
-    private static final int EXPIRATION = 60 * 24;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +23,7 @@ public class VerificationToken {
     private String token;
 
     @Column(name = "expiry_date")
-    private Date expiryDate;
+    private LocalDate expiryDate;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id", foreignKey = @ForeignKey(name = "FK_VERIFY_USER"))
@@ -38,7 +35,7 @@ public class VerificationToken {
 
     public VerificationToken(final String token) {
         this.token = token;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate();
     }
 
     public VerificationToken(final String token, final User user) {
@@ -46,7 +43,7 @@ public class VerificationToken {
 
         this.token = token;
         this.user = user;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate();
     }
 
     public Long getId() {
@@ -61,11 +58,11 @@ public class VerificationToken {
         this.token = token;
     }
 
-    public Date getExpiryDate() {
+    public LocalDate getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(final Date expiryDate) {
+    public void setExpiryDate(final LocalDate expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -77,16 +74,13 @@ public class VerificationToken {
         this.user = user;
     }
 
-    private Date calculateExpiryDate(final int expiryTimeInMinutes) {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(new Date().getTime());
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(cal.getTime().getTime());
+    private LocalDate calculateExpiryDate() {
+        return LocalDate.now().plusDays(1);
     }
 
     public void updateToken(final String token) {
         this.token = token;
-        this.expiryDate = calculateExpiryDate(EXPIRATION);
+        this.expiryDate = calculateExpiryDate();
     }
 
     @Override
