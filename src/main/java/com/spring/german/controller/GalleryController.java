@@ -16,6 +16,7 @@ import java.util.List;
 
 @Controller
 public class GalleryController {
+
     private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
     public static final String GALLERY_VIEW = "gallery";
 
@@ -40,6 +41,7 @@ public class GalleryController {
     @RequestMapping(value = "/gallery", method = RequestMethod.POST)
     public ModelAndView getProjects(ModelAndView mav,
                                     @ModelAttribute(value = "technologies") String technologies) {
+
         log.info("{}", technologies);
 
         List<Project> projects = projectService.getProjectsByTechnologyNames(technologies);

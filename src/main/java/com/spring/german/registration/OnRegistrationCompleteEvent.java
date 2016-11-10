@@ -4,6 +4,7 @@ import com.spring.german.entity.User;
 import org.springframework.context.ApplicationEvent;
 
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
+
     private final User user;
     private final ApplicationDetails details;
 

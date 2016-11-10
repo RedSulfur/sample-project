@@ -19,6 +19,7 @@ import java.util.UUID;
 @Component
 public class RegistrationListener
         implements ApplicationListener<OnRegistrationCompleteEvent> {
+
     private static final Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
     private VerificationTokenService creator;
@@ -40,6 +41,7 @@ public class RegistrationListener
     }
 
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
+
         User user = event.getUser();
         log.info("RegistrationListener accepts the following user: {}", event.getUser());
 

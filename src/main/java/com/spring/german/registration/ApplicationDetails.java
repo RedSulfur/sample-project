@@ -3,6 +3,7 @@ package com.spring.german.registration;
 import java.util.Locale;
 
 public class ApplicationDetails {
+
     private final String appUrl;
     private final Locale locale;
 

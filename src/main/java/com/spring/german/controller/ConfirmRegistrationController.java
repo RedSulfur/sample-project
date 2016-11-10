@@ -44,6 +44,7 @@ public class ConfirmRegistrationController {
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
     public ModelAndView confirmRegistration (WebRequest request,
                                        @RequestParam("token") String tokenName) {
+
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
 
@@ -54,6 +55,7 @@ public class ConfirmRegistrationController {
     }
 
     private ModelAndView getPageBasedOnTokenState(VerificationToken verificationToken) {
+
         if(isTokenExpired(verificationToken)) {
             return this.getDefaultModelAndView(); //error page is not yet ready
         } else {

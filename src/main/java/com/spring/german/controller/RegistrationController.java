@@ -23,6 +23,7 @@ import java.util.Locale;
 
 @Controller
 public class RegistrationController {
+
     private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
 
     public static final String REGISTRATION_PAGE = "/registration";
@@ -48,6 +49,7 @@ public class RegistrationController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public ModelAndView showRegistrationPage(ModelAndView model) {
+
         model.setViewName(REGISTRATION_PAGE);
         model.addObject(new User());
         return model;
@@ -58,6 +60,7 @@ public class RegistrationController {
                                    @Validated @Valid User user,
                                BindingResult result,
                                HttpServletRequest request) {
+
         validator.validate(user, result);
         if(result.hasErrors()) {
             return REGISTRATION_PAGE;
@@ -72,6 +75,7 @@ public class RegistrationController {
     }
 
     private ApplicationDetails getApplicationDetails(HttpServletRequest request) {
+
         String contextPath = request.getContextPath();
         Locale locale = request.getLocale();
 
