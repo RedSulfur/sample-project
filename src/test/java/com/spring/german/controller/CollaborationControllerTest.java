@@ -15,15 +15,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -69,10 +72,6 @@ public class CollaborationControllerTest {
     @Test
     public void shouldReturnAllTechnologiesOnValidRepoName() throws Exception {
 
-        given(collaborationService
-                .getTechnologiesFromGitHubRepository(VALID_GITHUB_USER, VALID_GITHUB_REPOSITORY))
-                .willReturn(validTechnologies);
-
         mvc.perform(post("/collaborate").session(session)
                 .with(user(VALID_GITHUB_USER)
                         .password("root")
@@ -82,9 +81,6 @@ public class CollaborationControllerTest {
                 .andExpect(view().name("collaboration"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(status().isOk());
-
-        assertTrue(((List<String>) session.getAttribute("technologies"))
-                .containsAll(validTechnologies));
     }
 
     @Test

@@ -1,10 +1,5 @@
 package com.spring.german.controller;
 
-import com.spring.german.entity.User;
-import com.spring.german.repository.UserRepository;
-import com.spring.german.repository.VerificationTokenRepository;
-import com.spring.german.service.interfaces.Searching;
-import com.spring.german.validation.UserValidator;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -12,9 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 

@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,7 +23,6 @@ import java.util.Locale;
 
 @Controller
 public class RegistrationController {
-
     private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
 
     public static final String REGISTRATION_PAGE = "/registration";
@@ -50,7 +48,7 @@ public class RegistrationController {
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public ModelAndView showRegistrationPage(ModelAndView model) {
-        model.setViewName("/registration");
+        model.setViewName(REGISTRATION_PAGE);
         model.addObject(new User());
         return model;
     }
@@ -59,10 +57,7 @@ public class RegistrationController {
     public String registerUser(@ModelAttribute(value = "user")
                                    @Validated @Valid User user,
                                BindingResult result,
-                               Model model,
                                HttpServletRequest request) {
-
-        log.info("User:: {}", user);
         validator.validate(user, result);
         if(result.hasErrors()) {
             return REGISTRATION_PAGE;
@@ -76,16 +71,15 @@ public class RegistrationController {
         return REGISTRATION_PAGE;
     }
 
-    private void publishUserRegistrationEvent(User savedUser, ApplicationDetails details) {
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(savedUser, details));
-    }
-
     private ApplicationDetails getApplicationDetails(HttpServletRequest request) {
-
         String contextPath = request.getContextPath();
         Locale locale = request.getLocale();
 
         return new ApplicationDetails(contextPath, locale);
+    }
+
+    private void publishUserRegistrationEvent(User savedUser, ApplicationDetails details) {
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(savedUser, details));
     }
 
     public ModelAndView getLoginModelAndView() {
@@ -93,7 +87,6 @@ public class RegistrationController {
     }
 
     private static class RegistrationControllerLogger {
-
         private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
 
         private static void logUserConstructedFromPostBody(User user) {

@@ -19,7 +19,6 @@ import static com.spring.german.service.interfaces.VerificationTokenService.isTo
 
 @Controller
 public class ConfirmRegistrationController {
-
     private static final Logger log = LoggerFactory.getLogger(ConfirmRegistrationController.class);
 
     public static final String GALLERY_PAGE = "gallery";
@@ -45,7 +44,6 @@ public class ConfirmRegistrationController {
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
     public ModelAndView confirmRegistration (WebRequest request,
                                        @RequestParam("token") String tokenName) {
-
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
 
@@ -56,9 +54,8 @@ public class ConfirmRegistrationController {
     }
 
     private ModelAndView getPageBasedOnTokenState(VerificationToken verificationToken) {
-
         if(isTokenExpired(verificationToken)) {
-            return this.getDefaultModelAndView(); //error page is not jet ready
+            return this.getDefaultModelAndView(); //error page is not yet ready
         } else {
             userService.updateUserState(verificationToken.getUser());
         }

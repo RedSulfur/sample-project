@@ -30,16 +30,15 @@ public class EmailUtil {
      * Sends a MIME style email message after filling it with all the required
      * for user information
      */
-    //TODO: SEPARATE OBJECT?
-    public void sendEmail(HtmlContent htmlContent) {
+    public void sendEmail(Email email) {                                                        //TODO: SEPARATE OBJECT?
 
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            mimeMessageHelper.setText(htmlContent.getBody(), true); // true = isHtml
-            mimeMessageHelper.setTo(htmlContent.getRecipientAddress());
-            mimeMessageHelper.setSubject(htmlContent.getSubject());
+            mimeMessageHelper.setText(email.getBody(), true); // true = isHtml
+            mimeMessageHelper.setTo(email.getRecipientAddress());
+            mimeMessageHelper.setSubject(email.getSubject());
             mimeMessageHelper.setFrom("noreply@gmail.com");
             mimeMessageHelper.addInline(LOGO_NAME, new ClassPathResource("static/img/logo.png"));
 
@@ -50,5 +49,3 @@ public class EmailUtil {
         }
     }
 }
-
-

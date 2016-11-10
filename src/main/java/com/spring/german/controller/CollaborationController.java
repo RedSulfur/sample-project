@@ -21,7 +21,6 @@ import static java.util.Optional.of;
 
 @Controller
 public class CollaborationController {
-
     private CollaborationService collaborationService;
 
     @Autowired
@@ -44,7 +43,6 @@ public class CollaborationController {
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
     public ModelAndView getTechnologiesByRepoName(@ModelAttribute(value = "repoName") String repoName,
                                               HttpServletRequest request, Principal principal) {
-
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
         GitHubRepository gitHubRepository = this.getGitHubRepositoryObject(repoName, userName);
@@ -75,7 +73,6 @@ public class CollaborationController {
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView persistProject(HttpServletRequest request, Principal principal) {
-
         List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
         CollaborationControllerLogger.logTechnologiesObtainedFromRequest(technologies);
         String username = principal.getName();
@@ -90,7 +87,6 @@ public class CollaborationController {
     }
 
     private static class CollaborationControllerLogger {
-
         private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
 
         private static void logCurrentlyLoggedInUser(String username) {

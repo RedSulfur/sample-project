@@ -54,7 +54,7 @@ public class ConfirmRegistrationControllerTest {
     @Before
     public void setUp() {
         validVerificationToken = new VerificationToken(VALID_TOKEN, VALID_USER);
-        validVerificationToken.setExpiryDate(new Date());
+        validVerificationToken.setExpiryDate(new Date()); //TODO: Use new java8 datetime library
     }
 
     @Test
@@ -74,6 +74,7 @@ public class ConfirmRegistrationControllerTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name("gallery"));
 
+        verify(verificationTokenService, times(1)).getEntityByKey(anyString());
         verify(userService, times(1)).updateUserState(anyObject());
     }
 }

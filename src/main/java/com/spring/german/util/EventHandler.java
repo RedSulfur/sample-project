@@ -29,40 +29,54 @@ public class EventHandler {
     }
 
     /**
-     * Processes an object that will contain a confirmation endpoint
-     * which is appended by a unique UUID token.
-     * Returned object encapsulates user's email which will
-     * be used for the further email dispatch.
-     *
-     * @param user  object that is used to extract user's email address
      * @param event object that is used to determine user's current locale
      * @param token string that is used to construct a unique registration
      *              confirmation link
      */
-    public HtmlContent processEvent(User user,
-                                    OnRegistrationCompleteEvent event,
-                                    String token) {
+    public String getEmailBody(OnRegistrationCompleteEvent event,
+                               String token) {
 
-        String recipientAddress = user.getEmail();
         Locale locale = event.getDetails().getLocale();
-        log.info("Destination email: {}", recipientAddress);
 
-        String subject = "Registration Confirmation";
         String confirmationUrl
                 = event.getDetails().getAppUrl() + "/registrationConfirm?token=" + token;
-        String message = messages.getMessage("message.registration.success", null, locale);
-        log.info("Based on user's locale, the following message, was fetched " +
-                "from the properties file: {{}, locale: {}}", message, locale);
+        String mainPart = messages.getMessage("message.registration.success", null, locale);
 
-        final Context ctx = new Context(locale);
+        String emailBody = this.constructMessage(mainPart, confirmationUrl);
+
+        return emailBody;
+    }
+
+    private String constructMessage(String message, String confirmationUrl) {
+
+        StringBuilder emailBuilder = new StringBuilder();
+        emailBuilder.append(message);
+        emailBuilder.append(" \n");
+        emailBuilder.append("http://localhost:8080");
+        emailBuilder.append(confirmationUrl);
+
+        return emailBuilder.toString();
+    }
+
+    /**
+     * Evaluates provided parameters in order to produce
+     * a ready to dispatch {@link Email} object
+     *
+     * @param user object that is used to extract user's email address
+     */
+    public Email constructEmailForUser(String emailBody, User user) {
+
+        String recipientAddress = user.getEmail();
+        String subject = "Registration Confirmation";
+
+        final Context ctx = new Context();
         ctx.setVariable("name", user.getSsoId());
-        ctx.setVariable("body", message + " \n" + "http://localhost:8080" + confirmationUrl);
+        ctx.setVariable("body", emailBody);
         ctx.setVariable("imageResourceName", LOGO_NAME);
-        String body = this.templateEngine.process("email-inlineimage", ctx);
+        String processedContext = this.templateEngine.process("email-inlineimage", ctx);
 
-        //TODO: 1!
-        HtmlContent htmlContent = new HtmlContent(body, recipientAddress, subject);
+        Email email = new Email(processedContext, recipientAddress, subject);
 
-        return htmlContent;
+        return email;
     }
 }

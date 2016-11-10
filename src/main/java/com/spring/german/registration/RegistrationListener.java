@@ -4,7 +4,7 @@ import com.spring.german.entity.User;
 import com.spring.german.service.interfaces.VerificationTokenService;
 import com.spring.german.util.EmailUtil;
 import com.spring.german.util.EventHandler;
-import com.spring.german.util.HtmlContent;
+import com.spring.german.util.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,7 @@ import java.util.UUID;
 @Component
 public class RegistrationListener
         implements ApplicationListener<OnRegistrationCompleteEvent> {
-
-    Logger log = LoggerFactory.getLogger(RegistrationListener.class);
+    private static final Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
     private VerificationTokenService creator;
     private EmailUtil emailUtil;
@@ -47,8 +46,9 @@ public class RegistrationListener
         String token = UUID.randomUUID().toString();
         creator.createVerificationToken(user, token);
 
-        HtmlContent htmlContent = eventHandler.processEvent(user, event, token);
+        String emailBody = eventHandler.getEmailBody(event, token);
+        Email email = eventHandler.constructEmailForUser(emailBody, user);
 
-        emailUtil.sendEmail(htmlContent);
+        emailUtil.sendEmail(email);
     }
 }

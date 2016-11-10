@@ -23,12 +23,11 @@ public class DefaultUserServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        userService = new DefaultUserService(passwordEncoder, userRepository, tokenRepository);
+        userService = new DefaultUserService(passwordEncoder, userRepository);
     }
 
     @Test
     public void registerUser() throws Exception {
         given(this.userRepository.findBySsoId(anyString())).willReturn(null);
-        userService.getEntityByKey(anyString());
     }
 }
