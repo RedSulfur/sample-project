@@ -3,7 +3,6 @@ package com.spring.german.service;
 import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
-import com.spring.german.exceptions.EmptyRepositoryNameException;
 import com.spring.german.exceptions.ReadmeNotFound;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.UserService;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-import static java.util.Optional.of;
 import static java.util.regex.Pattern.compile;
 
 @Service
@@ -33,7 +31,7 @@ public class CollaborationService {
 
     // e.g. "[Spring Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html)"
     // matches "Spring Thymeleaf"
-    private static final String TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE_REGEX = "\\[([a-zA-z ]*)\\]\\(.+\\)"; //TODO: Is it a correct place for this variable? Isn't the name too long?
+    private static final String TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE = "\\[([a-zA-z ]*)\\]\\(.+\\)"; //TODO: Is it a correct place for this variable? Isn't the name too long?
 
     @Autowired
     public CollaborationService(ProjectRepository projectRepository,
