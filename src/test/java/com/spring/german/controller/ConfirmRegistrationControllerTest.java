@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 
@@ -52,7 +53,7 @@ public class ConfirmRegistrationControllerTest {
     @Before
     public void setUp() {
         validVerificationToken = new VerificationToken(VALID_TOKEN, VALID_USER);
-        validVerificationToken.setExpiryDate(new Date()); //TODO: Use new java8 datetime library
+        validVerificationToken.setExpiryDate(LocalDate.now().plusDays(1));
     }
 
     @Test

@@ -82,7 +82,7 @@ public class CollaborationService {
     }
 
     /**
-     * Maps a list of the obtained strings that represent technologies
+     * Maps a list of the received strings that represent technologies
      * to the list of the corresponding objects.
      * These {@link com.spring.german.entity.Technology} objects are being
      * associated with the extracted user and his new project.
