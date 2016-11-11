@@ -2,7 +2,7 @@ Collaboratory
 =====================
 
 A website designed to help people find associates for their learning activity.
-You can offer any project that you want to collaborate on or to find one for yourself.<br />
+You can offer any project that you want to collaborate on or to find one for yourself.
 _Still in development_
 
 [![Travis Build](https://api.travis-ci.org/serhiizem/Collaboratory.svg?branch=master)](https://travis-ci.org/serhiizem/Collaboratory)
