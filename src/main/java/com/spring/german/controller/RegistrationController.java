@@ -21,13 +21,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Locale;
 
+import static com.spring.german.util.Endpoints.LOGIN_PAGE;
+import static com.spring.german.util.Endpoints.REGISTRATION_PAGE;
+
 @Controller
 public class RegistrationController {
 
     private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
-
-    public static final String REGISTRATION_PAGE = "/registration";
-    public static final String LOGIN_PAGE = "login";
 
     private UserService userService;
     private UserValidator validator;

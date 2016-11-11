@@ -13,15 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.Locale;
 
 import static com.spring.german.service.interfaces.VerificationTokenService.isTokenExpired;
+import static com.spring.german.util.Endpoints.GALLERY_PAGE;
 
 @Controller
 public class ConfirmRegistrationController {
-    private static final Logger log = LoggerFactory.getLogger(ConfirmRegistrationController.class);
 
-    public static final String GALLERY_PAGE = "gallery";
+    private static final Logger log = LoggerFactory.getLogger(ConfirmRegistrationController.class);
 
     private Searching<VerificationToken> verificationTokenService;
     private UserService userService;

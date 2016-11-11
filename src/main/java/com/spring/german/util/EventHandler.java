@@ -34,17 +34,15 @@ public class EventHandler {
      *              confirmation link
      */
     public String getEmailBody(OnRegistrationCompleteEvent event,
-                               String token) {
+                                       String token) {
 
         Locale locale = event.getDetails().getLocale();
 
+        String mainPart = messages.getMessage("message.registration.success", null, locale);
         String confirmationUrl
                 = event.getDetails().getAppUrl() + "/registrationConfirm?token=" + token;
-        String mainPart = messages.getMessage("message.registration.success", null, locale);
 
-        String emailBody = this.constructMessage(mainPart, confirmationUrl);
-
-        return emailBody;
+        return this.constructMessage(mainPart, confirmationUrl);
     }
 
     private String constructMessage(String message, String confirmationUrl) {
@@ -75,8 +73,6 @@ public class EventHandler {
         ctx.setVariable("imageResourceName", LOGO_NAME);
         String processedContext = this.templateEngine.process("email-inlineimage", ctx);
 
-        Email email = new Email(processedContext, recipientAddress, subject);
-
-        return email;
+        return new Email(recipientAddress, processedContext, subject);
     }
 }

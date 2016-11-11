@@ -3,7 +3,7 @@ package com.spring.german.service;
 import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
-import com.spring.german.exceptions.ReadmeNotFound;
+import com.spring.german.exceptions.ReadmeNotFoundException;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.UserService;
 import com.spring.german.util.GitHubRepository;
@@ -61,7 +61,7 @@ public class CollaborationService {
             encoding = encoding == null ? "UTF-8" : encoding;
             readmeBody = IOUtils.toString(in, encoding);
         } catch (IOException e) {
-            throw new ReadmeNotFound("There is no such user on github, or " +
+            throw new ReadmeNotFoundException("There is no such user on github, or " +
                     "repository name you've specified is non existent", e);
         }
 
@@ -71,7 +71,7 @@ public class CollaborationService {
     private List<String> extractTechnologyNamesFromReadmeBody(String body) {
 
         List<String> technologies = new ArrayList<>();
-        Matcher m = compile(TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE_REGEX).matcher(body);
+        Matcher m = compile(TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE).matcher(body);
         while (m.find()) {
             technologies.add(m.group(1));
         }

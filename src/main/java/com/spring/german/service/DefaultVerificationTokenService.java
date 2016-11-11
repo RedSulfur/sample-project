@@ -24,7 +24,7 @@ public class DefaultVerificationTokenService implements Searching<VerificationTo
 
     @Override
     public void createVerificationToken(User user, String token) {
-        com.spring.german.entity.VerificationToken myToken = new com.spring.german.entity.VerificationToken(token, user);
+        VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
     }
 

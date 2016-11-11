@@ -22,7 +22,7 @@ public class RegistrationListener
 
     private static final Logger log = LoggerFactory.getLogger(RegistrationListener.class);
 
-    private VerificationTokenService creator;
+    private VerificationTokenService verificationTokenService;
     private EmailUtil emailUtil;
     private EventHandler eventHandler;
 
@@ -30,7 +30,7 @@ public class RegistrationListener
     public RegistrationListener(VerificationTokenService creator,
                                 EmailUtil emailUtil,
                                 EventHandler eventHandler) {
-        this.creator = creator;
+        this.verificationTokenService = creator;
         this.emailUtil = emailUtil;
         this.eventHandler = eventHandler;
     }
@@ -46,7 +46,7 @@ public class RegistrationListener
         log.info("RegistrationListener accepts the following user: {}", event.getUser());
 
         String token = UUID.randomUUID().toString();
-        creator.createVerificationToken(user, token);
+        verificationTokenService.createVerificationToken(user, token);
 
         String emailBody = eventHandler.getEmailBody(event, token);
         Email email = eventHandler.constructEmailForUser(emailBody, user);
