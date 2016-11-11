@@ -1,5 +1,6 @@
 package com.spring.german.service;
 
+import com.spring.german.entity.Project;
 import com.spring.german.exceptions.ReadmeNotFoundException;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.UserService;
@@ -9,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;

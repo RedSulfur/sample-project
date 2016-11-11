@@ -3,28 +3,30 @@ package com.spring.german.service;
 import com.spring.german.entity.State;
 import com.spring.german.entity.User;
 import com.spring.german.repository.UserRepository;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.AdditionalAnswers;
-import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.HashSet;
 
 import static com.spring.german.entity.State.ACTIVE;
-import static org.hamcrest.Matchers.any;
+import static com.spring.german.entity.State.INACTIVE;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.isNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -60,7 +62,11 @@ public class DefaultUserServiceTest {
 
     @Test
     public void shouldUpdateUserState() {
-//        when(userRepository.save(Matchers.any())).then(returnsFirstArg());
-//        assertThat(userRepository.save(existingUser).getState(), is(ACTIVE.getState()));
+        when(userRepository.save((User) anyObject()))
+                .then(AdditionalAnswers.returnsFirstArg());
+
+        User updatedUser = userService.updateUserState(existingUser);
+
+        assertThat(updatedUser.getState(), is(ACTIVE.getState()));
     }
 }
