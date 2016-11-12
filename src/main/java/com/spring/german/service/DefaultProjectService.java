@@ -6,8 +6,9 @@ import com.spring.german.service.interfaces.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @Service
 public class DefaultProjectService implements ProjectService {
@@ -22,7 +23,7 @@ public class DefaultProjectService implements ProjectService {
     @Override
     public List<Project> getProjectsByTechnologyNames(String technologies) {
 
-        List<String> technologiesToSearchBy = Arrays.asList(technologies.split(","));
+        List<String> technologiesToSearchBy = asList(technologies.split(","));
 
         List<Project> projects =
                 projectRepository.findDistinctByTechnologiesNameIn(technologiesToSearchBy);

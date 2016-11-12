@@ -2,6 +2,7 @@ package com.spring.german.service;
 
 import com.spring.german.entity.User;
 import com.spring.german.entity.UserProfile;
+import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserDetailsService {
+public class UserDetailsService implements Searching<UserDetails> {
 
     private final static Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 
@@ -27,6 +28,7 @@ public class UserDetailsService {
         this.userService = userService;
     }
 
+    @Override
     public UserDetails getEntityByKey(String key) {
 
         User user = userService.getUserBySsoId(key);
