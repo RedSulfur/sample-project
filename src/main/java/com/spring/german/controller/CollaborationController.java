@@ -1,7 +1,7 @@
 package com.spring.german.controller;
 
-import com.spring.german.exceptions.EmptyRepositoryNameException;
 import com.spring.german.service.CollaborationService;
+import com.spring.german.service.interfaces.ProjectService;
 import com.spring.german.util.GitHubRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,16 +17,17 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
-import static java.util.Optional.of;
-
 @Controller
 public class CollaborationController {
 
     private CollaborationService collaborationService;
+    private ProjectService projectService;
 
     @Autowired
-    public CollaborationController(CollaborationService collaborationService) {
+    public CollaborationController(CollaborationService collaborationService,
+                                   ProjectService projectService) {
         this.collaborationService = collaborationService;
+        this.projectService = projectService;
     }
 
     @RequestMapping(value = "/collaborate", method = RequestMethod.GET)
@@ -47,22 +48,11 @@ public class CollaborationController {
 
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-        GitHubRepository gitHubRepository = this.getGitHubRepositoryObject(repoName, userName);
+        GitHubRepository gitHubRepository = collaborationService.getGitHubRepositoryObject(repoName, userName);
         HttpSession session = request.getSession();
         collaborationService.populateSessionWithTechnologiesFromRepo(session, gitHubRepository);
 
         return this.getDefaultView();
-    }
-
-    private GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
-
-        String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
-        return new GitHubRepository(notEmptyRepoName, userName);
-    }
-
-    private String getNotEmptyRepoName(String repoName) {
-        return of(repoName).orElseThrow(() ->
-                new EmptyRepositoryNameException("You have not provided any repository name"));
     }
 
     /**
@@ -76,11 +66,10 @@ public class CollaborationController {
      */
     @RequestMapping(value = "/publish", method = RequestMethod.GET)
     public ModelAndView persistProject(HttpServletRequest request, Principal principal) {
-
         List<String> technologies = (List<String>) request.getSession().getAttribute("technologies");
         CollaborationControllerLogger.logTechnologiesObtainedFromRequest(technologies);
         String username = principal.getName();
-        collaborationService.saveProjectWithTechnologies(username, technologies);
+        projectService.saveProjectWithTechnologies(username, technologies);
         request.getSession().removeAttribute("technologies");
 
         return this.getDefaultView();

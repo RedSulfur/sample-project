@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 
 @Service
 public class DefaultVerificationTokenService implements Searching<VerificationToken>,
@@ -30,7 +31,7 @@ public class DefaultVerificationTokenService implements Searching<VerificationTo
 
     @Override
     public VerificationToken getEntityByKey(String key) {
-        return of(tokenRepository.findByToken(key))
+        return ofNullable(tokenRepository.findByToken(key))
                 .orElseThrow(() -> new TokenNotFoundException("User not Found"));
     }
 }

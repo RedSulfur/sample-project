@@ -4,7 +4,6 @@ import com.spring.german.entity.UserProfile;
 import com.spring.german.exceptions.TokenNotFoundException;
 import com.spring.german.repository.UserProfileRepository;
 import com.spring.german.service.interfaces.Distinguishing;
-import com.spring.german.service.interfaces.Searching;
 import com.spring.german.service.interfaces.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
