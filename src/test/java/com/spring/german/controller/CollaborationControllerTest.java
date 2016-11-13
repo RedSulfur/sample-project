@@ -1,6 +1,7 @@
 package com.spring.german.controller;
 
 import com.spring.german.service.CollaborationService;
+import com.spring.german.service.interfaces.ProjectService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class CollaborationControllerTest {
     @Autowired
     private MockHttpSession session;
 
-    @MockBean private CollaborationService collaborationService;
+    @MockBean private ProjectService projectService;
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -104,7 +105,7 @@ public class CollaborationControllerTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name("collaboration"));
 
-        verify(collaborationService, times(1))
+        verify(projectService, times(1))
             .saveProjectWithTechnologies(anyString(), anyObject());
 
         assertTrue(session.getValueNames().length == 0);

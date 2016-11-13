@@ -26,11 +26,9 @@ import static org.mockito.Matchers.anyString;
 @DataJpaTest
 public class ProjectRepositoryTest {
 
-    public static final String VALID_USERNAME = "valid username";
     public static final List<String> TECHNOLOGIES_TO_SEARCH_BY = Arrays.asList("Git", "Gradle");
 
     private List<String> validTechnologyNames;
-    private User validUser;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -40,7 +38,6 @@ public class ProjectRepositoryTest {
         validTechnologyNames = Stream.of("Travis Build", "Code Coverage", "Spring Thymeleaf", "Spring MVC",
                 "Spring validation", "Gradle", "Spring Security", "Bootstrap", "Checkstyle Plugin")
                 .collect(Collectors.toList());
-        validUser = new User("default", "pass", "default@gmail.com", State.ACTIVE.getState(), new HashSet<>());
     }
 
     @Test
@@ -61,9 +58,7 @@ public class ProjectRepositoryTest {
 
     @Test
     public void shouldSaveProjectWithTechnologies() {
-        given(userService.getUserBySsoId(anyString())).willReturn(validUser);
 
-        collaborationService.saveProjectWithTechnologies(VALID_USERNAME, validTechnologyNames);
 
         Project lastSavedProject = projectRepository.findOne(10L);
 

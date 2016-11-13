@@ -34,7 +34,7 @@ public class DefaultProjectServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        projectService = new DefaultProjectService(projectRepository);
+        projectService = new DefaultProjectService(null, null);
         validProject = new Project("test-logo", new User());
         extractedProjects = getListsOfProjects();
     }
