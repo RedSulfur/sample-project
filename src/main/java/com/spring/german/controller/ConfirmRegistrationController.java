@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
 import java.util.Locale;
 
 import static com.spring.german.service.interfaces.VerificationTokenService.isTokenExpired;
 import static com.spring.german.util.Endpoints.GALLERY_PAGE;
+import static com.spring.german.util.Endpoints.TOKEN_EXPIRED_ERROR_PAGE;
 
 @Controller
 public class ConfirmRegistrationController {
@@ -45,29 +45,26 @@ public class ConfirmRegistrationController {
     @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
     public ModelAndView confirmRegistration (WebRequest request,
                                        @RequestParam("token") String tokenName) {
-
         Locale locale = request.getLocale();
         log.info("Locale: {}", locale);
 
         VerificationToken verificationToken = verificationTokenService.getEntityByKey(tokenName);
         log.info("verificationToken : {}", verificationToken);
 
-        return this.getPageBasedOnTokenState(verificationToken);
-    }
-
-    private ModelAndView getPageBasedOnTokenState(VerificationToken verificationToken) {
-
         if(isTokenExpired(verificationToken)) {
-            return this.getDefaultModelAndView(); //error page is not yet ready
+            return this.getErrorModelAndView();   //error page is not ready yet
         } else {
             userService.updateUserState(verificationToken.getUser());
+            return this.getDefaultModelAndView();
         }
-
-        return this.getDefaultModelAndView();
     }
 
     private ModelAndView getDefaultModelAndView() {
         return new ModelAndView(GALLERY_PAGE);
+    }
+
+    private ModelAndView getErrorModelAndView() {
+        return new ModelAndView(TOKEN_EXPIRED_ERROR_PAGE);
     }
 
     //TODO: create an error getErrorModelAndView method

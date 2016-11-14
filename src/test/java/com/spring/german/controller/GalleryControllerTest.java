@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.spring.german.util.Endpoints.GALLERY_PAGE;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyString;
@@ -45,7 +46,6 @@ public class GalleryControllerTest {
 
     @Before
     public void setup() {
-
         List<Technology> validTechnologies = Arrays.stream(("Travis Build,Spring Thymeleaf,Spring MVC,Spring validation," +
                 "Gradle,Spring Security,Bootstrap")
                 .split(",")).map(Technology::new)
@@ -64,7 +64,7 @@ public class GalleryControllerTest {
                 .andExpect(status().isOk())
 
                 .andExpect(redirectedUrl(null))
-                .andExpect(view().name("gallery"));
+                .andExpect(view().name(GALLERY_PAGE));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class GalleryControllerTest {
                         .contentType(APPLICATION_JSON)
                         .param("technologies", anyString()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("gallery"))
+                .andExpect(view().name(GALLERY_PAGE))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("projects", hasSize(1)));
 

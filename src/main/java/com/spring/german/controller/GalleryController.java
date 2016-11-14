@@ -14,11 +14,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+import static com.spring.german.util.Endpoints.GALLERY_PAGE;
+
 @Controller
 public class GalleryController {
 
     private static final Logger log = LoggerFactory.getLogger(GalleryController.class);
-    public static final String GALLERY_VIEW = "gallery";
 
     private ProjectService projectService;
 
@@ -39,23 +40,22 @@ public class GalleryController {
      * @param technologies  list that is used to search corresponding projects
      */
     @RequestMapping(value = "/gallery", method = RequestMethod.POST)
-    public ModelAndView getProjects(ModelAndView mav,
+    public ModelAndView getProjects(ModelAndView modelAndView,
                                     @ModelAttribute(value = "technologies") String technologies) {
-
         log.info("{}", technologies);
 
         List<Project> projects = projectService.getProjectsByTechnologyNames(technologies);
 
         GalleryControllerLogger.logAllTheExtractedProjects(projects);
 
-        mav.setViewName(GALLERY_VIEW);
-        mav.addObject("projects", projects);
+        modelAndView = this.getDefaultModelAndView();
+        modelAndView.addObject("projects", projects);
 
-        return mav;
+        return modelAndView;
     }
 
     private ModelAndView getDefaultModelAndView() {
-        return new ModelAndView(GALLERY_VIEW);
+        return new ModelAndView(GALLERY_PAGE);
     }
 
     private static class GalleryControllerLogger {
