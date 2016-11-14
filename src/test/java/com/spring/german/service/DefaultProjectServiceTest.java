@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.spring.german.service.ProjectTestUtil.getListsOfProjects;
+import static com.spring.german.service.ProjectTestUtil.getValidTechnologies;
+import static com.spring.german.service.ProjectTestUtil.getValidUser;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.hasItem;
@@ -44,7 +47,6 @@ public class DefaultProjectServiceTest {
     private DefaultProjectService projectService;
     private User validUser;
     private List<Project> extractedProjects;
-    private ProjectTestUtil projectTestUtil = new ProjectTestUtil();
 
     @Rule public ExpectedException exception = ExpectedException.none();
 
@@ -54,13 +56,13 @@ public class DefaultProjectServiceTest {
     @Before
     public void setUp() throws Exception {
         projectService = new DefaultProjectService(projectRepository, userService);
-        extractedProjects = this.projectTestUtil.getListsOfProjects();
-        validUser = this.projectTestUtil.getValidUser();
+        extractedProjects = getListsOfProjects();
+        validUser = getValidUser();
     }
 
     @Test
     public void shouldSaveProjectWithTechnologies() {
-        List<String> validTechnologies = projectTestUtil.getValidTechnologies();
+        List<String> validTechnologies = getValidTechnologies();
         given(userService.getUserBySsoId(anyObject())).willReturn(validUser);
 
         projectService.saveProjectWithTechnologies(VALID_USERNAME, validTechnologies);

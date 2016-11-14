@@ -1,5 +1,6 @@
 package com.spring.german.service;
 
+import com.spring.german.exceptions.RepositoryNotSpecifiedException;
 import com.spring.german.util.GitHubRepository;
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,7 +48,8 @@ public class CollaborationServiceTest {
 
     @Test
     public void shouldThrowAnErrorOnMissingRepositoryName() {
-        exception.expect(NullPointerException.class); //TODO: This exception should not be this kind of type
+        exception.expect(RepositoryNotSpecifiedException.class);
+        exception.expectMessage("You have to specify repository name");
         collaborationService.populateSessionWithTechnologiesFromRepo(session, null);
     }
 }

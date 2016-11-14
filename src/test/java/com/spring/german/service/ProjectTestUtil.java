@@ -20,18 +20,18 @@ public class ProjectTestUtil {
     public static final String VALID_EMAIL = "valid-email";
     public static final long EXISTING_ID = 1L;
 
-    public List<Project> getListsOfProjects() {
+    public static List<Project> getListsOfProjects() {
 
         List<Technology> technologies = Stream.of("Travis Build", "Maven", "Maven", "Spring validation",
                 "Gradle", "Maven", "Maven")
                 .map(Technology::new).collect(toList());
 
-        return this.splitInChunks(technologies, 2).stream()
+        return splitInChunks(technologies, 2).stream()
                 .map(l -> new Project("test-logo", l, new User()))
                 .collect(Collectors.toList());
     }
 
-    private <T> List<List<T>> splitInChunks(List<T> listToSplit, int length) {
+    private static <T> List<List<T>> splitInChunks(List<T> listToSplit, int length) {
         int listSize = listToSplit.size();
         int fullChunks = (listSize - 1) / length;
         return IntStream.range(0, fullChunks + 1)
@@ -39,16 +39,16 @@ public class ProjectTestUtil {
                 .collect(toList());
     }
 
-    public List<String> getValidTechnologies() {
+    public static List<String> getValidTechnologies() {
         return Stream.of(("Travis Build,Maven,Spring validation").split(","))
                 .collect(Collectors.toList());
     }
 
-    public Project getValidProject() {
+    public static Project getValidProject() {
         return new Project("test-logo", new User());
     }
 
-    public User getValidUser() {
+    public static User getValidUser() {
         return new User("test-sso", "test-password", "test-email", State.INACTIVE.getState(), new HashSet<>());
     }
 }
