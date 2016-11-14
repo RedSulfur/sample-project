@@ -2,6 +2,7 @@ package com.spring.german.controller;
 
 import com.spring.german.service.CollaborationService;
 import com.spring.german.service.interfaces.ProjectService;
+import com.spring.german.util.GitHubRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
@@ -48,6 +51,7 @@ public class CollaborationControllerTest {
     @Autowired
     private MockHttpSession session;
 
+    @MockBean private CollaborationService collaborationService;
     @MockBean private ProjectService projectService;
 
     @Rule
@@ -68,7 +72,6 @@ public class CollaborationControllerTest {
      */
     @Test
     public void shouldReturnAllTechnologiesOnValidRepoName() throws Exception {
-
         mvc.perform(post("/collaborate").session(session)
                 .with(user(VALID_GITHUB_USER)
                         .password("root")
@@ -78,24 +81,28 @@ public class CollaborationControllerTest {
                 .andExpect(view().name("collaboration"))
                 .andExpect(model().hasNoErrors())
                 .andExpect(status().isOk());
+
+        verify(collaborationService, times(1))
+                .populateSessionWithTechnologiesFromRepo(anyObject(), any(GitHubRepository.class));
     }
 
     @Test
     public void shouldThrowAnErrorOnNullRepoName() throws Exception {
-
         exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("'values' must not be empty");
+        exception.expectMessage("'values' must not be empty"); //TODO: ???
         mvc.perform(post("/collaborate")
                 .with(user("RedSulfur")
                         .password("pass")
                         .roles("ADMIN", "USER"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("repoName", null));
+
+        verify(collaborationService, times(1))
+                .populateSessionWithTechnologiesFromRepo(anyObject(), any(GitHubRepository.class));
     }
 
     @Test
     public void shouldSaveProjectAndClearSession() throws Exception {
-
         mvc.perform(get("/publish").session(session)
                 .with(user("RedSulfur")
                         .password("pass")
@@ -106,9 +113,8 @@ public class CollaborationControllerTest {
                 .andExpect(view().name("collaboration"));
 
         verify(projectService, times(1))
-            .saveProjectWithTechnologies(anyString(), anyObject());
+            .saveProjectWithTechnologies(anyString(), anyListOf(String.class));
 
         assertTrue(session.getValueNames().length == 0);
-
     }
 }

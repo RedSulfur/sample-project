@@ -1,6 +1,7 @@
 package com.spring.german.service;
 
 import com.spring.german.entity.User;
+import com.spring.german.entity.VerificationToken;
 import com.spring.german.exceptions.TokenNotFoundException;
 import com.spring.german.repository.VerificationTokenRepository;
 import org.junit.Before;
@@ -9,11 +10,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -23,6 +24,7 @@ public class DefaultVerificationTokenServiceTest {
     public static final String VALID_TOKEN = "valid-token";
     private DefaultVerificationTokenService tokenService;
     private User validUser;
+    private VerificationToken existingVerificationToken;
 
     @Mock private VerificationTokenRepository tokenRepository;
 
@@ -32,6 +34,7 @@ public class DefaultVerificationTokenServiceTest {
     public void setUp() throws Exception {
         tokenService = new DefaultVerificationTokenService(tokenRepository);
         validUser = new User();
+        existingVerificationToken = new VerificationToken(VALID_TOKEN, validUser);
     }
     @Test
     public void shouldThrowExceptionOnMissingKey() {
@@ -44,5 +47,15 @@ public class DefaultVerificationTokenServiceTest {
     public void shouldSaveTokenOnce() {
         tokenService.createVerificationToken(validUser, VALID_TOKEN);
 
+        verify(tokenRepository, times(1)).save((VerificationToken) anyObject());
+    }
+
+    @Test
+    public void shouldSearchForTokenOnceIfTokenNameWasNotNull() {
+        given(tokenRepository.findByToken(anyString())).willReturn(existingVerificationToken);
+
+        tokenService.getEntityByKey(VALID_TOKEN);
+
+        verify(tokenRepository, times(1)).findByToken(anyString());
     }
 }

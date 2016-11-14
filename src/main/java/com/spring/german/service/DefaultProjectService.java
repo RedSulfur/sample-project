@@ -3,6 +3,7 @@ package com.spring.german.service;
 import com.spring.german.entity.Project;
 import com.spring.german.entity.Technology;
 import com.spring.german.entity.User;
+import com.spring.german.exceptions.TechnologiesNotFoundException;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.ProjectService;
 import com.spring.german.service.interfaces.UserService;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
+import static java.util.Optional.ofNullable;
 
 @Service
 public class DefaultProjectService implements ProjectService {
@@ -29,13 +31,12 @@ public class DefaultProjectService implements ProjectService {
 
     @Override
     public List<Project> getProjectsByTechnologyNames(String technologies) {
-
+        ofNullable(technologies)
+                .orElseThrow(() -> new TechnologiesNotFoundException("You specified no technologies to search by"));
         List<String> technologiesToSearchBy = asList(technologies.split(","));
 
-        List<Project> projects =
-                projectRepository.findDistinctByTechnologiesNameIn(technologiesToSearchBy);
-
-        return projects;
+        return projectRepository
+                .findDistinctByTechnologiesNameIn(technologiesToSearchBy);
     }
 
     @Override

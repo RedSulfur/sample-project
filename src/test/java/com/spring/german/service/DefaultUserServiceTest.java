@@ -1,65 +1,92 @@
 package com.spring.german.service;
 
-import com.spring.german.entity.State;
 import com.spring.german.entity.User;
 import com.spring.german.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.AdditionalAnswers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
-
 import static com.spring.german.entity.State.ACTIVE;
+import static com.spring.german.service.ProjectTestUtil.EXISTING_ID;
+import static com.spring.german.service.ProjectTestUtil.VALID_EMAIL;
+import static com.spring.german.service.ProjectTestUtil.VALID_SSO_ID;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultUserServiceTest {
 
-    private static final long EXISTING_ID = 1L;
-    private User existingUser;
-
+    private User validUser;
     private DefaultUserService userService;
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private ProjectTestUtil projectTestUtil = new ProjectTestUtil();
 
-    @Mock private PasswordEncoder passwordEncoder;
     @Mock private UserRepository userRepository;
 
     @Before
     public void setUp() throws Exception {
-        existingUser =
-                new User("default", "pass", "default@gmail.com", State.INACTIVE.getState(), new HashSet<>());
         userService = new DefaultUserService(passwordEncoder, userRepository);
+        validUser = this.projectTestUtil.getValidUser();
     }
 
     @Test
-    public void registerUser() throws Exception {
-        given(userRepository.findBySsoId(anyString())).willReturn(null);
+    public void shouldSearchForUser() {
+        userService.getUserBySsoId(VALID_SSO_ID);
+
+        verify(userRepository, times(1)).findBySsoId(VALID_SSO_ID);
     }
 
     @Test
-    public void shouldFindUserOnExistingId() {
-        given(userRepository.findOne(EXISTING_ID)).willReturn(existingUser);
+    public void shouldEncryptPasswordBeforeSavingUser() {
+        String oldPassword = validUser.getPassword();
+        when(userRepository.save((User) anyObject()))
+                .then(returnsFirstArg());
 
-        assertNotNull("findOne method did not find a User when it actually existed",
-                userService.getById(EXISTING_ID));
+        String passwordAfterUserWasSaved = userService.save(validUser).getPassword();
+
+        assertNotEquals("User password should be encrypted before storage",
+                passwordAfterUserWasSaved, oldPassword);
+    }
+
+    @Test
+    public void shouldSearchByEmail() {
+        given(userRepository.findByEmail(anyString())).willReturn(validUser);
+
+        userService.getByEmail(VALID_EMAIL);
+
+        verify(userRepository, times(1)).findByEmail(VALID_EMAIL);
     }
 
     @Test
     public void shouldUpdateUserState() {
         when(userRepository.save((User) anyObject()))
-                .then(AdditionalAnswers.returnsFirstArg());
+                .then(returnsFirstArg());
 
-        User updatedUser = userService.updateUserState(existingUser);
+        User updatedUser = userService.updateUserState(validUser);
 
         assertThat(updatedUser.getState(), is(ACTIVE.getState()));
+    }
+
+    @Test
+    public void shouldFindUserOnExistingId() {
+        given(userRepository.findOne(EXISTING_ID)).willReturn(validUser);
+
+        assertNotNull("findOne method did not find a User when it actually existed",
+                userService.getById(EXISTING_ID));
+
+        verify(userRepository, times(1)).findOne(EXISTING_ID);
     }
 }

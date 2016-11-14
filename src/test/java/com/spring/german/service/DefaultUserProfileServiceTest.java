@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.spring.german.service.ProjectTestUtil.VALID_TOKEN;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -19,7 +20,6 @@ import static org.mockito.Matchers.anyLong;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultUserProfileServiceTest {
 
-    public static final String VALID_TOKEN = "valid-token";
     private DefaultUserProfileService userProfileService;
     private UserProfile validUserProfile;
 
@@ -60,6 +60,4 @@ public class DefaultUserProfileServiceTest {
 
         assertThat(extractedUserProfile, is(validUserProfile));
     }
-
-
 }

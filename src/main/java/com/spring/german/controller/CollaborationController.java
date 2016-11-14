@@ -45,10 +45,9 @@ public class CollaborationController {
     @RequestMapping(value = "/collaborate", method = RequestMethod.POST)
     public ModelAndView getTechnologiesByRepoName(@ModelAttribute(value = "repoName") String repoName,
                                               HttpServletRequest request, Principal principal) {
-
         String userName = principal.getName();
         CollaborationControllerLogger.logCurrentlyLoggedInUser(userName);
-        GitHubRepository gitHubRepository = collaborationService.getGitHubRepositoryObject(repoName, userName);
+        GitHubRepository gitHubRepository = new GitHubRepository(repoName, userName);
         HttpSession session = request.getSession();
         collaborationService.populateSessionWithTechnologiesFromRepo(session, gitHubRepository);
 

@@ -9,7 +9,6 @@ import com.spring.german.service.interfaces.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
 @Service

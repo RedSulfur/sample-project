@@ -1,12 +1,9 @@
 package com.spring.german.service;
 
-import com.spring.german.exceptions.EmptyRepositoryNameException;
 import com.spring.german.exceptions.ReadmeNotFoundException;
-import com.spring.german.repository.ProjectRepository;
-import com.spring.german.service.interfaces.UserService;
+import com.spring.german.exceptions.RepositoryNotSpecifiedException;
 import com.spring.german.util.GitHubRepository;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -16,45 +13,29 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 
-import static java.util.Optional.of;
 import static java.util.regex.Pattern.compile;
 
 @Service
 public class CollaborationService {
 
-    private ProjectRepository projectRepository;
-    private UserService userService;
-
     // e.g. "[Spring Thymeleaf](http://www.thymeleaf.org/doc/tutorials/2.1/thymeleafspring.html)"
     // matches "Spring Thymeleaf"
     private static final String TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE = "\\[([a-zA-z ]*)\\]\\(.+\\)"; //TODO: Is it a correct place for this variable? Isn't the name too long?
 
-    @Autowired
-    public CollaborationService(ProjectRepository projectRepository,
-                                UserService userService) {
-        this.userService = userService;
-        this.projectRepository = projectRepository;
-    }
-
-    public GitHubRepository getGitHubRepositoryObject(String repoName, String userName) {
-
-        String notEmptyRepoName = this.getNotEmptyRepoName(repoName);
-        return new GitHubRepository(notEmptyRepoName, userName);
-    }
-
-    private String getNotEmptyRepoName(String repoName) {
-        return of(repoName).orElseThrow(() ->
-                new EmptyRepositoryNameException("You have not provided any repository name"));
-    }
-
     public void populateSessionWithTechnologiesFromRepo(HttpSession session,
                                                         GitHubRepository gitHubRepository) {
-
-        String readmeBody = this.getReadmeFromGitHubRepository(gitHubRepository);
+        GitHubRepository notEmptyGitHubRepository = this.getNotEmptyGithubRepository(gitHubRepository);
+        String readmeBody = this.getReadmeFromGitHubRepository(notEmptyGitHubRepository);
         List<String> technologies = this.extractTechnologyNamesFromReadmeBody(readmeBody);
         session.setAttribute("technologies", technologies);
+    }
+
+    private GitHubRepository getNotEmptyGithubRepository(GitHubRepository gitHubRepository) {
+        return Optional.ofNullable(gitHubRepository)
+                .orElseThrow(() -> new RepositoryNotSpecifiedException("You have to specify repository name"));
     }
 
     private String getReadmeFromGitHubRepository(GitHubRepository gitHubRepository) {
