@@ -20,6 +20,8 @@ import java.util.List;
 @Controller
 public class CollaborationController {
 
+    private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
+
     private CollaborationService collaborationService;
     private ProjectService projectService;
 

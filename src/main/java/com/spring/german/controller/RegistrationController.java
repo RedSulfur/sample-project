@@ -61,6 +61,7 @@ public class RegistrationController {
                                BindingResult result,
                                HttpServletRequest request) {
 
+//        log.info("Test enters registerUser");
         validator.validate(user, result);
         if(result.hasErrors()) {
             return REGISTRATION_PAGE;

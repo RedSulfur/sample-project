@@ -1,19 +1,30 @@
 package com.spring.german.controller;
 
+import com.spring.german.entity.User;
+import com.spring.german.registration.OnRegistrationCompleteEvent;
+import com.spring.german.service.interfaces.UserService;
+import com.spring.german.validation.UserValidator;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.BindingResult;
 
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +42,9 @@ public class RegistrationControllerTest {
     private MockMvc mvc;
 
     @MockBean private RegistrationController controller;
+//    @MockBean private UserService userService;
+//    @MockBean private UserValidator validator;
+//    @MockBean private ApplicationEventPublisher eventPublisher;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -45,10 +59,11 @@ public class RegistrationControllerTest {
                         .roles("ADMIN", "USER")))
                 .andExpect(status().isOk())
                 .andExpect(redirectedUrl(null));
+
     }
 
     @Test
-    public void shouldPopulateModelOnPostMethodToRegistrationPage()
+    public void shouldPopulateModelOnPostMethodToRegistrationPageIfUserIsValid()
             throws Exception {
 
         this.mvc.perform(post("/registration")
@@ -67,6 +82,10 @@ public class RegistrationControllerTest {
                 .andExpect(model().attribute("user", hasProperty("password", is("pass"))))
                 .andExpect(model().attribute("user", hasProperty("email", is("john@doe.com"))))
                 .andExpect(forwardedUrl(null));
+
+//        verify(validator, times(1)).validate(any(User.class), any(BindingResult.class));
+//        verify(userService, times(1)).save(any(User.class));
+//        verify(eventPublisher, times(1)).publishEvent(any(OnRegistrationCompleteEvent.class));
     }
 
     @Test
