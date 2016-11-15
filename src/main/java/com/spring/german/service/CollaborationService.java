@@ -61,9 +61,9 @@ public class CollaborationService {
     private List<String> extractTechnologyNamesFromReadmeBody(String body) {
 
         List<String> technologies = new ArrayList<>();
-        Matcher m = compile(TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE).matcher(body);
-        while (m.find()) {
-            technologies.add(m.group(1));
+        Matcher matcher = compile(TECHNOLOGY_NAME_BY_GITHUB_README_REFERENCE).matcher(body);
+        while (matcher.find()) {
+            technologies.add(matcher.group(1));
         }
 
         return technologies;

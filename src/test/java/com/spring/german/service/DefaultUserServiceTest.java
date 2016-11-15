@@ -32,21 +32,23 @@ public class DefaultUserServiceTest {
     private User validUser;
     private DefaultUserService userService;
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private ProjectTestUtil projectTestUtil = new ProjectTestUtil();
 
     @Mock private UserRepository userRepository;
 
     @Before
     public void setUp() throws Exception {
         userService = new DefaultUserService(passwordEncoder, userRepository);
-        validUser = this.projectTestUtil.getValidUser();
+        validUser = ProjectTestUtil.getValidUser();
     }
 
     @Test
     public void shouldSearchForUser() {
+        given(userRepository.findBySsoId(anyString())).willReturn(validUser);
+
         userService.getUserBySsoId(VALID_SSO_ID);
 
         verify(userRepository, times(1)).findBySsoId(VALID_SSO_ID);
+        assertThat(userService.getUserBySsoId(VALID_SSO_ID), is(validUser));             //TODO: does order of verify and assert matters?
     }
 
     @Test
@@ -55,8 +57,10 @@ public class DefaultUserServiceTest {
         when(userRepository.save((User) anyObject()))
                 .then(returnsFirstArg());
 
-        String passwordAfterUserWasSaved = userService.save(validUser).getPassword();
+        User savedUser = userService.save(validUser);
+        String passwordAfterUserWasSaved = savedUser.getPassword();
 
+        verify(userRepository, times(1)).save((User) anyObject());
         assertNotEquals("User password should be encrypted before storage",
                 passwordAfterUserWasSaved, oldPassword);
     }

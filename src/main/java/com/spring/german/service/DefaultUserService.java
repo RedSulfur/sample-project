@@ -3,8 +3,6 @@ package com.spring.german.service;
 import com.spring.german.entity.State;
 import com.spring.german.entity.User;
 import com.spring.german.repository.UserRepository;
-import com.spring.german.repository.VerificationTokenRepository;
-import com.spring.german.service.interfaces.Checking;
 import com.spring.german.service.interfaces.Distinguishing;
 import com.spring.german.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

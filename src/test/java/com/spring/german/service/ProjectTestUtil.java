@@ -15,10 +15,11 @@ import static java.util.stream.Collectors.toList;
 
 public class ProjectTestUtil {
 
+    public static final String VALID_USERNAME = "valid-username";
     public static final String VALID_TOKEN = "valid-token";
     public static final String VALID_SSO_ID = "valid-sso";
     public static final String VALID_EMAIL = "valid-email";
-    public static final long EXISTING_ID = 1L;
+    public static final Long EXISTING_ID = 1L;
 
     public static List<Project> getListsOfProjects() {
 
@@ -39,13 +40,19 @@ public class ProjectTestUtil {
                 .collect(toList());
     }
 
-    public static List<String> getValidTechnologies() {
-        return Stream.of(("Travis Build,Maven,Spring validation").split(","))
+    public static Project getValidProject() {
+        return new Project("test-logo", new User());
+    }
+
+    public static List<String> getValidTechnologyNames() {
+        return Stream.of("Travis Build", "Code Coverage", "Spring Thymeleaf", "Spring MVC",
+                "Spring validation", "Gradle", "Spring Security", "Bootstrap", "Checkstyle Plugin")
                 .collect(Collectors.toList());
     }
 
-    public static Project getValidProject() {
-        return new Project("test-logo", new User());
+    public static List<String> getValidTechnologies() {
+        return Stream.of(("Travis Build,Maven,Spring validation").split(","))
+                .collect(Collectors.toList());
     }
 
     public static User getValidUser() {

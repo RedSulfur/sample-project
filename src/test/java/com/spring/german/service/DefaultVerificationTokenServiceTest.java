@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.spring.german.service.ProjectTestUtil.VALID_TOKEN;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -21,7 +22,6 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultVerificationTokenServiceTest {
 
-    public static final String VALID_TOKEN = "valid-token";
     private DefaultVerificationTokenService tokenService;
     private User validUser;
     private VerificationToken existingVerificationToken;
@@ -36,6 +36,14 @@ public class DefaultVerificationTokenServiceTest {
         validUser = new User();
         existingVerificationToken = new VerificationToken(VALID_TOKEN, validUser);
     }
+
+    @Test
+    public void shouldCreateAndSaveVerificationToken() {
+        tokenService.createVerificationToken(validUser, VALID_TOKEN);
+
+        verify(tokenRepository, times(1)).save((VerificationToken) anyObject());
+    }
+
     @Test
     public void shouldThrowExceptionOnMissingKey() {
         exception.expect(TokenNotFoundException.class);
@@ -44,14 +52,7 @@ public class DefaultVerificationTokenServiceTest {
     }
 
     @Test
-    public void shouldSaveTokenOnce() {
-        tokenService.createVerificationToken(validUser, VALID_TOKEN);
-
-        verify(tokenRepository, times(1)).save((VerificationToken) anyObject());
-    }
-
-    @Test
-    public void shouldSearchForTokenOnceIfTokenNameWasNotNull() {
+    public void shouldSearchForTokenIfTokenNameWasNotNull() {
         given(tokenRepository.findByToken(anyString())).willReturn(existingVerificationToken);
 
         tokenService.getEntityByKey(VALID_TOKEN);

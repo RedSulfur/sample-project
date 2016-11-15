@@ -33,9 +33,7 @@ public class CollaborationServiceTest {
         collaborationService = new CollaborationService();
         session = new MockHttpSession();
         validGitHubRepository = new GitHubRepository("Collaboratory", "serhiizem");
-        validTechnologyNames = Stream.of("Travis Build", "Code Coverage", "Spring Thymeleaf", "Spring MVC",
-                "Spring validation", "Gradle", "Spring Security", "Bootstrap", "Checkstyle Plugin")
-                .collect(Collectors.toList());
+        validTechnologyNames = ProjectTestUtil.getValidTechnologyNames();
     }
 
     @Test
