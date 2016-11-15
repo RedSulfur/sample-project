@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -22,6 +23,6 @@ public class UserProfileRepositoryTest {
 
         UserProfile userProfile = userProfileRepository.findByType("USER");
 
-        Assert.assertThat(userProfile.getType(), is("USER"));
+        assertThat(userProfile.getType(), is("USER"));
     }
 }

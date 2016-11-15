@@ -2,6 +2,7 @@ package com.spring.german.service;
 
 import com.spring.german.entity.User;
 import com.spring.german.repository.UserRepository;
+import com.spring.german.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,9 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.spring.german.entity.State.ACTIVE;
-import static com.spring.german.service.ProjectTestUtil.EXISTING_ID;
-import static com.spring.german.service.ProjectTestUtil.VALID_EMAIL;
-import static com.spring.german.service.ProjectTestUtil.VALID_SSO_ID;
+import static com.spring.german.util.TestUtil.EXISTING_ID;
+import static com.spring.german.util.TestUtil.VALID_EMAIL;
+import static com.spring.german.util.TestUtil.VALID_SSO_ID;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,7 +39,7 @@ public class DefaultUserServiceTest {
     @Before
     public void setUp() throws Exception {
         userService = new DefaultUserService(passwordEncoder, userRepository);
-        validUser = ProjectTestUtil.getValidUser();
+        validUser = TestUtil.getValidUser();
     }
 
     @Test

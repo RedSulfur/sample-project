@@ -44,8 +44,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void findBySsoShouldReturnUser() throws Exception {
-
+    public void findBySsoShouldReturnUser() {
         User extractedUser = this.userRepository.findBySsoId("UserSam");
         assertThat(extractedUser.getSsoId(), is("UserSam"));
         assertThat(extractedUser.getUserProfiles().isEmpty(), is(true));
@@ -53,14 +52,12 @@ public class UserRepositoryTest {
 
     @Test
     public void shouldFindAllTheActiveUsers() {
-
         List<User> activeUsers = userRepository.findByState("ACTIVE");
         assertEquals(5, activeUsers.size());
     }
 
     @Test
     public void deleteByStateShouldRemoveUsers() {
-
         List<User> inactiveUsers = userRepository.removeByState("INACTIVE");
         assertThat(inactiveUsers.size(), is(3));
     }

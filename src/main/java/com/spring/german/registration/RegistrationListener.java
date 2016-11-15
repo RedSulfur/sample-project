@@ -27,10 +27,10 @@ public class RegistrationListener
     private EventHandler eventHandler;
 
     @Autowired
-    public RegistrationListener(VerificationTokenService creator,
+    public RegistrationListener(VerificationTokenService tokenService,
                                 EmailUtil emailUtil,
                                 EventHandler eventHandler) {
-        this.verificationTokenService = creator;
+        this.verificationTokenService = tokenService;
         this.emailUtil = emailUtil;
         this.eventHandler = eventHandler;
     }
@@ -41,7 +41,6 @@ public class RegistrationListener
     }
 
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
-
         User user = event.getUser();
         log.info("RegistrationListener accepts the following user: {}", event.getUser());
 

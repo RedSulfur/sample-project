@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.spring.german.service.ProjectTestUtil.VALID_TOKEN;
+import static com.spring.german.util.TestUtil.VALID_TOKEN;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;

@@ -2,6 +2,7 @@ package com.spring.german.repository;
 
 import com.spring.german.entity.User;
 import com.spring.german.entity.VerificationToken;
+import com.spring.german.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,9 +11,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 
-import static com.spring.german.entity.State.ACTIVE;
+import static com.spring.german.util.TestUtil.VALID_TOKEN;
+import static java.time.LocalDate.now;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -27,29 +28,29 @@ public class VerificationTokenRepositoryTest {
     private UserRepository userRepository;
 
     private User validUser;
-    private String validToken;
 
     @Before
     public void setUp() throws Exception {
-        validUser = new User("default", "pass", "default@gmail.com", ACTIVE.getState(), new HashSet<>());
-        validToken = "valid-token";
+        validUser = TestUtil.getValidUser();
         userRepository.save(validUser);
     }
 
     @Test
     public void shouldCalculateExpiryDate() {
-        VerificationToken savedToken = verificationTokenRepository
-                .save(new VerificationToken(validToken, validUser));
+        VerificationToken verificationTokenToSave = new VerificationToken(VALID_TOKEN, validUser);
 
-        assertThat(savedToken.getExpiryDate(), is(LocalDate.now().plusDays(1)));
-        assertThat(savedToken.getToken(), is(validToken));
+        VerificationToken savedToken = verificationTokenRepository
+                .save(verificationTokenToSave);
+
+        assertThat(savedToken.getExpiryDate(), is(now().plusDays(1)));
+        assertThat(savedToken.getToken(), is(VALID_TOKEN));
     }
 
     @Test
     public void shouldFindSavedTokenByToken() {
-        verificationTokenRepository.save(new VerificationToken(validToken, validUser));
+        verificationTokenRepository.save(new VerificationToken(VALID_TOKEN, validUser));
 
-        VerificationToken extractedToken = verificationTokenRepository.findByToken(validToken);
-        assertThat(extractedToken.getToken(), is(validToken));
+        VerificationToken extractedToken = verificationTokenRepository.findByToken(VALID_TOKEN);
+        assertThat(extractedToken.getToken(), is(VALID_TOKEN));
     }
 }

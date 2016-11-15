@@ -1,6 +1,7 @@
 package com.spring.german.repository;
 
 import com.spring.german.entity.Technology;
+import com.spring.german.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,28 +27,24 @@ public class TechnologyRepositoryTest {
 
     @Before
     public void setUp() {
-        technologiesToSave = Arrays.stream("Travis Build,Spring Thymeleaf,Spring MVC,Spring validation,Gradle,Spring Security,Bootstrap"
-                .split(",")).map(Technology::new).collect(Collectors.toList());
+        technologiesToSave = TestUtil.getValidTechnologyNames().stream()
+                .map(Technology::new).collect(Collectors.toList());
     }
 
     @Test
-    public void shouldSaveAllTechnologiesFromList()
-            throws Exception {
-
+    public void shouldSaveAllTechnologiesFromList() {
         List<Technology> savedTechnologies = technologyRepository.save(technologiesToSave);
         assertThat(savedTechnologies, hasSize(7));
     }
 
     @Test
-    public void shouldReturnUpdatedTechnologyAfterUpdate()
-            throws Exception {
-
+    public void shouldReturnUpdatedTechnologyAfterUpdate() {
         Technology sampleTechnology = technologyRepository.findOne(1L);
         assertThat(sampleTechnology.getName(), is("Spring Data"));
 
         sampleTechnology.setName("Spring Batch");
-
         Technology updatedTechnology = technologyRepository.save(sampleTechnology);
+
         assertThat(updatedTechnology.getName(), is("Spring Batch"));
     }
 }

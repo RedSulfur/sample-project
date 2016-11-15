@@ -2,6 +2,7 @@ package com.spring.german.service;
 
 import com.spring.german.exceptions.RepositoryNotSpecifiedException;
 import com.spring.german.util.GitHubRepository;
+import com.spring.german.util.TestUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,8 +12,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpSession;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,7 +32,7 @@ public class CollaborationServiceTest {
         collaborationService = new CollaborationService();
         session = new MockHttpSession();
         validGitHubRepository = new GitHubRepository("Collaboratory", "serhiizem");
-        validTechnologyNames = ProjectTestUtil.getValidTechnologyNames();
+        validTechnologyNames = TestUtil.getValidTechnologyNames();
     }
 
     @Test

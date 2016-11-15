@@ -1,4 +1,4 @@
-package com.spring.german.service;
+package com.spring.german.util;
 
 import com.spring.german.entity.Project;
 import com.spring.german.entity.State;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class ProjectTestUtil {
+public class TestUtil {
 
     public static final String VALID_USERNAME = "valid-username";
     public static final String VALID_TOKEN = "valid-token";
@@ -57,5 +57,9 @@ public class ProjectTestUtil {
 
     public static User getValidUser() {
         return new User("test-sso", "test-password", "test-email", State.INACTIVE.getState(), new HashSet<>());
+    }
+
+    public static Email getValidEmail() {
+        return new Email("test-email@gmail.com", "test-subject", "test-body");
     }
 }

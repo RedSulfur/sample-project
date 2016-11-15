@@ -6,6 +6,7 @@ import com.spring.german.entity.User;
 import com.spring.german.exceptions.TechnologiesNotFoundException;
 import com.spring.german.repository.ProjectRepository;
 import com.spring.german.service.interfaces.UserService;
+import com.spring.german.util.TestUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,9 +18,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.spring.german.service.ProjectTestUtil.VALID_USERNAME;
-import static com.spring.german.service.ProjectTestUtil.getValidTechnologies;
-import static com.spring.german.service.ProjectTestUtil.getValidTechnologyNames;
+import static com.spring.german.util.TestUtil.VALID_USERNAME;
+import static com.spring.german.util.TestUtil.getValidTechnologyNames;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -43,8 +43,8 @@ public class DefaultProjectServiceTest {
     @Before
     public void setUp() throws Exception {
         projectService = new DefaultProjectService(projectRepository, userService);
-        extractedProjects = ProjectTestUtil.getListsOfProjects();
-        validUser = ProjectTestUtil.getValidUser();
+        extractedProjects = TestUtil.getListsOfProjects();
+        validUser = TestUtil.getValidUser();
     }
 
     @Test
