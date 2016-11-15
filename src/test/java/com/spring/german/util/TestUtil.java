@@ -59,6 +59,14 @@ public class TestUtil {
         return new User("test-sso", "test-password", "test-email@gmail.com", State.INACTIVE.getState(), new HashSet<>());
     }
 
+    public static GitHubRepository getValidGitHubRepositoryObject() {
+        return new GitHubRepository("Collaboratory", "serhiizem");
+    }
+
+    public static GitHubRepository getInvalidGitHubRepositoryObject() {
+        return new GitHubRepository("no-such-name-on-github", "non-existent-repo");
+    }
+
     public static Email getValidEmail() {
         return new Email("test-email@gmail.com", "test-subject", "test-body");
     }

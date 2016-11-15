@@ -1,5 +1,6 @@
 package com.spring.german.service;
 
+import com.spring.german.exceptions.ReadmeNotFoundException;
 import com.spring.german.exceptions.RepositoryNotSpecifiedException;
 import com.spring.german.util.GitHubRepository;
 import com.spring.german.util.TestUtil;
@@ -13,6 +14,7 @@ import org.springframework.mock.web.MockHttpSession;
 
 import java.util.List;
 
+import static com.spring.german.util.TestUtil.getInvalidGitHubRepositoryObject;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -44,9 +46,21 @@ public class CollaborationServiceTest {
     }
 
     @Test
+    public void shouldThrowAnErrorIfThereIsNoSuchRepositoryOnGitHub() {
+        exception.expect(ReadmeNotFoundException.class);
+        exception.expectMessage("There is no such user on github, or " +
+                "repository name you've specified is non existent");
+        GitHubRepository invalidGitHubRepository = getInvalidGitHubRepositoryObject();
+
+        collaborationService
+                .populateSessionWithTechnologiesFromRepo(session, invalidGitHubRepository);
+    }
+
+    @Test
     public void shouldThrowAnErrorOnMissingRepositoryName() {
         exception.expect(RepositoryNotSpecifiedException.class);
         exception.expectMessage("You have to specify repository name");
+
         collaborationService.populateSessionWithTechnologiesFromRepo(session, null);
     }
 }
