@@ -50,6 +50,8 @@ public class RegistrationListener
         String emailBody = eventHandler.getEmailBody(event, token);
         Email email = eventHandler.constructEmailForUser(emailBody, user);
 
+        log.info("Email constructed: {}", email);
+
         emailUtil.sendEmail(email);
     }
 }

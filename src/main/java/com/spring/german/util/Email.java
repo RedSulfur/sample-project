@@ -23,4 +23,13 @@ public class Email {
     public String getBody() {
         return body;
     }
+
+    @Override
+    public String toString() {
+        return "Email{" +
+                "recipientAddress='" + recipientAddress + '\'' +
+                ", subject='" + subject + '\'' +
+                ", body='" + body + '\'' +
+                '}';
+    }
 }
