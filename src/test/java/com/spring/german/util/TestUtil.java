@@ -56,7 +56,7 @@ public class TestUtil {
     }
 
     public static User getValidUser() {
-        return new User("test-sso", "test-password", "test-email", State.INACTIVE.getState(), new HashSet<>());
+        return new User("test-sso", "test-password", "test-email@gmail.com", State.INACTIVE.getState(), new HashSet<>());
     }
 
     public static Email getValidEmail() {

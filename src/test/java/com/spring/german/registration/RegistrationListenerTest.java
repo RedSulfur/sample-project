@@ -37,6 +37,7 @@ public class RegistrationListenerTest {
 
     @Test
     public void shouldSaveVerificationToken() {
+        registrationListener.onApplicationEvent(onRegistrationCompleteEvent);
 
         verify(tokenService, times(1)).createVerificationToken(any(User.class), anyString());
     }

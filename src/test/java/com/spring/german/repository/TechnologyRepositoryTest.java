@@ -34,7 +34,7 @@ public class TechnologyRepositoryTest {
     @Test
     public void shouldSaveAllTechnologiesFromList() {
         List<Technology> savedTechnologies = technologyRepository.save(technologiesToSave);
-        assertThat(savedTechnologies, hasSize(7));
+        assertThat(savedTechnologies, hasSize(9));
     }
 
     @Test
