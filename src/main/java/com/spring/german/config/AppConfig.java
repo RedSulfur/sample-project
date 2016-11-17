@@ -21,7 +21,7 @@ import java.util.Properties;
 @PropertySource("classpath:email.properties")
 public class AppConfig {
 
-    Logger log = LoggerFactory.getLogger(AppConfig.class);
+    private static final Logger log = LoggerFactory.getLogger(AppConfig.class);
 
     @Autowired
     private Environment env;

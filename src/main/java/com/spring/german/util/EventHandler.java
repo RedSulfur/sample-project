@@ -73,6 +73,6 @@ public class EventHandler {
         ctx.setVariable("imageResourceName", LOGO_NAME);
         String processedContext = this.templateEngine.process("email-inlineimage", ctx);
 
-        return new Email(recipientAddress, processedContext, subject);
+        return new Email(recipientAddress, subject, processedContext);
     }
 }

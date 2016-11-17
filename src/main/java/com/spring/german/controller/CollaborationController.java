@@ -20,8 +20,6 @@ import java.util.List;
 @Controller
 public class CollaborationController {
 
-    private static final Logger log = LoggerFactory.getLogger(CollaborationController.class);
-
     private CollaborationService collaborationService;
     private ProjectService projectService;
 
@@ -57,7 +55,7 @@ public class CollaborationController {
     }
 
     /**
-     * Saves a new project associated with the current user and all the
+     * Saves a new project associated with the current user and with all the
      * technologies that he has defined
      *
      * @param request   an object that is used to obtain technology names from

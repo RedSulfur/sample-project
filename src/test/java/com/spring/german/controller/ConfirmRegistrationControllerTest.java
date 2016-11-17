@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ConfirmRegistrationController.class)
-@WebAppConfiguration //required to attach session to the request
+@WebAppConfiguration
 public class ConfirmRegistrationControllerTest {
 
     private static final User VALID_USER = new User();
