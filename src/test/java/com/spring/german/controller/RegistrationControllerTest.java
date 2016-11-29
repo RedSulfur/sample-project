@@ -6,11 +6,13 @@ import com.spring.german.service.interfaces.UserService;
 import com.spring.german.util.TestUtil;
 import com.spring.german.validation.UserValidator;
 import org.hamcrest.Matchers;
+import org.hibernate.cache.spi.access.RegionAccessStrategy;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.AdditionalAnswers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,13 +23,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.any;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -67,6 +71,7 @@ public class RegistrationControllerTest {
     public void shouldPopulateModelOnPostMethodToRegistrationPageIfUserIsValid()
             throws Exception {
 
+        when(userService.save(any(User.class))).then(returnsFirstArg());
         User user = TestUtil.getValidUser();
 
         this.mvc.perform(post("/registration")
@@ -81,14 +86,17 @@ public class RegistrationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("registration"))
                 .andExpect(model().hasNoErrors())
-//                .andExpect(model().attribute("user", hasProperty("ssoId", is("nickname"))))
-//                .andExpect(model().attribute("user", hasProperty("password", is("pass"))))
-//                .andExpect(model().attribute("user", hasProperty("email", is("john@doe.com"))))
+                .andExpect(model().attribute("user",
+                        hasProperty("ssoId", is("test-sso"))))
+                .andExpect(model().attribute("user",
+                        hasProperty("password", is("test-password"))))
+                .andExpect(model().attribute("user",
+                        hasProperty("email", is("test-email@gmail.com"))))
                 .andExpect(forwardedUrl(null));
 
-//        verify(validator, times(1)).validate(any(User.class), anyObject());
+        verify(validator, times(1)).validate(any(User.class), anyObject());
         verify(userService, times(1)).save(user);
-//        verify(eventPublisher, times(1)).publishEvent(any(OnRegistrationCompleteEvent.class));
+        verify(eventPublisher, times(1)).publishEvent(anyObject());
     }
 
     @Test

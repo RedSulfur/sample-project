@@ -1,5 +1,7 @@
 package com.spring.german.entity;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -117,30 +120,15 @@ public class User {
 
     @Override
     public int hashCode() {
-        final long prime = 31;
-        int result = 1;
-        result = (int) (prime * result + id);
-        result = (int) (prime * result + ((ssoId == null) ? 0 : ssoId.hashCode()));
-        return result;
+        return new HashCodeBuilder(55, 113)
+                .append(this.id).append(this.ssoId).append(this.email).toHashCode();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (!(obj instanceof User))
-            return false;
-        User other = (User) obj;
-        if (id != other.id)
-            return false;
-        if (ssoId == null) {
-            if (other.ssoId != null)
-                return false;
-        } else if (!ssoId.equals(other.ssoId))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        User other = (User) o;
+        return new EqualsBuilder().append(other.ssoId, this.ssoId)
+                .append(other.email, this.email).isEquals();
     }
 
     @Override

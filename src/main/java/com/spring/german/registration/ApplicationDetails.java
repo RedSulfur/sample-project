@@ -19,4 +19,12 @@ public class ApplicationDetails {
     public Locale getLocale() {
         return locale;
     }
+
+    @Override
+    public String toString() {
+        return "ApplicationDetails{" +
+                "appUrl='" + appUrl + '\'' +
+                ", locale=" + locale +
+                '}';
+    }
 }

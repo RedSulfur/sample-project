@@ -61,7 +61,6 @@ public class RegistrationController {
                                BindingResult result,
                                HttpServletRequest request) {
 
-        log.info("Test enters registerUser");
         validator.validate(user, result);
         if (result.hasErrors()) {
             return REGISTRATION_PAGE;
@@ -70,7 +69,7 @@ public class RegistrationController {
         RegistrationControllerLogger.logUserConstructedFromPostBody(user);
         User savedUser = userService.save(user);
         ApplicationDetails details = this.getApplicationDetails(request);
-//        this.publishUserRegistrationEvent(savedUser, details);
+        this.publishUserRegistrationEvent(savedUser, details);
 
         return REGISTRATION_PAGE;
     }
@@ -84,6 +83,7 @@ public class RegistrationController {
     }
 
     private void publishUserRegistrationEvent(User savedUser, ApplicationDetails details) {
+        log.info("Method for publishing!!!!!");
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(savedUser, details));
     }
 
