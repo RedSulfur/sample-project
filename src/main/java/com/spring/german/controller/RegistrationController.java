@@ -62,15 +62,15 @@ public class RegistrationController {
                                HttpServletRequest request) {
 
         log.info("Test enters registerUser");
-        validator.validate(user, result );
-        if(result.hasErrors()) {
+        validator.validate(user, result);
+        if (result.hasErrors()) {
             return REGISTRATION_PAGE;
         }
 
         RegistrationControllerLogger.logUserConstructedFromPostBody(user);
         User savedUser = userService.save(user);
-        ApplicationDetails details = getApplicationDetails(request);
-        publishUserRegistrationEvent(savedUser, details);
+        ApplicationDetails details = this.getApplicationDetails(request);
+//        this.publishUserRegistrationEvent(savedUser, details);
 
         return REGISTRATION_PAGE;
     }

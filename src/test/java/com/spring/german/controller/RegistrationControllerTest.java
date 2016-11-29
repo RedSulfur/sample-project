@@ -1,5 +1,12 @@
 package com.spring.german.controller;
 
+import com.spring.german.entity.User;
+import com.spring.german.registration.OnRegistrationCompleteEvent;
+import com.spring.german.service.interfaces.UserService;
+import com.spring.german.util.TestUtil;
+import com.spring.german.validation.UserValidator;
+import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -7,13 +14,20 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
 
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.any;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,10 +44,9 @@ public class RegistrationControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean private RegistrationController controller;
-//    @MockBean private UserService userService;
-//    @MockBean private UserValidator validator;
-//    @MockBean private ApplicationEventPublisher eventPublisher;
+    @MockBean private UserService userService;
+    @MockBean private UserValidator validator;
+    @MockBean private ApplicationEventPublisher eventPublisher;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -48,32 +61,33 @@ public class RegistrationControllerTest {
                         .roles("ADMIN", "USER")))
                 .andExpect(status().isOk())
                 .andExpect(redirectedUrl(null));
-
     }
 
     @Test
     public void shouldPopulateModelOnPostMethodToRegistrationPageIfUserIsValid()
             throws Exception {
 
+        User user = TestUtil.getValidUser();
+
         this.mvc.perform(post("/registration")
                 .with(user("admin")
                 .password("pass")
                 .roles("ADMIN", "USER"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("ssoId", "nickname")
-                .param("password", "pass")
-                .param("email", "john@doe.com"))
+                .param("ssoId", user.getSsoId())
+                .param("password", user.getPassword())
+                .param("email", user.getEmail()))
 
                 .andExpect(status().isOk())
                 .andExpect(view().name("registration"))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attribute("user", hasProperty("ssoId", is("nickname"))))
-                .andExpect(model().attribute("user", hasProperty("password", is("pass"))))
-                .andExpect(model().attribute("user", hasProperty("email", is("john@doe.com"))))
+//                .andExpect(model().attribute("user", hasProperty("ssoId", is("nickname"))))
+//                .andExpect(model().attribute("user", hasProperty("password", is("pass"))))
+//                .andExpect(model().attribute("user", hasProperty("email", is("john@doe.com"))))
                 .andExpect(forwardedUrl(null));
 
-//        verify(validator, times(1)).validate(any(User.class), any(BindingResult.class));
-//        verify(userService, times(1)).save(any(User.class));
+//        verify(validator, times(1)).validate(any(User.class), anyObject());
+        verify(userService, times(1)).save(user);
 //        verify(eventPublisher, times(1)).publishEvent(any(OnRegistrationCompleteEvent.class));
     }
 
