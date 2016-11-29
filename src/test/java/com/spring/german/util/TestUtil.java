@@ -18,6 +18,7 @@ public class TestUtil {
     public static final String VALID_USERNAME = "valid-username";
     public static final String VALID_TOKEN = "valid-token";
     public static final String VALID_SSO_ID = "valid-sso";
+    public static final String NON_EXISTENT_SSO_ID = "not-found";
     public static final String VALID_EMAIL = "valid-email";
     public static final Long EXISTING_ID = 1L;
 
