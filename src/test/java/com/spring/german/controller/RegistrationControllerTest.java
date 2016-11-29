@@ -1,18 +1,13 @@
 package com.spring.german.controller;
 
 import com.spring.german.entity.User;
-import com.spring.german.registration.OnRegistrationCompleteEvent;
 import com.spring.german.service.interfaces.UserService;
 import com.spring.german.util.TestUtil;
 import com.spring.german.validation.UserValidator;
-import org.hamcrest.Matchers;
-import org.hibernate.cache.spi.access.RegionAccessStrategy;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.AdditionalAnswers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,8 +15,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.BindingResult;
 
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasProperty;

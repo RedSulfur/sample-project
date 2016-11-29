@@ -1,5 +1,8 @@
 package com.spring.german.entity;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user_profile")
@@ -40,30 +42,15 @@ public class UserProfile {
 
     @Override
     public int hashCode() {
-        final long prime = 31;
-        int result = 1;
-        result = (int) (prime * result + id);
-        result = (int) (prime * result + ((type == null) ? 0 : type.hashCode()));
-        return result;
+        return new HashCodeBuilder(55, 113)
+                .append(this.id).append(this.type).toHashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (!(obj instanceof UserProfile))
-            return false;
         UserProfile other = (UserProfile) obj;
-        if (id != other.id)
-            return false;
-        if (type == null) {
-            if (other.type != null)
-                return false;
-        } else if (!type.equals(other.type))
-            return false;
-        return true;
+        return new EqualsBuilder().append(other.id, this.id)
+                .append(other.type, this.type).isEquals();
     }
 
     @Override

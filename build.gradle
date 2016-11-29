@@ -56,7 +56,6 @@ dependencies {
     compile     "javax.mail:mail:1.4.7"
     compile     "com.h2database:h2:1.4.192"
     compile     "commons-lang:commons-lang:2.6"
-
 }
 
 task wrapper(type: Wrapper) {
